@@ -13,7 +13,7 @@ var express = require('express'),
 
 // ---------------- API --------------------------------------------------------
 
-var OPERATION = '/move';
+var OPERATION = '/animation';
 
 // ---------------- Routing ----------------------------------------------------
 
@@ -24,21 +24,4 @@ app.get('/', function(req, res) {
 
   db.getBars(req, res);
 
-});
-
-app.get('/:receiver', function(req, res) {
-    res.json(
-      {
-        'receiver' : req.params.receiver
-      }
-    );
-});
-
-app.get('/:receiver/:position', function(req, res) {
-    res.json(
-      {
-        'receiver' : req.params.receiver,
-        'position' : req.params.position
-      }
-    );
 });

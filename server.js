@@ -1,59 +1,92 @@
-//
-// # Application
-//
+// ---------------- REST Server ------------------------------------------------
 //
 //
-var express = require('express');
-var path = require('path');
+//
 
 
-// ## SimpleServer
-//
-// Creates a new instance of SimpleServer with the following options:
-//  * `port` - The HTTP port to listen on. If `process.env.PORT` is set, _it overrides this value_.
-//
-//var router = express();
-//var server = http.createServer(router);
-var app = module.exports = express();
 
-app.use(express.static(path.resolve(__dirname, 'client')));
-
-// ## REST-SERVICE
-//
-// define the versions
-var VERSIONS = { 'Version 1': '/v1' }; //, 'Version 1': '/v1'};
+// ---------------- URL --------------------------------------------------------
 
 // define url and port to concat REST-URLs
-var URL     = 'http://localhost/',
-    PORT    = 80;
+var BASEURL     = 'http://localhost',
+    PORT        = 8080,
+    URL         = BASEURL+':'+PORT;
 
-//console.log(process.env.IP);
-//console.log(process.env.PORT);
+module.exports.serverUrl = URL;
 
+// ---------------- App --------------------------------------------------------
+
+var express = require('express'),
+    path = require('path'),
+
+    // REST-API v1
+    v1 = require('./src/v1/rest-api').api,
+    // further versions: v2 = require('./src/v2/rest-api').api,
+
+    // Express.js Application
+    app = module.exports = express();
+
+app.use(express.static(path.resolve(__dirname, 'client')));
 app.set('_URL', URL);
 app.set('_PORT', PORT);
 
+// add the middleware to the stack
+// app.use(org.express.oauth({
+//   onSuccess: '/test/query',
+//   onError: '/oauth/error'
+// }));
 
 
-// ## Client
-//
-// route to angular material prototype
 
-// route to display versions
-app.get('/api/versions', function(req, res) {
+// ---------------- Versions ---------------------------------------------------
+
+/*
+ * ## define the versions
+ */
+var VERSIONS =
+{
+  'href': URL+'/api',
+  'versions': [
+    v1
+    // further versions
+  ]
+};
+
+// ---------------- Routing ----------------------------------------------------
+
+/*
+ * ## ROOT
+ */
+app.get('/', function(req, res) {
+
+    var API =
+    {
+      'echo' : 'HTML Output -> API Browser'
+    };
+
+    res.json(API);
+})
+
+/*
+ * ## route to display versions
+ */
+app.get('/api', function(req, res) {
     res.json(VERSIONS);
 })
 
-// ## Server
-//
-// versioned routes go in the src/{version}/rest-api directory
-// import the routes
-for (var k in VERSIONS) {
-    // e.g. ./server/routes/rest-api/v0/api.js
-    app.use('/api' + VERSIONS[k], require('./src' + VERSIONS[k] + '/rest-api'));
+/*
+ * ## versioned routes go in the src/{version}/rest-api directory
+ * - import the routes
+ */
+for (var k in VERSIONS.versions) {
+    // e.g. ./src/v0/rest-api.js
+    app.use(
+      '/api/' + VERSIONS.versions[k].name,
+      require('./src/' + VERSIONS.versions[k].name + '/rest-api')
+    );
 }
 
-
+// ---------------- Run Application --------------------------------------------
 
 var server = app.listen(PORT, function () {
     console.log("Listening on port %s...", server.address().port);
