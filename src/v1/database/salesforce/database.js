@@ -79,7 +79,7 @@ module.exports = {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        animations.getAnimation(req, res, org, oauth);                   // <--
+        animations.getAnimation(req, res, org, oauth);                    // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
@@ -87,7 +87,7 @@ module.exports = {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        animations.insertAnimation(req, res, org, oauth);                   // <--
+        animations.insertAnimation(req, res, org, oauth);                 // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
@@ -95,7 +95,7 @@ module.exports = {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        animations.updateAnimation(req, res, org, oauth);                   // <--
+        animations.updateAnimation(req, res, org, oauth);                 // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
@@ -103,16 +103,40 @@ module.exports = {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        animations.deleteAnimation(req, res, org, oauth);                   // <--
+        animations.deleteAnimation(req, res, org, oauth);                 // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  // ---------------------------------------------------------------------------
+  // --- Tokens ----------------------------------------------------------------
   getTokens : function(req, res) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         tokens.getTokens(req, res, org, oauth);                           // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertToken : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        tokens.insertToken(req, res, org, oauth);                 // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateToken : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        tokens.updateToken(req, res, org, oauth);                 // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteToken : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        tokens.deleteToken(req, res, org, oauth);                 // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

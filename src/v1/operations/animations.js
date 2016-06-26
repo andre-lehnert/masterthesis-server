@@ -27,7 +27,7 @@ app.get('/', function(req, res) {
 });
 
 /*
- * ## Insert new bar
+ * ## Insert new animation
  */
 app.post('/', function(req, res) {
   db.insertAnimation(req, res);
