@@ -17,20 +17,52 @@ var CREDENTIALS =
 
 // ---------------------------------------------------------------------------
 // Data Access
-var bars          = require('./../models/bar-model'),
-    animations    = require('./../models/animation-model'),
-    tokens        = require('./../models/token-model'),
-    apps          = require('./../models/app-model'),
-    notifications = require('./../models/notification-model');
+var bars          = require('./bar'),
+    animations    = require('./animation'),
+    tokens        = require('./token'),
+    apps          = require('./app'),
+    notifications = require('./notification');
 
 
 module.exports = {
-  // ---------------------------------------------------------------------------
+  // --- Bars ------------------------------------------------------------------
   getBars : function(req, res) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         bars.getBars(req, res, org, oauth);                               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getBar : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        bars.getBar(req, res, org, oauth);                                // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertBar : function (req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        bars.insertBar(req, res, org, oauth);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateBar : function (req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        bars.updateBar(req, res, org, oauth);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteBar : function (req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        bars.deleteBar(req, res, org, oauth);                             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

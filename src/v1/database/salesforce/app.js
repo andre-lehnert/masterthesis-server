@@ -1,8 +1,8 @@
-var GET_ALL = 'SELECT Id, Name, CreatedDate, LastModifiedDate, label__c, calibrated__c, position__c, animation__c, token__c, led__c, motor__c, app__c FROM Bar__c';
+var GET_ALL = 'SELECT Id, Name, CreatedDate, LastModifiedDate, Notifications__c FROM App__c';
 
 module.exports = {
 
-  getBars : function(req, res, org, oauth) {
+  getApps : function(req, res, org, oauth) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -16,16 +16,16 @@ module.exports = {
 
             // -----------------------------------------------------------------
             // Set Response Object
-            var receivers = [];
+            var apps = [];
 
             for (var r in results.records) {
-              receivers.push(results.records[r]);
+              apps.push(results.records[r]);
             }
 
             var response =
             {
               'href': URL,
-              'receivers': receivers
+              'apps': apps
             };
 
             res.json(response);

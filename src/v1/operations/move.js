@@ -1,4 +1,4 @@
-// ---------------- Operation --------------------------------------------------
+// ---------------- Operation ---------------------------------------------
 
 var express = require('express'),
     // Server
@@ -7,15 +7,15 @@ var express = require('express'),
     // REST-API-Router
     api = require('./../rest-api'),
     // Database Access (salesforce REST-API)
-    db = require('./../database/salesforce');
+    db = require('./../database/salesforce/database');
     // Express.js Application
     app = module.exports = express();
 
-// ---------------- API --------------------------------------------------------
+// ---------------- API ---------------------------------------------------
 
 var OPERATION = '/move';
 
-// ---------------- Routing ----------------------------------------------------
+// ---------------- Routing -----------------------------------------------
 
 /*
  * ## List all receivers

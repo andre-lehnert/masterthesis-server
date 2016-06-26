@@ -14,8 +14,6 @@ var express = require('express'),
     // Server
     server = require('./../../server'),
     URL = server.serverUrl,
-    // Operations
-    move = require('./operations/move'),
     // Express.js Application
     app = module.exports = express();
 
