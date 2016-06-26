@@ -1,8 +1,8 @@
 var nforce = require('nforce');
 
-var GET_ALL = 'SELECT label__c, calibrated__c, position__c, animation__c, token__c, led__c, motor__c, app__c, CreatedDate, LastModifiedDate, Id FROM Bar__c';
-var GET_BY_ID = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE Id = \'[:id]\'';
-var GET_BY_LABEL = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE label__c = \'[:label]\'';
+var GET_ALL = 'SELECT label__c, calibrated__c, position__c, animation__c, token__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c';
+var GET_BY_ID = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE Id = \'[:id]\'';
+var GET_BY_LABEL = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE label__c = \'[:label]\'';
 
 // var BAR =
 // {
@@ -143,6 +143,11 @@ module.exports = {
         bar.set('animation__c', req.body.animation__c);
         bar.set('token__c', req.body.token__c);
         bar.set('app__c',  req.body.app__c);
+        bar.set('animation_speed__c',  req.body.animation_speed__c);
+        bar.set('animation__c',  req.body.animation__c);
+        bar.set('color__c',  req.body.color__c);
+        bar.set('brightness__c',  req.body.brightness__c);
+        bar.set('device__c',  req.body.device__c);
 
         console.log(">> INSERT");
         console.log(bar.toJSON());
@@ -186,18 +191,13 @@ module.exports = {
 
             org.query({ query: query, oauth: oauth }, function(err, result){
               if (err) {
-
                 console.log(err);
-
-                // -----------------------------------------------------------------
-                // Set Response Object
                 var response =
                 {
                   'href': URL,
                   '_success': false,
                   '_errors': err
                 };
-
                 res.json(response);
 
               // -----------------------------------------------------------------
@@ -210,11 +210,18 @@ module.exports = {
 
                 // -----------------------------------------------------------------
                 // Set Response Object
+                var response =
+                {
+                  'href': URL,
+                  '_id': result.records[0]._fields.id,
+                  '_success': true,
+                  'object': result.records[0]._fields
+                };
+
+
                 console.log(response);
 
-                response.object = result.records[0];
-
-                res.json(response);
+                res.json(result);
               }
             });
 
@@ -262,6 +269,11 @@ module.exports = {
           bar.set('animation__c', req.body.animation__c);
           bar.set('token__c', req.body.token__c);
           bar.set('app__c',  req.body.app__c);
+          bar.set('animation_speed__c',  req.body.animation_speed__c);
+          bar.set('animation__c',  req.body.animation__c);
+          bar.set('color__c',  req.body.color__c);
+          bar.set('brightness__c',  req.body.brightness__c);
+          bar.set('device__c',  req.body.device__c);
 
           org.update({ sobject: bar, oauth: oauth }, function(err, result) {
 
