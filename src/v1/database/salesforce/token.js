@@ -125,7 +125,7 @@ module.exports = {
         var token = nforce.createSObject('Token__c');
         token.set('label__c', req.body.label__c);
         token.set('serial__c', req.body.serial__c);
-        //token.set('app__c ', req.body.app__c );
+        token.set('app__c', req.body.app__c );
 
         console.log(">> INSERT");
         console.log(token.toJSON());
@@ -242,7 +242,7 @@ module.exports = {
           var token = result.records[0];
           token.set('label__c', req.body.label__c);
           token.set('serial__c', req.body.serial__c);
-          //token.set('app__c ', req.body.app__c );
+          token.set('app__c', req.body.app__c );
 
           org.update({ sobject: token, oauth: oauth }, function(err, result) {
 

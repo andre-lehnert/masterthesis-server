@@ -20,6 +20,8 @@ var CREDENTIALS =
 var bars          = require('./bar'),
     animations    = require('./animation'),
     tokens        = require('./token'),
+    devices       = require('./device'),
+    smartphones   = require('./smartphone'),
     apps          = require('./app'),
     notifications = require('./notification');
 
@@ -116,11 +118,19 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  getToken : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        tokens.getToken(req, res, org, oauth);                           // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   insertToken : function(req, res) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        tokens.insertToken(req, res, org, oauth);                 // <--
+        tokens.insertToken(req, res, org, oauth);                         // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
@@ -128,7 +138,7 @@ module.exports = {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        tokens.updateToken(req, res, org, oauth);                 // <--
+        tokens.updateToken(req, res, org, oauth);                         // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
@@ -136,11 +146,96 @@ module.exports = {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        tokens.deleteToken(req, res, org, oauth);                 // <--
+        tokens.deleteToken(req, res, org, oauth);                         // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  // ---------------------------------------------------------------------------
+
+  // ===========================================================================
+
+  // --- Devices ---------------------------------------------------------------
+  getDevices : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        devices.getDevices(req, res, org, oauth);                         // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getDevice : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        devices.getDevice(req, res, org, oauth);                         // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertDevice : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        devices.insertDevice(req, res, org, oauth);                       // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateDevice : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        devices.updateDevice(req, res, org, oauth);                       // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteDevice : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        devices.deleteDevice(req, res, org, oauth);                       // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  // --- Smartphones -----------------------------------------------------------
+  getSmartphones : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        smartphones.getSmartphones(req, res, org, oauth);                 // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getSmartphone : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        smartphones.getSmartphone(req, res, org, oauth);                  // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertSmartphone : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        smartphones.insertSmartphone(req, res, org, oauth);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateSmartphone : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        smartphones.updateSmartphone(req, res, org, oauth);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteSmartphone : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        smartphones.deleteSmartphone(req, res, org, oauth);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  // --- Apps ------------------------------------------------------------------
   getApps : function(req, res) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
@@ -149,7 +244,39 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
-  // ---------------------------------------------------------------------------
+  getApp : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        apps.getApp(req, res, org, oauth);                                // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertApp : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        apps.insertApp(req, res, org, oauth);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateApp : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        apps.updateApp(req, res, org, oauth);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteApp : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        apps.deleteApp(req, res, org, oauth);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  // --- Notifications ---------------------------------------------------------
   getNotifications : function(req, res) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {

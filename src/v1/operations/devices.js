@@ -15,7 +15,7 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 // ---------------- API --------------------------------------------------------
 
-var OPERATION = '/tokens';
+var OPERATION = '/devices';
 
 // ---------------- Routing ----------------------------------------------------
 
@@ -23,33 +23,33 @@ var OPERATION = '/tokens';
  * ## List all receivers
  */
 app.get('/', function(req, res) {
-  db.getTokens(req, res);
+  db.getDevices(req, res);
 });
 
 /*
- * ## Insert new token
+ * ## Insert new Device
  */
 app.post('/', function(req, res) {
-  db.insertToken(req, res);
+  db.insertDevice(req, res);
 });
 
 /*
- * ## Get Token by label
+ * ## Get Device by id
  */
-app.get('/:label', function(req, res) {
-  db.getToken(req, res);
+app.get('/:id', function(req, res) {
+  db.getDevice(req, res);
 });
 
 /*
- * ## Update an Token by label
+ * ## Update an Device by id
  */
-app.put('/:label', function(req, res) {
-  db.updateToken(req, res);
+app.put('/:id', function(req, res) {
+  db.updateDevice(req, res);
 });
 
 /*
- * ## Delete an Token by label
+ * ## Delete an Device by id
  */
-app.delete('/:label', function(req, res) {
-  db.deleteToken(req, res);
+app.delete('/:id', function(req, res) {
+  db.deleteDevice(req, res);
 });

@@ -29,7 +29,9 @@ var OPERATIONS =
     'apps': '/apps',
     'bars': '/bars',
     'tokens': '/tokens',
-    'animations': '/animations'
+    'animations': '/animations',
+    'devices': '/devices',
+    'smartphones': '/smartphones'
     // more operations and /operations/js-files
 };
 
@@ -43,11 +45,13 @@ var API =
     URL+'/api/' + name + OPERATIONS.light,
     URL+'/api/' + name + OPERATIONS.animation,
     URL+'/api/' + name + OPERATIONS.status,
-    // Production API v1
+    // Production API v2
     URL+'/api/' + name + OPERATIONS.apps,
     URL+'/api/' + name + OPERATIONS.bars,
     URL+'/api/' + name + OPERATIONS.tokens,
     URL+'/api/' + name + OPERATIONS.animations,
+    URL+'/api/' + name + OPERATIONS.devices,
+    URL+'/api/' + name + OPERATIONS.smartphones,
   ]
 };
 

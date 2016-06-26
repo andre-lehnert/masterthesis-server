@@ -1,12 +1,11 @@
 var nforce = require('nforce');
 
-var GET_ALL = 'SELECT label__c, calibrated__c, position__c, animation__c, token__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c';
-var GET_BY_ID = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE Id = \'[:id]\'';
-var GET_BY_LABEL = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE label__c = \'[:label]\'';
+var GET_ALL = 'SELECT Id, model__c, brand__c, serial__c, os__c, device__c, Name, CreatedDate, LastModifiedDate FROM Smartphone__c';
+var GET_BY_ID = 'SELECT Id, model__c, brand__c, serial__c, os__c, device__c, Name, CreatedDate, LastModifiedDate FROM Smartphone__c WHERE Id = \'[:id]\'';
 
 module.exports = {
 
-  getBars : function(req, res, org, oauth) {
+  getSmartphones : function(req, res, org, oauth) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -54,15 +53,15 @@ module.exports = {
         });
   },
 
-  getBar : function(req, res, org, oauth) {
+  getSmartphone : function(req, res, org, oauth) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-    var barLabel = req.params.label;
+    var obj = req.params.id;
 
-    console.log(">> GET BAR BY LABEL: "+ barLabel);
+    console.log(">> GET SMARTPHONE BY ID: "+ obj);
 
-    var query = GET_BY_LABEL.replace("[:label]", barLabel);
+    var query = GET_BY_ID.replace("[:id]", obj);
 
     org.query({ query: query, oauth: oauth }, function(err, result){
       if (err) {
@@ -118,29 +117,21 @@ module.exports = {
     });
   },
 
-  insertBar : function(req, res, org, oauth) {
+  insertSmartphone : function(req, res, org, oauth) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-        var bar = nforce.createSObject('Bar__c');
-        bar.set('label__c', req.body.label__c);
-        bar.set('position__c', req.body.position__c);
-        bar.set('led__c', req.body.led__c);
-        bar.set('motor__c', req.body.motor__c);
-        bar.set('calibrated__c', req.body.calibrated__c);
-        bar.set('animation__c', req.body.animation__c);
-        bar.set('token__c', req.body.token__c);
-        bar.set('app__c',  req.body.app__c);
-        bar.set('animation_speed__c',  req.body.animation_speed__c);
-        bar.set('animation__c',  req.body.animation__c);
-        bar.set('color__c',  req.body.color__c);
-        bar.set('brightness__c',  req.body.brightness__c);
-        bar.set('device__c',  req.body.device__c);
+        var obj = nforce.createSObject('Smartphone__c');
+        obj.set('model__c', req.body.model__c);
+        obj.set('brand__c', req.body.brand__c);
+        obj.set('serial__c', req.body.serial__c);
+        obj.set('os__c', req.body.os__c);
+        obj.set('device__c', req.body.device__c );
 
         console.log(">> INSERT");
-        console.log(bar.toJSON());
+        console.log(obj.toJSON());
 
-        org.insert({ sobject: bar, oauth: oauth }, function(err, result){
+        org.insert({ sobject: obj, oauth: oauth }, function(err, result){
 
           // -----------------------------------------------------------------
           // on ERROR
@@ -217,15 +208,15 @@ module.exports = {
         });
   },
 
-  updateBar : function(req, res, org, oauth) {
+  updateSmartphone : function(req, res, org, oauth) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-    var barLabel = req.params.label;
+    var obj = req.params.id;
 
-    console.log(">> UPDATE BAR BY LABEL: "+ barLabel);
+    console.log(">> UPDATE SMARTPHONE BY LABEL: "+ obj);
 
-    var query = GET_BY_LABEL.replace("[:label]", barLabel);
+    var query = GET_BY_ID.replace("[:id]", obj);
 
     org.query({ query: query, oauth: oauth }, function(err, result) {
 
@@ -249,21 +240,14 @@ module.exports = {
         // UPDATE
         if (result.totalSize == 1) { // 1 entry
 
-          var bar = result.records[0];
-          bar.set('position__c', req.body.position__c);
-          bar.set('led__c', req.body.led__c);
-          bar.set('motor__c', req.body.motor__c);
-          bar.set('calibrated__c', req.body.calibrated__c);
-          bar.set('animation__c', req.body.animation__c);
-          bar.set('token__c', req.body.token__c);
-          bar.set('app__c',  req.body.app__c);
-          bar.set('animation_speed__c',  req.body.animation_speed__c);
-          bar.set('animation__c',  req.body.animation__c);
-          bar.set('color__c',  req.body.color__c);
-          bar.set('brightness__c',  req.body.brightness__c);
-          bar.set('device__c',  req.body.device__c);
+          var obj = result.records[0];
+          obj.set('model__c', req.body.model__c);
+          obj.set('brand__c', req.body.brand__c);
+          obj.set('serial__c', req.body.serial__c);
+          obj.set('os__c', req.body.os__c);
+          obj.set('device__c', req.body.device__c );
 
-          org.update({ sobject: bar, oauth: oauth }, function(err, result) {
+          org.update({ sobject: obj, oauth: oauth }, function(err, result) {
 
             if (err) {
               console.log(err);
@@ -346,15 +330,15 @@ module.exports = {
 
   },
 
-  deleteBar : function(req, res, org, oauth) {
+  deleteSmartphone : function(req, res, org, oauth) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-    var barLabel = req.params.label;
+    var obj = req.params.id;
 
-    console.log(">> DELETE BAR BY LABEL: "+ barLabel);
+    console.log(">> DELETE SMARTPHONE BY ID: "+ obj);
 
-    var query = GET_BY_LABEL.replace("[:label]", barLabel);
+    var query = GET_BY_ID.replace("[:id]", obj);
 
     org.query({ query: query, oauth: oauth }, function(err, result) {
 
@@ -378,9 +362,9 @@ module.exports = {
         // UPDATE
         if (result.totalSize == 1) { // 1 entry
 
-          var bar = result.records[0];
+          var obj = result.records[0];
 
-          org.delete({ sobject: bar, oauth: oauth }, function(err, result) {
+          org.delete({ sobject: obj, oauth: oauth }, function(err, result) {
 
             if (err) {
               console.log(err);
