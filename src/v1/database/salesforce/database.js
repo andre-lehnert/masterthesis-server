@@ -66,12 +66,44 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
-  // ---------------------------------------------------------------------------
+  // --- Animations ------------------------------------------------------------
   getAnimations : function(req, res) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         animations.getAnimations(req, res, org, oauth);                   // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getAnimation : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        animations.getAnimation(req, res, org, oauth);                   // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertAnimation : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        animations.insertAnimation(req, res, org, oauth);                   // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateAnimation : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        animations.updateAnimation(req, res, org, oauth);                   // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteAnimation : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        animations.deleteAnimation(req, res, org, oauth);                   // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

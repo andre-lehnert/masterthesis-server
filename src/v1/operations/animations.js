@@ -1,6 +1,6 @@
 // ---------------- Operation --------------------------------------------------
-
-var express = require('express'),
+var bodyParser = require('body-parser'),
+    express = require('express'),
     // Server
     server = require('./../../../server'),
     URL = server.serverUrl,
@@ -10,6 +10,8 @@ var express = require('express'),
     db = require('./../database/salesforce/database');
     // Express.js Application
     app = module.exports = express();
+
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 // ---------------- API --------------------------------------------------------
 
@@ -21,7 +23,33 @@ var OPERATION = '/animations';
  * ## List all receivers
  */
 app.get('/', function(req, res) {
-
   db.getAnimations(req, res);
+});
 
+/*
+ * ## Insert new bar
+ */
+app.post('/', function(req, res) {
+  db.insertAnimation(req, res);
+});
+
+/*
+ * ## Get animation by name
+ */
+app.get('/:name', function(req, res) {
+  db.getAnimation(req, res);
+});
+
+/*
+ * ## Update an animation by name
+ */
+app.put('/:name', function(req, res) {
+  db.updateAnimation(req, res);
+});
+
+/*
+ * ## Delete an animation by name
+ */
+app.delete('/:name', function(req, res) {
+  db.deleteAnimation(req, res);
 });
