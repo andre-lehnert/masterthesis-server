@@ -31,7 +31,9 @@ var OPERATIONS =
     'tokens': '/tokens',
     'animations': '/animations',
     'devices': '/devices',
-    'smartphones': '/smartphones'
+    'smartphones': '/smartphones',
+    'notifications': '/notifications',
+    'invocations': '/invocations',
     // more operations and /operations/js-files
 };
 
@@ -52,6 +54,8 @@ var API =
     URL+'/api/' + name + OPERATIONS.animations,
     URL+'/api/' + name + OPERATIONS.devices,
     URL+'/api/' + name + OPERATIONS.smartphones,
+    URL+'/api/' + name + OPERATIONS.notifications,
+    URL+'/api/' + name + OPERATIONS.invocations
   ]
 };
 

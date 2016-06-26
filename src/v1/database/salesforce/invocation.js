@@ -1,11 +1,11 @@
 var nforce = require('nforce');
 
-var GET_ALL = 'SELECT Id, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c';
-var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c WHERE Id = \'[:id]\'';
+var GET_ALL = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c';
+var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE Id = \'[:id]\'';
 
 module.exports = {
 
-  getNotifications : function(req, res, org, oauth) {
+  getInvocations : function(req, res, org, oauth) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -53,13 +53,13 @@ module.exports = {
         });
   },
 
-  getNotification : function(req, res, org, oauth) {
+  getInvocation : function(req, res, org, oauth) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
     var obj = req.params.id;
 
-    console.log(">> GET Notification BY ID: "+ obj);
+    console.log(">> GET Invocation BY ID: "+ obj);
 
     var query = GET_BY_ID.replace("[:id]", obj);
 
@@ -117,17 +117,16 @@ module.exports = {
     });
   },
 
-  insertNotification : function(req, res, org, oauth) {
+  insertInvocation : function(req, res, org, oauth) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-        var obj = nforce.createSObject('Notification__c');
-        obj.set('text__c', req.body.text__c);
-        obj.set('title__c', req.body.title__c);
-        obj.set('datetime__c', req.body.datetime__c);
-        obj.set('contact__c', req.body.contact__c);
-        obj.set('priority__c', req.body.priority__c);
+        var obj = nforce.createSObject('Invocation__c');
+        obj.set('start__c', req.body.start__c);
+        obj.set('end__c', req.body.end__c);
+        obj.set('total_time__c', req.body.total_time__c);
         obj.set('app__c', req.body.app__c);
+
 
         console.log(">> INSERT");
         console.log(obj.toJSON());
@@ -209,13 +208,13 @@ module.exports = {
         });
   },
 
-  updateNotification : function(req, res, org, oauth) {
+  updateInvocation : function(req, res, org, oauth) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
     var obj = req.params.id;
 
-    console.log(">> UPDATE Notification BY LABEL: "+ obj);
+    console.log(">> UPDATE Invocation BY LABEL: "+ obj);
 
     var query = GET_BY_ID.replace("[:id]", obj);
 
@@ -242,11 +241,9 @@ module.exports = {
         if (result.totalSize == 1) { // 1 entry
 
           var obj = result.records[0];
-          obj.set('text__c', req.body.text__c);
-          obj.set('title__c', req.body.title__c);
-          obj.set('datetime__c', req.body.datetime__c);
-          obj.set('contact__c', req.body.contact__c);
-          obj.set('priority__c', req.body.priority__c);
+          obj.set('start__c', req.body.start__c);
+          obj.set('end__c', req.body.end__c);
+          obj.set('total_time__c', req.body.total_time__c);
           obj.set('app__c', req.body.app__c);
 
           org.update({ sobject: obj, oauth: oauth }, function(err, result) {
@@ -332,13 +329,13 @@ module.exports = {
 
   },
 
-  deleteNotification : function(req, res, org, oauth) {
+  deleteInvocation : function(req, res, org, oauth) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
     var obj = req.params.id;
 
-    console.log(">> DELETE Notification BY ID: "+ obj);
+    console.log(">> DELETE Invocation BY ID: "+ obj);
 
     var query = GET_BY_ID.replace("[:id]", obj);
 

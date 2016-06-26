@@ -23,7 +23,8 @@ var bars          = require('./bar'),
     devices       = require('./device'),
     smartphones   = require('./smartphone'),
     apps          = require('./app'),
-    notifications = require('./notification');
+    notifications = require('./notification'),
+    invocations = require('./invocation');
 
 
 module.exports = {
@@ -284,7 +285,80 @@ module.exports = {
         notifications.getNotifications(req, res, org, oauth);             // <--
       } else { console.log('Error: ' + err.message); }
     });
-  }
+  },
+  getNotification : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        notifications.getNotification(req, res, org, oauth);              // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertNotification : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        notifications.insertNotification(req, res, org, oauth);           // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateNotification : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        notifications.updateNotification(req, res, org, oauth);           // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteNotification : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        notifications.deleteNotification(req, res, org, oauth);           // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  // --- Invocations -----------------------------------------------------------
+  getInvocations : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        invocations.getInvocations(req, res, org, oauth);                 // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getInvocation : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        invocations.getInvocation(req, res, org, oauth);                  // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertInvocation : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        invocations.insertInvocation(req, res, org, oauth);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateInvocation : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        invocations.updateInvocation(req, res, org, oauth);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteInvocation : function(req, res) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        invocations.deleteInvocation(req, res, org, oauth);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   // ---------------------------------------------------------------------------
 
 
