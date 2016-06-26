@@ -2,7 +2,7 @@
 var bodyParser = require('body-parser'),
     express = require('express'),
     // Server
-    server = require('./../../../server'),
+    server = require('./../../../webserver'),
     URL = server.serverUrl,
     // REST-API-Router
     api = require('./../rest-api'),

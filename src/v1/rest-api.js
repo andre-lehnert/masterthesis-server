@@ -12,7 +12,7 @@ module.exports.name = name;
 
 var express = require('express'),
     // Server
-    server = require('./../../server'),
+    server = require('./../../webserver'),
     URL = server.serverUrl,
     // Express.js Application
     app = module.exports = express();
