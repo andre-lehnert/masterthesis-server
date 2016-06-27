@@ -33,12 +33,15 @@ var requestBar = function (req, res, next) {
 
 var moveBar = function (req, res, next) {
 
-  if (req.resonse._success) {
+  if (req.response._success) {
+console.log('SPEED:'+req.params.speed);
     if (!req.params.speed)
-      i2c.move(req.resonse.object.motor__c, req.params.position, 'half');
+      i2c.move(req.response.object.motor__c, req.params.position, 'half');
     else
-      i2c.move(req.resonse.object.motor__c, req.params.position, req.params.speed);
+      i2c.move(req.response.object.motor__c, req.params.position, req.params.speed);
   }
+
+next();
 };
 
 
