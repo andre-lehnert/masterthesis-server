@@ -6,7 +6,7 @@ var GET_BY_LABEL = 'SELECT label__c, token__c, animation__c, position__c, calibr
 
 module.exports = {
 
-  getBars : function(req, res, org, oauth) {
+  getBars : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -24,7 +24,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+            next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -49,12 +50,13 @@ module.exports = {
 
             console.log(response);
 
-            res.json(response);
+            req.response = response;
+            next();
           }
         });
   },
 
-  getBar : function(req, res, org, oauth) {
+  getBar : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -78,7 +80,8 @@ module.exports = {
           '_errors': err
         };
 
-        res.json(response);
+        req.response = response;
+        next();
 
       } else if(!err) {
 
@@ -99,7 +102,8 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+          next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -112,13 +116,14 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+          next();
         }
       }
     });
   },
 
-  insertBar : function(req, res, org, oauth) {
+  insertBar : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -157,7 +162,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+            next();
 
           // -----------------------------------------------------------------
           // on SUCCESS
@@ -186,7 +192,8 @@ module.exports = {
                   '_success': false,
                   '_errors': err
                 };
-                res.json(response);
+                req.response = response;
+                next();
 
               // -----------------------------------------------------------------
               // on SUCCESS
@@ -208,8 +215,8 @@ module.exports = {
 
 
                 console.log(response);
-
-                res.json(result);
+                req.response = response;
+                next();
               }
             });
 
@@ -217,7 +224,7 @@ module.exports = {
         });
   },
 
-  updateBar : function(req, res, org, oauth) {
+  updateBar : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -237,7 +244,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+        next();
 
       } else if(!err) {
 
@@ -273,7 +281,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+              next();
 
             } else if(!err) {
 
@@ -289,7 +298,8 @@ module.exports = {
                     '_success': false,
                     '_errors': err
                   };
-                  res.json(response);
+                  req.response = response;
+                  next();
 
                 } else if(!err) {
 
@@ -309,8 +319,8 @@ module.exports = {
                     };
 
                     console.log(response);
-
-                    res.json(response);
+                    req.response = response;
+                    next();
 
                   } else { // no entry // salesforce duplicate check
 
@@ -323,7 +333,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+                    next();
                   }
                 }
 
@@ -339,14 +350,15 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+          next();
         }
       }
     });
 
   },
 
-  deleteBar : function(req, res, org, oauth) {
+  deleteBar : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -366,7 +378,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+        next();
 
       } else if(!err) {
 
@@ -390,7 +403,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+              next();
 
             } else if(!err) {
               console.log('DELETE COMPLETE');
@@ -400,7 +414,8 @@ module.exports = {
                 '_success': true
               };
               console.log(response);
-              res.json(response);
+              req.response = response;
+              next();
             }
           });
 
@@ -412,7 +427,8 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+          next();
         }
       }
     });

@@ -1,44 +1,73 @@
 // ---------------- Operation ---------------------------------------------
 
-var express = require('express'),
+var bodyParser = require('body-parser'),
+    express = require('express'),
     // Server
     server = require('./../../../webserver'),
     URL = server.serverUrl,
     // REST-API-Router
     api = require('./../rest-api'),
     // Database Access (salesforce REST-API)
-    db = require('./../database/salesforce/database');
+    db = require('./../database/salesforce/database'),
+
+    i2c = require('masterthesis-i2c-library');
     // Express.js Application
     app = module.exports = express();
+
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 // ---------------- API ---------------------------------------------------
 
 var OPERATION = '/move';
+
+
+// ---------------- Operations --------------------------------------------
+
+var requestBars = function (req, res, next) {
+  db.getBars(req, res, next);
+};
+
+var requestBar = function (req, res, next) {
+  db.getBar(req, res, next);
+};
+
+var moveBar = function (req, res, next) {
+
+  if (req.resonse._success) {
+    if (!req.params.speed)
+      i2c.move(req.resonse.object.motor__c, req.params.position, 'half');
+    else
+      i2c.move(req.resonse.object.motor__c, req.params.position, req.params.speed);
+  }
+};
+
 
 // ---------------- Routing -----------------------------------------------
 
 /*
  * ## List all receivers
  */
-app.get('/', function(req, res) {
-
-  db.getBars(req, res);
-
+app.get('/', [requestBars], function(req, res) {
+  res.json(req.response);
 });
 
-app.get('/:receiver', function(req, res) {
-    res.json(
-      {
-        'receiver' : req.params.receiver
-      }
-    );
+/*
+ * ## Get a bar by label
+ */
+app.get('/:label', [requestBar], function(req, res) {
+  res.json(req.response);
 });
 
-app.get('/:receiver/:position', function(req, res) {
-    res.json(
-      {
-        'receiver' : req.params.receiver,
-        'position' : req.params.position
-      }
-    );
+/*
+ * ## Move a bar to :position
+ */
+app.get('/:label/:position', [requestBar, moveBar], function (req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Move a bar to :position with :speed
+ */
+app.get('/:label/:position/:speed', [requestBar, moveBar], function (req, res) {
+  res.json(req.response);
 });

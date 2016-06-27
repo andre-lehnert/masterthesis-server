@@ -29,43 +29,43 @@ var bars          = require('./bar'),
 
 module.exports = {
   // --- Bars ------------------------------------------------------------------
-  getBars : function(req, res) {
+  getBars : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        bars.getBars(req, res, org, oauth);                               // <--
+        bars.getBars(req, res, org, oauth, next);                               // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  getBar : function(req, res) {
+  getBar : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        bars.getBar(req, res, org, oauth);                                // <--
+        bars.getBar(req, res, org, oauth, next);                                // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  insertBar : function (req, res) {
+  insertBar : function (req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        bars.insertBar(req, res, org, oauth);                             // <--
+        bars.insertBar(req, res, org, oauth, next);                             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  updateBar : function (req, res) {
+  updateBar : function (req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        bars.updateBar(req, res, org, oauth);                             // <--
+        bars.updateBar(req, res, org, oauth, next);                             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  deleteBar : function (req, res) {
+  deleteBar : function (req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        bars.deleteBar(req, res, org, oauth);                             // <--
+        bars.deleteBar(req, res, org, oauth, next);                             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

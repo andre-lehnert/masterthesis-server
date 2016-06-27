@@ -18,39 +18,60 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 var OPERATION = '/bars';
 
+// ---------------- Operations --------------------------------------------
+
+var requestBars = function (req, res, next) {
+  db.getBars(req, res, next);
+};
+
+var requestBar = function (req, res, next) {
+  db.getBar(req, res, next);
+};
+
+var insertBar = function (req, res, next) {
+    db.insertBar(req, res, next);
+};
+
+var updateBar = function (req, res, next) {
+    db.updateBar(req, res, next);
+};
+
+var deleteBar = function (req, res, next) {
+    db.deleteBar(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
  * ## List all receivers
  */
-app.get('/', function(req, res) {
-  db.getBars(req, res);
+app.get('/', [requestBars], function(req, res) {
+ res.json(req.response);
 });
 
 /*
  * ## Insert new bar
  */
-app.post('/', function(req, res) {
-  db.insertBar(req, res);
+app.post('/', [insertBar], function(req, res) {
+ res.json(req.response);
 });
-
 /*
  * ## Get bar by label
  */
-app.get('/:label', function(req, res) {
-  db.getBar(req, res);
+app.get('/:label', [requestBar], function(req, res) {
+ res.json(req.response);
 });
 
 /*
  * ## Update a bar by label
  */
-app.put('/:label', function(req, res) {
-  db.updateBar(req, res);
+app.put('/:label', [updateBar], function(req, res) {
+ res.json(req.response);
 });
 
 /*
  * ## Delete a bar by label
  */
-app.delete('/:label', function(req, res) {
-  db.deleteBar(req, res);
+app.delete('/:label', [deleteBar], function(req, res) {
+ res.json(req.response);
 });
