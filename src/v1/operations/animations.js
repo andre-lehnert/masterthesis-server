@@ -17,39 +17,61 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 var OPERATION = '/animations';
 
+// ---------------- Operations --------------------------------------------
+
+var requestAnimations = function (req, res, next) {
+  db.getAnimations(req, res, next);
+};
+
+var requestAnimation = function (req, res, next) {
+  db.getAnimation(req, res, next);
+};
+
+var insertAnimation = function (req, res, next) {
+    db.insertAnimation(req, res, next);
+};
+
+var updateAnimation = function (req, res, next) {
+    db.updateAnimation(req, res, next);
+};
+
+var deleteAnimation = function (req, res, next) {
+    db.deleteAnimation(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
  * ## List all receivers
  */
-app.get('/', function(req, res) {
-  db.getAnimations(req, res);
+app.get('/', [requestAnimations], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Insert new animation
  */
-app.post('/', function(req, res) {
-  db.insertAnimation(req, res);
+app.post('/', [insertAnimation], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Get animation by name
  */
-app.get('/:name', function(req, res) {
-  db.getAnimation(req, res);
+app.get('/:name', [requestAnimation], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Update an animation by name
  */
-app.put('/:name', function(req, res) {
-  db.updateAnimation(req, res);
+app.put('/:name', [updateAnimation], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Delete an animation by name
  */
-app.delete('/:name', function(req, res) {
-  db.deleteAnimation(req, res);
+app.delete('/:name', [deleteAnimation], function(req, res) {
+  res.json(req.response);
 });

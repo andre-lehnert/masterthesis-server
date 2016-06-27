@@ -70,43 +70,43 @@ module.exports = {
     });
   },
   // --- Animations ------------------------------------------------------------
-  getAnimations : function(req, res) {
+  getAnimations : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        animations.getAnimations(req, res, org, oauth);                   // <--
+        animations.getAnimations(req, res, org, oauth, next);                   // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  getAnimation : function(req, res) {
+  getAnimation : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        animations.getAnimation(req, res, org, oauth);                    // <--
+        animations.getAnimation(req, res, org, oauth, next);                    // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  insertAnimation : function(req, res) {
+  insertAnimation : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        animations.insertAnimation(req, res, org, oauth);                 // <--
+        animations.insertAnimation(req, res, org, oauth, next);                 // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  updateAnimation : function(req, res) {
+  updateAnimation : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        animations.updateAnimation(req, res, org, oauth);                 // <--
+        animations.updateAnimation(req, res, org, oauth, next);                 // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
-  deleteAnimation : function(req, res) {
+  deleteAnimation : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        animations.deleteAnimation(req, res, org, oauth);                 // <--
+        animations.deleteAnimation(req, res, org, oauth, next);                 // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

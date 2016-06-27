@@ -7,7 +7,7 @@ var GET_BY_NAME = 'SELECT name__c, short_name__c, LastModifiedDate, CreatedDate,
 
 module.exports = {
 
-  getAnimations : function(req, res, org, oauth) {
+  getAnimations : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -21,7 +21,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+            next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -45,13 +46,13 @@ module.exports = {
             };
 
             console.log(response);
-
-            res.json(response);
+            req.response = response;
+            next();
           }
         });
   },
 
-  getAnimation : function(req, res, org, oauth) {
+  getAnimation : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -75,7 +76,8 @@ module.exports = {
           '_errors': err
         };
 
-        res.json(response);
+        req.response = response;
+        next();
 
       } else if(!err) {
 
@@ -95,8 +97,8 @@ module.exports = {
           };
 
           console.log(response);
-
-          res.json(response);
+          req.response = response;
+          next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -108,14 +110,14 @@ module.exports = {
           };
 
           console.log(response);
-
-          res.json(response);
+          req.response = response;
+          next();
         }
       }
     });
   },
 
-  insertAnimation : function(req, res, org, oauth) {
+  insertAnimation : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -142,8 +144,8 @@ module.exports = {
               '_success': false,
               '_errors': err
             };
-
-            res.json(response);
+            req.response = response;
+            next();
 
           // -----------------------------------------------------------------
           // on SUCCESS
@@ -172,7 +174,8 @@ module.exports = {
                   '_success': false,
                   '_errors': err
                 };
-                res.json(response);
+                req.response = response;
+                next();
 
               // -----------------------------------------------------------------
               // on SUCCESS
@@ -194,8 +197,8 @@ module.exports = {
 
 
                 console.log(response);
-
-                res.json(result);
+                req.response = response;
+                next();
               }
             });
 
@@ -203,7 +206,7 @@ module.exports = {
         });
   },
 
-  updateAnimation : function(req, res, org, oauth) {
+  updateAnimation : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -223,7 +226,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+        next();
 
       } else if(!err) {
 
@@ -248,7 +252,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+              next();
 
             } else if(!err) {
 
@@ -264,7 +269,8 @@ module.exports = {
                     '_success': false,
                     '_errors': err
                   };
-                  res.json(response);
+                  req.response = response;
+                  next();
 
                 } else if(!err) {
 
@@ -284,8 +290,8 @@ module.exports = {
                     };
 
                     console.log(response);
-
-                    res.json(response);
+                    req.response = response;
+                    next();
 
                   } else { // no entry // salesforce duplicate check
 
@@ -297,8 +303,8 @@ module.exports = {
                     };
 
                     console.log(response);
-
-                    res.json(response);
+                    req.response = response;
+                    next();
                   }
                 }
 
@@ -314,14 +320,15 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+          next();
         }
       }
     });
 
   },
 
-  deleteAnimation : function(req, res, org, oauth) {
+  deleteAnimation : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -341,7 +348,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+        next();
 
       } else if(!err) {
 
@@ -365,7 +373,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+              next();
 
             } else if(!err) {
               console.log('DELETE COMPLETE');
@@ -375,7 +384,8 @@ module.exports = {
                 '_success': true
               };
               console.log(response);
-              res.json(response);
+              req.response = response;
+              next();
             }
           });
 
@@ -387,7 +397,8 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+          next();
         }
       }
     });

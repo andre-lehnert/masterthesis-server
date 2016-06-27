@@ -31,17 +31,16 @@ var requestBar = function (req, res, next) {
   db.getBar(req, res, next);
 };
 
-var moveBar = function (req, res, next) {
+var sendI2CRequest = function (req, res, next) {
+  console.log(req.resonse);
+  console.log(req.resonse);
 
-  if (req.response._success) {
-console.log('SPEED:'+req.params.speed);
+  if (req.resonse._success) {
     if (!req.params.speed)
-      i2c.move(req.response.object.motor__c, req.params.position, 'half');
+      i2c.move(req.resonse.object.motor__c, req.params.position, 'half');
     else
-      i2c.move(req.response.object.motor__c, req.params.position, req.params.speed);
+      i2c.move(req.resonse.object.motor__c, req.params.position, req.params.speed);
   }
-
-next();
 };
 
 
@@ -64,13 +63,13 @@ app.get('/:label', [requestBar], function(req, res) {
 /*
  * ## Move a bar to :position
  */
-app.get('/:label/:position', [requestBar, moveBar], function (req, res) {
+app.get('/:label/:position', [requestBar, sendI2CRequest], function (req, res) {
   res.json(req.response);
 });
 
 /*
  * ## Move a bar to :position with :speed
  */
-app.get('/:label/:position/:speed', [requestBar, moveBar], function (req, res) {
+app.get('/:label/:position/:speed', [requestBar, sendI2CRequest], function (req, res) {
   res.json(req.response);
 });

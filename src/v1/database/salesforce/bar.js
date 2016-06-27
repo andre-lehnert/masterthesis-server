@@ -101,7 +101,8 @@ module.exports = {
           };
 
           console.log(response);
-
+          req.ledControl = response.object.led__c;
+          req.motorControl = response.object.motor__c;
           req.response = response;
           next();
 
