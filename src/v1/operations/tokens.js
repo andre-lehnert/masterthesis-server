@@ -58,20 +58,20 @@ app.post('/', [insertToken], function(req, res) {
 /*
  * ## Get Token by id
  */
-app.get('/:id', [requestToken], function(req, res) {
+app.get('/:label', [requestToken], function(req, res) {
   res.json(req.response);
 });
 
 /*
  * ## Update an Token by id
  */
-app.put('/:id', [updateToken], function(req, res) {
+app.put('/:label', [updateToken], function(req, res) {
   res.json(req.response);
 });
 
 /*
  * ## Delete an Token by id
  */
-app.delete('/:id', [deleteToken], function(req, res) {
+app.delete('/:label', [deleteToken], function(req, res) {
   res.json(req.response);
 });
