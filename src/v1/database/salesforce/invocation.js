@@ -5,7 +5,7 @@ var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, tot
 
 module.exports = {
 
-  getInvocations : function(req, res, org, oauth) {
+  getInvocations : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -23,7 +23,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -48,12 +49,13 @@ module.exports = {
 
             console.log(response);
 
-            res.json(response);
+            req.response = response;
+next();
           }
         });
   },
 
-  getInvocation : function(req, res, org, oauth) {
+  getInvocation : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -77,7 +79,8 @@ module.exports = {
           '_errors': err
         };
 
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -98,7 +101,8 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -111,13 +115,14 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
   },
 
-  insertInvocation : function(req, res, org, oauth) {
+  insertInvocation : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -148,7 +153,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           // -----------------------------------------------------------------
           // on SUCCESS
@@ -177,7 +183,8 @@ module.exports = {
                   '_success': false,
                   '_errors': err
                 };
-                res.json(response);
+                req.response = response;
+next();
 
               // -----------------------------------------------------------------
               // on SUCCESS
@@ -208,7 +215,7 @@ module.exports = {
         });
   },
 
-  updateInvocation : function(req, res, org, oauth) {
+  updateInvocation : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -228,7 +235,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -256,7 +264,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
 
@@ -272,7 +281,8 @@ module.exports = {
                     '_success': false,
                     '_errors': err
                   };
-                  res.json(response);
+                  req.response = response;
+next();
 
                 } else if(!err) {
 
@@ -293,7 +303,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
 
                   } else { // no entry // salesforce duplicate check
 
@@ -306,7 +317,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
                   }
                 }
 
@@ -322,14 +334,15 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
 
   },
 
-  deleteInvocation : function(req, res, org, oauth) {
+  deleteInvocation : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -349,7 +362,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -373,7 +387,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
               console.log('DELETE COMPLETE');
@@ -383,7 +398,8 @@ module.exports = {
                 '_success': true
               };
               console.log(response);
-              res.json(response);
+              req.response = response;
+next();
             }
           });
 
@@ -395,7 +411,8 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });

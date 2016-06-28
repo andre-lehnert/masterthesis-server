@@ -8,7 +8,7 @@ var bodyParser = require('body-parser'),
     api = require('./../rest-api'),
     // Database Access (salesforce REST-API)
     db = require('./../database/salesforce/database');
-    // Express.js Application
+    // Express.js Devicelication
     app = module.exports = express();
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -17,39 +17,61 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 var OPERATION = '/devices';
 
+// ---------------- Operations --------------------------------------------
+
+var requestDevices = function (req, res, next) {
+  db.getDevices(req, res, next);
+};
+
+var requestDevice = function (req, res, next) {
+  db.getDevice(req, res, next);
+};
+
+var insertDevice = function (req, res, next) {
+    db.insertDevice(req, res, next);
+};
+
+var updateDevice = function (req, res, next) {
+    db.updateDevice(req, res, next);
+};
+
+var deleteDevice = function (req, res, next) {
+    db.deleteDevice(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
  * ## List all receivers
  */
-app.get('/', function(req, res) {
-  db.getDevices(req, res);
+app.get('/', [requestDevices], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Insert new Device
  */
-app.post('/', function(req, res) {
-  db.insertDevice(req, res);
+app.post('/', [insertDevice], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Get Device by id
  */
-app.get('/:id', function(req, res) {
-  db.getDevice(req, res);
+app.get('/:id', [requestDevice], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Update an Device by id
  */
-app.put('/:id', function(req, res) {
-  db.updateDevice(req, res);
+app.put('/:id', [updateDevice], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Delete an Device by id
  */
-app.delete('/:id', function(req, res) {
-  db.deleteDevice(req, res);
+app.delete('/:id', [deleteDevice], function(req, res) {
+  res.json(req.response);
 });

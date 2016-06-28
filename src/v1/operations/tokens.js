@@ -17,39 +17,61 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 var OPERATION = '/tokens';
 
+// ---------------- Operations --------------------------------------------
+
+var requestTokens = function (req, res, next) {
+  db.getTokens(req, res, next);
+};
+
+var requestToken = function (req, res, next) {
+  db.getToken(req, res, next);
+};
+
+var insertToken = function (req, res, next) {
+    db.insertToken(req, res, next);
+};
+
+var updateToken = function (req, res, next) {
+    db.updateToken(req, res, next);
+};
+
+var deleteToken = function (req, res, next) {
+    db.deleteToken(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
  * ## List all receivers
  */
-app.get('/', function(req, res) {
-  db.getTokens(req, res);
+app.get('/', [requestTokens], function(req, res) {
+  res.json(req.response);
 });
 
 /*
- * ## Insert new token
+ * ## Insert new Token
  */
-app.post('/', function(req, res) {
-  db.insertToken(req, res);
+app.post('/', [insertToken], function(req, res) {
+  res.json(req.response);
 });
 
 /*
- * ## Get Token by label
+ * ## Get Token by id
  */
-app.get('/:label', function(req, res) {
-  db.getToken(req, res);
+app.get('/:id', [requestToken], function(req, res) {
+  res.json(req.response);
 });
 
 /*
- * ## Update an Token by label
+ * ## Update an Token by id
  */
-app.put('/:label', function(req, res) {
-  db.updateToken(req, res);
+app.put('/:id', [updateToken], function(req, res) {
+  res.json(req.response);
 });
 
 /*
- * ## Delete an Token by label
+ * ## Delete an Token by id
  */
-app.delete('/:label', function(req, res) {
-  db.deleteToken(req, res);
+app.delete('/:id', [deleteToken], function(req, res) {
+  res.json(req.response);
 });

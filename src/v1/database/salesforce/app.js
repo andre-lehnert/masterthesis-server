@@ -5,7 +5,7 @@ var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, name__c, author__c, p
 
 module.exports = {
 
-  getApps : function(req, res, org, oauth) {
+  getApps : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -23,7 +23,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -48,12 +49,13 @@ module.exports = {
 
             console.log(response);
 
-            res.json(response);
+            req.response = response;
+next();
           }
         });
   },
 
-  getApp : function(req, res, org, oauth) {
+  getApp : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -77,7 +79,8 @@ module.exports = {
           '_errors': err
         };
 
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -98,7 +101,8 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -111,13 +115,14 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
   },
 
-  insertApp : function(req, res, org, oauth) {
+  insertApp : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -153,7 +158,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           // -----------------------------------------------------------------
           // on SUCCESS
@@ -182,7 +188,8 @@ module.exports = {
                   '_success': false,
                   '_errors': err
                 };
-                res.json(response);
+                req.response = response;
+next();
 
               // -----------------------------------------------------------------
               // on SUCCESS
@@ -213,7 +220,7 @@ module.exports = {
         });
   },
 
-  updateApp : function(req, res, org, oauth) {
+  updateApp : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -233,7 +240,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -267,7 +275,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
 
@@ -283,7 +292,8 @@ module.exports = {
                     '_success': false,
                     '_errors': err
                   };
-                  res.json(response);
+                  req.response = response;
+next();
 
                 } else if(!err) {
 
@@ -304,7 +314,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
 
                   } else { // no entry // salesforce duplicate check
 
@@ -317,7 +328,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
                   }
                 }
 
@@ -333,14 +345,15 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
 
   },
 
-  deleteApp : function(req, res, org, oauth) {
+  deleteApp : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -360,7 +373,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -384,7 +398,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
               console.log('DELETE COMPLETE');
@@ -394,7 +409,8 @@ module.exports = {
                 '_success': true
               };
               console.log(response);
-              res.json(response);
+              req.response = response;
+next();
             }
           });
 
@@ -406,7 +422,8 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });

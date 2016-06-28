@@ -17,39 +17,61 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 var OPERATION = '/notifications';
 
+// ---------------- Operations --------------------------------------------
+
+var requestNotifications = function (req, res, next) {
+  db.getNotifications(req, res, next);
+};
+
+var requestNotification = function (req, res, next) {
+  db.getNotification(req, res, next);
+};
+
+var insertNotification = function (req, res, next) {
+    db.insertNotification(req, res, next);
+};
+
+var updateNotification = function (req, res, next) {
+    db.updateNotification(req, res, next);
+};
+
+var deleteNotification = function (req, res, next) {
+    db.deleteNotification(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
  * ## List all receivers
  */
-app.get('/', function(req, res) {
-  db.getNotifications(req, res);
+app.get('/', [requestNotifications], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Insert new Notification
  */
-app.post('/', function(req, res) {
-  db.insertNotification(req, res);
+app.post('/', [insertNotification], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Get Notification by id
  */
-app.get('/:id', function(req, res) {
-  db.getNotification(req, res);
+app.get('/:id', [requestNotification], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Update an Notification by id
  */
-app.put('/:id', function(req, res) {
-  db.updateNotification(req, res);
+app.put('/:id', [updateNotification], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Delete an Notification by id
  */
-app.delete('/:id', function(req, res) {
-  db.deleteNotification(req, res);
+app.delete('/:id', [deleteNotification], function(req, res) {
+  res.json(req.response);
 });

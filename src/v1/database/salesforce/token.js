@@ -6,7 +6,7 @@ var GET_BY_LABEL = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifie
 
 module.exports = {
 
-  getTokens : function(req, res, org, oauth) {
+  getTokens : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -24,7 +24,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -49,12 +50,13 @@ module.exports = {
 
             console.log(response);
 
-            res.json(response);
+            req.response = response;
+next();
           }
         });
   },
 
-  getToken : function(req, res, org, oauth) {
+  getToken : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -78,7 +80,8 @@ module.exports = {
           '_errors': err
         };
 
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -99,7 +102,8 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -112,13 +116,14 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
   },
 
-  insertToken : function(req, res, org, oauth) {
+  insertToken : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -147,7 +152,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           // -----------------------------------------------------------------
           // on SUCCESS
@@ -176,7 +182,8 @@ module.exports = {
                   '_success': false,
                   '_errors': err
                 };
-                res.json(response);
+                req.response = response;
+next();
 
               // -----------------------------------------------------------------
               // on SUCCESS
@@ -207,7 +214,7 @@ module.exports = {
         });
   },
 
-  updateToken : function(req, res, org, oauth) {
+  updateToken : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -227,7 +234,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -254,7 +262,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
 
@@ -270,7 +279,8 @@ module.exports = {
                     '_success': false,
                     '_errors': err
                   };
-                  res.json(response);
+                  req.response = response;
+next();
 
                 } else if(!err) {
 
@@ -291,7 +301,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
 
                   } else { // no entry // salesforce duplicate check
 
@@ -304,7 +315,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
                   }
                 }
 
@@ -320,14 +332,15 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
 
   },
 
-  deleteToken : function(req, res, org, oauth) {
+  deleteToken : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -347,7 +360,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -371,7 +385,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
               console.log('DELETE COMPLETE');
@@ -381,7 +396,8 @@ module.exports = {
                 '_success': true
               };
               console.log(response);
-              res.json(response);
+              req.response = response;
+next();
             }
           });
 
@@ -393,7 +409,8 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
