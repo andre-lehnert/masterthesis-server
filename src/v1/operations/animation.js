@@ -32,25 +32,25 @@ var requestBar = function (req, res, next) {
 };
 
 var requestAnimation = function (req, res, next) {
+console.log('Request Animation:');
   db.getAnimation(req, res, next);
 };
 
 var sendI2CRequest = function (req, res, next) {
-  console.log('sendI2CRequest:');
-  console.log(req.resonse);
+  
+  var id, receiver, animation, speed, color, brightness;
 
-  var receiver, animation, speed, color, brightness;
+  if (req.response._success) {
+	
 
-  if (req.resonse._success) {
     if (req.ledControl) {
-
-      console.log('receiver:'+req.ledControl);
-      console.log('animation:'+req.resonse.short_name__c);
+ 
       receiver = req.ledControl;
-      animation = req.resonse.short_name__c;
-
+      animation = req.response.object._fields.short_name__c;
+      id = req.response.object._fields.id;
+      
       if (!req.params.color)
-        color = '0000ff';
+        color = 'ff0000';
       else
         color = req.params.color;
 
@@ -64,9 +64,15 @@ var sendI2CRequest = function (req, res, next) {
       else
         speed = req.params.speed;
 
-      console.log('>> SEND');
-      i2c.move(receiver, animation, color, brightness, speed);
-      console.log('DONE <<');
+      console.log('>> SEND I2C REQUEST: '+receiver+', '+animation+', '+color+', '+brightness+', '+speed);
+      i2c.animation(receiver, animation, color, brightness, speed);
+      req.body = 
+{ 
+"animation__c": id,
+"color__c": color, 
+"brightness__c": brightness, 
+"animation_speed__c": speed
+};
 
     } else {
       res.send('ERROR: sendI2CRequest(): No LED Controller');
@@ -75,6 +81,12 @@ var sendI2CRequest = function (req, res, next) {
     res.send('ERROR: sendI2CRequest(): No Animation Found');
   }
   next();
+};
+
+
+var updateBarAnimation = function (req, res, next) {
+
+  db.updateBar(req, res, next);
 };
 
 
@@ -97,13 +109,28 @@ app.get('/:label', [requestBar], function(req, res) {
 /*
  * ## Get a bar by label
  */
-app.get('/:label/:animation', [requestBar, requestAnimation], function(req, res) {
+app.get('/:label/:name', [requestBar, requestAnimation, sendI2CRequest, updateBarAnimation], function(req, res) {
  res.json(req.response);
 });
 
 /*
  * ## Get a bar by label
  */
-app.get('/:label/:animation/:color', [requestBar, requestAnimation, sendRequest], function(req, res) {
+app.get('/:label/:name/:color', [requestBar, requestAnimation, sendI2CRequest, updateBarAnimation], function(req, res) {
  res.json(req.response);
 });
+
+/*
+ * ## Get a bar by label
+ */
+app.get('/:label/:name/:color/:brightness', [requestBar, requestAnimation, sendI2CRequest, updateBarAnimation], function(req, res) {
+ res.json(req.response);
+});
+
+/*
+ * ## Get a bar by label
+ */
+app.get('/:label/:name/:color/:brightness/:speed', [requestBar, requestAnimation, sendI2CRequest, updateBarAnimation], function(req, res) {
+ res.json(req.response);
+});
+
