@@ -5,7 +5,7 @@ var GET_BY_ID = 'SELECT Id, user__c, offline__c, CreatedDate, LastModifiedDate F
 
 module.exports = {
 
-  getDevices : function(req, res, org, oauth) {
+  getDevices : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -23,7 +23,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -48,12 +49,13 @@ module.exports = {
 
             console.log(response);
 
-            res.json(response);
+            req.response = response;
+next();
           }
         });
   },
 
-  getDevice : function(req, res, org, oauth) {
+  getDevice : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -77,7 +79,8 @@ module.exports = {
           '_errors': err
         };
 
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -98,7 +101,8 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -111,13 +115,14 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
   },
 
-  insertDevice : function(req, res, org, oauth) {
+  insertDevice : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -145,7 +150,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           // -----------------------------------------------------------------
           // on SUCCESS
@@ -174,7 +180,8 @@ module.exports = {
                   '_success': false,
                   '_errors': err
                 };
-                res.json(response);
+                req.response = response;
+next();
 
               // -----------------------------------------------------------------
               // on SUCCESS
@@ -205,7 +212,7 @@ module.exports = {
         });
   },
 
-  updateDevice : function(req, res, org, oauth) {
+  updateDevice : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -225,7 +232,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -250,7 +258,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
 
@@ -266,7 +275,8 @@ module.exports = {
                     '_success': false,
                     '_errors': err
                   };
-                  res.json(response);
+                  req.response = response;
+next();
 
                 } else if(!err) {
 
@@ -287,7 +297,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
 
                   } else { // no entry // salesforce duplicate check
 
@@ -300,7 +311,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
                   }
                 }
 
@@ -316,14 +328,15 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
 
   },
 
-  deleteDevice : function(req, res, org, oauth) {
+  deleteDevice : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -343,7 +356,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -367,7 +381,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
               console.log('DELETE COMPLETE');
@@ -377,7 +392,8 @@ module.exports = {
                 '_success': true
               };
               console.log(response);
-              res.json(response);
+              req.response = response;
+next();
             }
           });
 
@@ -389,7 +405,8 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });

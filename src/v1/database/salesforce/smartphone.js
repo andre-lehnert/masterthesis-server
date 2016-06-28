@@ -5,7 +5,7 @@ var GET_BY_ID = 'SELECT Id, model__c, brand__c, serial__c, os__c, device__c, Nam
 
 module.exports = {
 
-  getSmartphones : function(req, res, org, oauth) {
+  getSmartphones : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -23,7 +23,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -48,12 +49,13 @@ module.exports = {
 
             console.log(response);
 
-            res.json(response);
+            req.response = response;
+next();
           }
         });
   },
 
-  getSmartphone : function(req, res, org, oauth) {
+  getSmartphone : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -77,7 +79,8 @@ module.exports = {
           '_errors': err
         };
 
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -98,7 +101,8 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -111,13 +115,14 @@ module.exports = {
 
           console.log(response);
 
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
   },
 
-  insertSmartphone : function(req, res, org, oauth) {
+  insertSmartphone : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -148,7 +153,8 @@ module.exports = {
               '_errors': err
             };
 
-            res.json(response);
+            req.response = response;
+next();
 
           // -----------------------------------------------------------------
           // on SUCCESS
@@ -177,7 +183,8 @@ module.exports = {
                   '_success': false,
                   '_errors': err
                 };
-                res.json(response);
+                req.response = response;
+next();
 
               // -----------------------------------------------------------------
               // on SUCCESS
@@ -208,7 +215,7 @@ module.exports = {
         });
   },
 
-  updateSmartphone : function(req, res, org, oauth) {
+  updateSmartphone : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -228,7 +235,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -257,7 +265,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
 
@@ -273,7 +282,8 @@ module.exports = {
                     '_success': false,
                     '_errors': err
                   };
-                  res.json(response);
+                  req.response = response;
+next();
 
                 } else if(!err) {
 
@@ -294,7 +304,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
 
                   } else { // no entry // salesforce duplicate check
 
@@ -307,7 +318,8 @@ module.exports = {
 
                     console.log(response);
 
-                    res.json(response);
+                    req.response = response;
+next();
                   }
                 }
 
@@ -323,14 +335,15 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });
 
   },
 
-  deleteSmartphone : function(req, res, org, oauth) {
+  deleteSmartphone : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -350,7 +363,8 @@ module.exports = {
           '_success': false,
           '_errors': err
         };
-        res.json(response);
+        req.response = response;
+next();
 
       } else if(!err) {
 
@@ -374,7 +388,8 @@ module.exports = {
                 '_success': false,
                 '_errors': err
               };
-              res.json(response);
+              req.response = response;
+next();
 
             } else if(!err) {
               console.log('DELETE COMPLETE');
@@ -384,7 +399,8 @@ module.exports = {
                 '_success': true
               };
               console.log(response);
-              res.json(response);
+              req.response = response;
+next();
             }
           });
 
@@ -396,7 +412,8 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
           console.log(response);
-          res.json(response);
+          req.response = response;
+next();
         }
       }
     });

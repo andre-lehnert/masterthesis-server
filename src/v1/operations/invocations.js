@@ -17,39 +17,61 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 var OPERATION = '/invocations';
 
+// ---------------- Operations --------------------------------------------
+
+var requestInvocations = function (req, res, next) {
+  db.getInvocations(req, res, next);
+};
+
+var requestInvocation = function (req, res, next) {
+  db.getInvocation(req, res, next);
+};
+
+var insertInvocation = function (req, res, next) {
+    db.insertInvocation(req, res, next);
+};
+
+var updateInvocation = function (req, res, next) {
+    db.updateInvocation(req, res, next);
+};
+
+var deleteInvocation = function (req, res, next) {
+    db.deleteInvocation(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
  * ## List all receivers
  */
-app.get('/', function(req, res) {
-  db.getInvocations(req, res);
+app.get('/', [requestInvocations], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Insert new Invocation
  */
-app.post('/', function(req, res) {
-  db.insertInvocation(req, res);
+app.post('/', [insertInvocation], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Get Invocation by id
  */
-app.get('/:id', function(req, res) {
-  db.getInvocation(req, res);
+app.get('/:id', [requestInvocation], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Update an Invocation by id
  */
-app.put('/:id', function(req, res) {
-  db.updateInvocation(req, res);
+app.put('/:id', [updateInvocation], function(req, res) {
+  res.json(req.response);
 });
 
 /*
  * ## Delete an Invocation by id
  */
-app.delete('/:id', function(req, res) {
-  db.deleteInvocation(req, res);
+app.delete('/:id', [deleteInvocation], function(req, res) {
+  res.json(req.response);
 });
