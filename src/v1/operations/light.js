@@ -103,27 +103,27 @@ app.get('/:label', [requestBar], function(req, res) {
 /*
  * ## Get a bar by label
  */
-app.get('/:label/:name', [requestBar, requestLight, sendI2CRequest, updateBarLight], function(req, res) {
+app.get('/:label/:name', [requestBar, sendI2CRequest, updateBarLight], function(req, res) {
  res.json(req.response);
 });
 
 /*
  * ## Get a bar by label
  */
-app.get('/:label/:name/:color', [requestBar, requestLight, sendI2CRequest, updateBarLight], function(req, res) {
+app.get('/:label/:name/:color', [requestBar, sendI2CRequest, updateBarLight], function(req, res) {
  res.json(req.response);
 });
 
 /*
  * ## Get a bar by label
  */
-app.get('/:label/:name/:color/:brightness', [requestBar, requestLight, sendI2CRequest, updateBarLight], function(req, res) {
+app.get('/:label/:name/:color/:brightness', [requestBar, sendI2CRequest, updateBarLight], function(req, res) {
  res.json(req.response);
 });
 
 /*
  * ## Get a bar by label
  */
-app.get('/:label/:name/:color/:brightness/:speed', [requestBar, requestLight, sendI2CRequest, updateBarLight], function(req, res) {
+app.get('/:label/:name/:color/:brightness/:speed', [requestBar, sendI2CRequest, updateBarLight], function(req, res) {
  res.json(req.response);
 });

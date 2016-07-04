@@ -126,15 +126,26 @@ module.exports = {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-        var Side = nforce.createSObject('Side__c');
-        Side.set('label__c', req.body.label__c);
-        Side.set('position__c', req.body.position__c);
+        var side = nforce.createSObject('Side__c');
+          side.set('label__c', req.body.label__c);
+	  side.set('led_0__c', req.body.led_0__c);
+          side.set('led_1__c', req.body.led_1__c);
+          side.set('led_2__c', req.body.led_2__c);
+          side.set('led_3__c', req.body.led_3__c);
+          side.set('led_4__c', req.body.led_4__c);
+          side.set('led_5__c', req.body.led_5__c);
+          side.set('led_6__c', req.body.led_6__c);
+          side.set('led_7__c', req.body.led_7__c);
+          side.set('led_8__c', req.body.led_8__c);
+          side.set('led_9__c', req.body.led_9__c);
+          side.set('led_10__c', req.body.led_10__c);
+          side.set('bar__c', req.body.bar__c);
 
 
         console.log(">> INSERT");
-        console.log(Side.toJSON());
+        console.log(side.toJSON());
 
-        org.insert({ sobject: Side, oauth: oauth }, function(err, result){
+        org.insert({ sobject: side, oauth: oauth }, function(err, result){
 
           // -----------------------------------------------------------------
           // on ERROR
@@ -247,8 +258,22 @@ module.exports = {
         if (result.totalSize == 1) { // 1 entry
 
           var side = result.records[0];
-          Side.set('position__c', req.body.position__c);
-          Side.set('led__c', req.body.led__c);
+          side.set('led_0__c', req.body.led_0__c);
+	  side.set('led_1__c', req.body.led_1__c);
+	  side.set('led_2__c', req.body.led_2__c);
+	  side.set('led_3__c', req.body.led_3__c);
+	  side.set('led_4__c', req.body.led_4__c);
+	  side.set('led_5__c', req.body.led_5__c);
+	  side.set('led_6__c', req.body.led_6__c);
+	  side.set('led_7__c', req.body.led_7__c);
+	  side.set('led_8__c', req.body.led_8__c);
+	  side.set('led_9__c', req.body.led_9__c);
+	  side.set('led_10__c', req.body.led_10__c);
+	  side.set('bar__c', req.body.bar__c);
+
+
+
+          side.set('led__c', req.body.led__c);
 
           org.update({ sobject: side, oauth: oauth }, function(err, result) {
 
