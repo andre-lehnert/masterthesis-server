@@ -87,8 +87,8 @@ var sendI2CRequest = function (req, res, next) {
         operation = '-';
 
       lednumber = parseInt(req.params.led) + 1;
-      var leds = Array(11);
-
+      var leds = [ '000000','000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000' ];
+            
       switch (lednumber) {
         case 1: leds[0] = color; break;
         case 2: leds[1] = color; break;
@@ -119,8 +119,11 @@ var sendI2CRequest = function (req, res, next) {
           "led_7__c": leds[7],
           "led_8__c": leds[8],
           "led_9__c": leds[9],
-          "led_10__c": leds[10]
+          "led_10__c": leds[10],
+          "label__c": side
         };
+      req.sideId = id;
+      console.log('ID: '+req.sideId );
 
     } else {
       res.send('ERROR: sendI2CRequest(): No LED Controller');
@@ -133,7 +136,7 @@ var sendI2CRequest = function (req, res, next) {
 
 
 var updateBarSides = function (req, res, next) {
-  db.updateSide(req, res, next);
+  db.updateSideByBar(req, res, next);
 };
 
 

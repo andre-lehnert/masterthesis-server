@@ -119,11 +119,11 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
-  updateSides : function (req, res, next) {
+  updateSideByBar : function (req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        sides.updateSides(req, res, org, oauth, next);                             // <--
+        sides.updateSideByBar(req, res, org, oauth, next);                             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

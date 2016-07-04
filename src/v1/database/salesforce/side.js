@@ -698,6 +698,8 @@ module.exports = {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
+    console.log('GET ID: '+req.sideId);
+console.log(req.body);
     var param = req.sideId;
 
     console.log(">> GET Side BY ID: "+ param);
