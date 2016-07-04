@@ -65,7 +65,7 @@ var sendI2CRequest = function (req, res, next) {
 
 
 
-      console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness+);
+      console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness);
       //i2c.light(receiver, Light, color, brightness, speed);
       //req.body =
       // {
