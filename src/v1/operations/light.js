@@ -31,6 +31,14 @@ var requestBar = function (req, res, next) {
   db.getBar(req, res, next);
 };
 
+var requestSide = function (req, res, next) {
+  db.getSideByLabel(req, res, next);
+};
+
+var requestAllSides = function (req, res, next) {
+  db.getSidesByBar(req, res, next);
+};
+
 var sendI2CRequest = function (req, res, next) {
 
   var id, receiver, side, operation, lednumber, color, brightness;
@@ -41,8 +49,9 @@ var sendI2CRequest = function (req, res, next) {
     if (req.ledControl) {
 
       receiver = req.ledControl;
-      Light = req.response.object._fields.short_name__c;
       id = req.response.object._fields.id;
+      lednumber = req.params.led;
+      operation = req.params.operation;
 
       if (!req.params.color)
         color = 'ff0000';
@@ -54,33 +63,30 @@ var sendI2CRequest = function (req, res, next) {
       else
         brightness = req.params.brightness;
 
-      if (!req.params.speed)
-        speed = 100;
-      else
-        speed = req.params.speed;
 
-      console.log('>> SEND I2C REQUEST: '+receiver+', '+Light+', '+color+', '+brightness+', '+speed);
-      i2c.Light(receiver, Light, color, brightness, speed);
-      req.body =
-        {
-        "Light__c": id,
-        "color__c": color,
-        "brightness__c": brightness,
-        "Light_speed__c": speed
-        };
+
+      console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness+);
+      //i2c.light(receiver, Light, color, brightness, speed);
+      //req.body =
+      // {
+      // "Light__c": id,
+      // "color__c": color,
+      // "brightness__c": brightness,
+      // "Light_speed__c": speed
+      // };
 
     } else {
       res.send('ERROR: sendI2CRequest(): No LED Controller');
     }
   } else {
-    res.send('ERROR: sendI2CRequest(): No Light Found');
+    res.send('ERROR: sendI2CRequest(): No Side Found');
   }
   next();
 };
 
 
-var updateBarLight = function (req, res, next) {
-  db.updateBar(req, res, next);
+var updateBarSides = function (req, res, next) {
+  db.updateSides(req, res, next);
 };
 
 
@@ -96,34 +102,45 @@ app.get('/', [requestBars], function(req, res) {
 /*
  * ## Get a bar by label
  */
-app.get('/:label', [requestBar], function(req, res) {
+app.get('/:label', [requestBar, requestAllSides], function(req, res) {
  res.json(req.response);
 });
 
 /*
- * ## Get a bar by label
+ * ## Get a bar by label (A1, A2, ...), side(a, b, c, d)
  */
-app.get('/:label/:name', [requestBar, sendI2CRequest, updateBarLight], function(req, res) {
+app.get('/:label/:side', [requestBar, requestSide], function(req, res) {
  res.json(req.response);
 });
 
 /*
- * ## Get a bar by label
+ * ## Get a bar by label (A1, A2, ...), side(a, b, c, d)  operation (new, add, remove)
  */
-app.get('/:label/:name/:color', [requestBar, sendI2CRequest, updateBarLight], function(req, res) {
+app.get('/:label/:side/:operation', function(req, res) {
+ res.json(
+   {
+     "leds" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+   }
+  );
+});
+
+/*
+ * ## Get a bar by label (A1, A2, ...), side(a, b, c, d), operation (new, add, remove), led number (0-10),
+ */
+app.get('/:label/:side/:operation/:led', [requestBar, requestSide, sendI2CRequest, updateBarSides], function(req, res) {
  res.json(req.response);
 });
 
 /*
- * ## Get a bar by label
+ * ## Get a bar by label (A1, A2, ...), side(a, b, c, d), operation (new, add, remove), led number (0-10), color (ff0000)
  */
-app.get('/:label/:name/:color/:brightness', [requestBar, sendI2CRequest, updateBarLight], function(req, res) {
+app.get('/:label/:side/:operation/:led/:color', [requestBar, requestSide, sendI2CRequest, updateBarSides], function(req, res) {
  res.json(req.response);
 });
 
 /*
- * ## Get a bar by label
+ * ## Get a bar by label (A1, A2, ...), side(a, b, c, d), operation (new, add, remove), led number (0-10), color (ff0000), brightness (0-100)
  */
-app.get('/:label/:name/:color/:brightness/:speed', [requestBar, sendI2CRequest, updateBarLight], function(req, res) {
+app.get('/:label/:side/:operation/:led/:color/:brightness', [requestBar, requestSide, sendI2CRequest, updateBarSides], function(req, res) {
  res.json(req.response);
 });
