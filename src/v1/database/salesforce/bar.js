@@ -105,7 +105,7 @@ module.exports = {
           req.ledControl = response.object._fields.led__c;
           console.log(' req.ledControl'+  req.ledControl);
 
-          req.motorControl = response.object.motor__c;
+          req.motorControl = response.object._fields.motor__c;
           req.response = response;
           next();
 

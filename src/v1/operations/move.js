@@ -41,7 +41,7 @@ var sendI2CRequest = function (req, res, next) {
 
     receiver = req.motorControl;
     id = req.response.object._fields.id;
-    targetPosition = req.params.position;
+    targetPosition = parseInt(req.params.position);
 
     if (!req.params.speed)
       speed = 'half';
