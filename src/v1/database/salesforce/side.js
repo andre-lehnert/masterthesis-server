@@ -196,6 +196,7 @@ module.exports = {
           };
 
           console.log(response);
+          req.selectedSide = response.object._fields.label__c;
           req.response = response;
           next();
 
@@ -560,6 +561,143 @@ module.exports = {
   },
 
   updateSide : function(req, res, org, oauth, next) {
+
+    var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    var param = req.params.id;
+
+    console.log(">> GET Side BY ID: "+ param);
+
+    var query = GET_BY_ID.replace("[:id]", param);
+
+    org.query({ query: query, oauth: oauth }, function(err, result) {
+
+      if (err) {
+        console.log(err);
+        var response =
+        {
+          'href': URL,
+          '_success': false,
+          '_errors': err
+        };
+        req.response = response;
+        next();
+
+      } else if(!err) {
+
+        console.log('>> DB REQUEST');
+        console.log('QUERY: '+ query);
+        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // UPDATE
+        if (result.totalSize == 1) { // 1 entry
+
+          var side = result.records[0];
+          side.set('led_0__c', req.body.led_0__c);
+      	  side.set('led_1__c', req.body.led_1__c);
+      	  side.set('led_2__c', req.body.led_2__c);
+      	  side.set('led_3__c', req.body.led_3__c);
+      	  side.set('led_4__c', req.body.led_4__c);
+      	  side.set('led_5__c', req.body.led_5__c);
+      	  side.set('led_6__c', req.body.led_6__c);
+      	  side.set('led_7__c', req.body.led_7__c);
+      	  side.set('led_8__c', req.body.led_8__c);
+      	  side.set('led_9__c', req.body.led_9__c);
+      	  side.set('led_10__c', req.body.led_10__c);
+
+
+
+          side.set('led__c', req.body.led__c);
+
+          org.update({ sobject: side, oauth: oauth }, function(err, result) {
+
+            if (err) {
+              console.log(err);
+              var response =
+              {
+                'href': URL,
+                '_success': false,
+                '_errors': err
+              };
+              req.response = response;
+              next();
+
+            } else if(!err) {
+
+              // -----------------------------------------------------------------
+              // REQUEST OBJECT
+              org.query({ query: query, oauth: oauth }, function(err, result) {
+
+                if (err) {
+                  console.log(err);
+                  var response =
+                  {
+                    'href': URL,
+                    '_success': false,
+                    '_errors': err
+                  };
+                  req.response = response;
+                  next();
+
+                } else if(!err) {
+
+                  console.log('>> DB REQUEST');
+                  console.log('QUERY: '+ query);
+                  console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                  // -----------------------------------------------------------------
+                  // Set Response Object
+                  if (result.totalSize == 1) { // 1 entry
+
+                    var response =
+                    {
+                      'href': URL,
+                      '_success': true,
+                      'object': result.records[0]
+                    };
+
+                    console.log(response);
+                    req.response = response;
+                    next();
+
+                  } else { // no entry // salesforce duplicate check
+
+                    var response =
+                    {
+                      'href': URL,
+                      '_success': false,
+                      '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                    };
+
+                    console.log(response);
+
+                    req.response = response;
+                    next();
+                  }
+                }
+
+            });
+          }
+
+          });
+        } else { // no entry // salesforce duplicate check
+          var response =
+          {
+            'href': URL,
+            '_success': false,
+            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+          };
+          console.log(response);
+          req.response = response;
+          next();
+        }
+      }
+    });
+
+  },
+
+  updateSides : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 

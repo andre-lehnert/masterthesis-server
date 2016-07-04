@@ -52,6 +52,7 @@ var sendI2CRequest = function (req, res, next) {
       id = req.response.object._fields.id;
       lednumber = req.params.led;
       operation = req.params.operation;
+      side = req.selectedSide;
 
       if (!req.params.color)
         color = 'ff0000';
@@ -61,19 +62,27 @@ var sendI2CRequest = function (req, res, next) {
       if (!req.params.brightness)
         brightness = 100;
       else
-        brightness = req.params.brightness;
+        brightness = parseInt(req.params.brightness);
 
+      if (operation.toLowerCase() === 'new')
+        operation = '*';
+      else if (operation.toLowerCase() === 'add')
+        operation = '+';
+      else if (operation.toLowerCase() === 'remove')
+        operation = '-';
+
+      if (typeof lednumber === 'number')
+        lednumber = parseInt(req.params.led) + 1;
+      else
+        res.send('ERROR: sendI2CRequest(): Invalid LED Number (0-10)');
 
 
       console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness);
-      //i2c.light(receiver, Light, color, brightness, speed);
-      //req.body =
-      // {
-      // "Light__c": id,
-      // "color__c": color,
-      // "brightness__c": brightness,
-      // "Light_speed__c": speed
-      // };
+      i2c.light(receiver, side, operation, led, color, brightness);
+      req.body =
+        {
+
+        };
 
     } else {
       res.send('ERROR: sendI2CRequest(): No LED Controller');
@@ -86,7 +95,7 @@ var sendI2CRequest = function (req, res, next) {
 
 
 var updateBarSides = function (req, res, next) {
-  db.updateSides(req, res, next);
+  //db.updateSides(req, res, next);
 };
 
 
