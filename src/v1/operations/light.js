@@ -87,14 +87,39 @@ var sendI2CRequest = function (req, res, next) {
         operation = '-';
 
       lednumber = parseInt(req.params.led) + 1;
-      
+      var leds = Array(11);
+
+      switch (lednumber) {
+        case 1: leds[0] = color; break;
+        case 2: leds[1] = color; break;
+        case 3: leds[2] = color; break;
+        case 4: leds[3] = color; break;
+        case 5: leds[4] = color; break;
+        case 6: leds[5] = color; break;
+        case 7: leds[6] = color; break;
+        case 8: leds[7] = color; break;
+        case 9: leds[8] = color; break;
+        case 10: leds[9] = color; break;
+        case 11: leds[10] = color; break;
+        default: break;
+      }
 
 
       console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness);
       i2c.light(receiver, side, operation, lednumber, color, brightness);
       req.body =
         {
-
+          "led_0__c": leds[0],
+          "led_1__c": leds[1],
+          "led_2__c": leds[2],
+          "led_3__c": leds[3],
+          "led_4__c": leds[4],
+          "led_5__c": leds[5],
+          "led_6__c": leds[6],
+          "led_7__c": leds[7],
+          "led_8__c": leds[8],
+          "led_9__c": leds[9],
+          "led_10__c": leds[10]
         };
 
     } else {
@@ -108,7 +133,7 @@ var sendI2CRequest = function (req, res, next) {
 
 
 var updateBarSides = function (req, res, next) {
-  //db.updateSides(req, res, next);
+  db.updateSide(req, res, next);
 };
 
 
