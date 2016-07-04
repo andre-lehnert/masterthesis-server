@@ -48,9 +48,24 @@ var sendI2CRequest = function (req, res, next) {
 
     if (req.ledControl) {
 
+      operation = req.params.operation;
+      lednumber = req.params.led;
+
+      if (operation.toLowerCase() != 'new' &&
+          typeof lednumber == 'undefined') {
+
+         res.json(
+         {
+           "leds" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+         });
+	 next();
+
+      } else if (operation.toLowerCase() == 'new') {
+        lednumber = 0;
+      }
+
       receiver = req.ledControl;
       id = req.response.object._fields.id;
-      lednumber = req.params.led;
       operation = req.params.operation;
       side = req.selectedSide;
 
@@ -71,14 +86,12 @@ var sendI2CRequest = function (req, res, next) {
       else if (operation.toLowerCase() === 'remove')
         operation = '-';
 
-      if (typeof lednumber === 'number')
-        lednumber = parseInt(req.params.led) + 1;
-      else
-        res.send('ERROR: sendI2CRequest(): Invalid LED Number (0-10)');
+      lednumber = parseInt(req.params.led) + 1;
+      
 
 
       console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness);
-      i2c.light(receiver, side, operation, led, color, brightness);
+      i2c.light(receiver, side, operation, lednumber, color, brightness);
       req.body =
         {
 
@@ -125,7 +138,7 @@ app.get('/:label/:side', [requestBar, requestSide], function(req, res) {
 /*
  * ## Get a bar by label (A1, A2, ...), side(a, b, c, d)  operation (new, add, remove)
  */
-app.get('/:label/:side/:operation', function(req, res) {
+app.get('/:label/:side/:operation', [requestBar, requestSide, sendI2CRequest, updateBarSides], function(req, res) {
  res.json(
    {
      "leds" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
