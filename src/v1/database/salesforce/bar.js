@@ -101,11 +101,12 @@ module.exports = {
           };
 
           console.log(response);
-          console.log('response.object.led__c'+ response.object._fields.led__c);
           req.ledControl = response.object._fields.led__c;
-          console.log(' req.ledControl'+  req.ledControl);
-
           req.motorControl = response.object._fields.motor__c;
+          req.sideA = response.object._fields.side_a__c;
+          req.sideB = response.object._fields.side_b__c;
+          req.sideC = response.object._fields.side_c__c;
+          req.sideD = response.object._fields.side_d__c;
           req.response = response;
           next();
 

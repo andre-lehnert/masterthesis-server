@@ -87,6 +87,22 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  getSideByLabel : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sides.getSideByLabel(req, res, org, oauth, next);                                // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getSideByBar : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sides.getSideByBar(req, res, org, oauth, next);                                // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   insertSide : function (req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {

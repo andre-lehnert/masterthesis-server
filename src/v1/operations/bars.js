@@ -28,6 +28,14 @@ var requestBar = function (req, res, next) {
   db.getBar(req, res, next);
 };
 
+var requestSide = function (req, res, next) {
+  db.getSideByLabel(req, res, next);
+};
+
+var requestAllSides = function (req, res, next) {
+  db.getSidesByBar(req, res, next);
+};
+
 var insertBar = function (req, res, next) {
     db.insertBar(req, res, next);
 };
@@ -59,6 +67,18 @@ app.post('/', [insertBar], function(req, res) {
  * ## Get bar by label
  */
 app.get('/:label', [requestBar], function(req, res) {
+ res.json(req.response);
+});
+/*
+ * ## Get bar by label
+ */
+app.get('/:label/sides', [requestBar, requestAllSides], function(req, res) {
+ res.json(req.response);
+});
+/*
+ * ## Get bar by label
+ */
+app.get('/:label/sides/:side', [requestBar, requestSide], function(req, res) {
  res.json(req.response);
 });
 

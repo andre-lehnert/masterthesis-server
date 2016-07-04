@@ -122,6 +122,343 @@ module.exports = {
     });
   },
 
+  getSideByLabel : function(req, res, org, oauth, next) {
+
+    var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    var param = req.params.side;
+
+    console.log(">> GET Side BY LABEL: "+ param); // A, B, C or D
+
+    if (param.toLowerCase() === 'a')
+      param = req.sideA;
+    else if (param.toLowerCase() === 'b')
+      param = req.sideB;
+    else if (param.toLowerCase() === 'c')
+      param = req.sideC;
+    else if (param.toLowerCase() === 'd')
+      param = req.sideD;
+    else {
+
+      console.log(err);
+
+      // -----------------------------------------------------------------
+      // Set Response Object
+      var response =
+      {
+        'href': URL,
+        '_success': false,
+        '_errors': 'Invalid Side [A, B, C, D != ' + param
+      };
+
+      req.response = response;
+      next();
+
+    }
+
+
+    console.log(">> GET Side BY ID: "+ param);
+
+    var query = GET_BY_ID.replace("[:id]", param);
+
+    org.query({ query: query, oauth: oauth }, function(err, result){
+      if (err) {
+
+        console.log(err);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        var response =
+        {
+          'href': URL,
+          '_success': false,
+          '_errors': err
+        };
+
+        req.response = response;
+        next();
+
+      } else if(!err) {
+
+        console.log('>> DB REQUEST');
+        console.log('QUERY: '+ query);
+        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        if (result.totalSize == 1) { // 1 entry
+
+          var response =
+          {
+            'href': URL,
+            '_success': true,
+            'object': result.records[0]
+          };
+
+          console.log(response);
+          req.response = response;
+          next();
+
+        } else { // no entry // salesforce duplicate check
+
+          var response =
+          {
+            'href': URL,
+            '_success': false,
+            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+          };
+
+          console.log(response);
+
+          req.response = response;
+          next();
+        }
+      }
+    });
+  },
+
+  getSideByBar : function(req, res, org, oauth, next) {
+
+    var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    var param, sides = [];
+
+    console.log(">> GET Side BY BAR"); // A, B, C or D
+
+    param = req.sideA;
+
+    console.log(">> GET Side BY ID: "+ param);
+
+    var query = GET_BY_ID.replace("[:id]", param);
+
+    org.query({ query: query, oauth: oauth }, function(err, result){
+      if (err) {
+
+        console.log(err);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        var response =
+        {
+          'href': URL,
+          '_success': false,
+          '_errors': err
+        };
+
+        req.response = response;
+        next();
+
+      } else if(!err) {
+
+        console.log('>> DB REQUEST');
+        console.log('QUERY: '+ query);
+        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        if (result.totalSize == 1) { // 1 entry
+
+          // A
+          sides.push(result.records[0]);
+
+          // B
+          param = req.sideB;
+
+          console.log(">> GET Side BY ID: "+ param);
+
+          var query = GET_BY_ID.replace("[:id]", param);
+
+          org.query({ query: query, oauth: oauth }, function(err, result){
+            if (err) {
+
+              console.log(err);
+
+              // -----------------------------------------------------------------
+              // Set Response Object
+              var response =
+              {
+                'href': URL,
+                '_success': false,
+                '_errors': err
+              };
+
+              req.response = response;
+              next();
+
+            } else if(!err) {
+
+              console.log('>> DB REQUEST');
+              console.log('QUERY: '+ query);
+              console.log('RESPONSE: Entries = '+ result.totalSize);
+
+              // -----------------------------------------------------------------
+              // Set Response Object
+              if (result.totalSize == 1) { // 1 entry
+
+                // B
+                sides.push(result.records[0]);
+
+                // C
+                param = req.sideC;
+
+                console.log(">> GET Side BY ID: "+ param);
+
+                var query = GET_BY_ID.replace("[:id]", param);
+
+                org.query({ query: query, oauth: oauth }, function(err, result){
+                  if (err) {
+
+                    console.log(err);
+
+                    // -----------------------------------------------------------------
+                    // Set Response Object
+                    var response =
+                    {
+                      'href': URL,
+                      '_success': false,
+                      '_errors': err
+                    };
+
+                    req.response = response;
+                    next();
+
+                  } else if(!err) {
+
+                    console.log('>> DB REQUEST');
+                    console.log('QUERY: '+ query);
+                    console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                    // -----------------------------------------------------------------
+                    // Set Response Object
+                    if (result.totalSize == 1) { // 1 entry
+                      // C
+                      sides.push(result.records[0]);
+
+                      // D
+                      param = req.sideD;
+
+                      console.log(">> GET Side BY ID: "+ param);
+
+                      var query = GET_BY_ID.replace("[:id]", param);
+
+                      org.query({ query: query, oauth: oauth }, function(err, result){
+                        if (err) {
+
+                          console.log(err);
+
+                          // -----------------------------------------------------------------
+                          // Set Response Object
+                          var response =
+                          {
+                            'href': URL,
+                            '_success': false,
+                            '_errors': err
+                          };
+
+                          req.response = response;
+                          next();
+
+                        } else if(!err) {
+
+                          console.log('>> DB REQUEST');
+                          console.log('QUERY: '+ query);
+                          console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                          // -----------------------------------------------------------------
+                          // Set Response Object
+                          if (result.totalSize == 1) { // 1 entry
+
+                            // D
+                            sides.push(result.records[0]);
+
+                            var response =
+                            {
+                              'href': URL,
+                              '_success': true,
+                              '_count': results.totalSize,
+                              'objects': sides
+                            };
+
+                            console.log(response);
+
+                            req.response = response; // <-----------------------
+                            next();
+
+                          } else { // no entry // salesforce duplicate check
+
+                            var response =
+                            {
+                              'href': URL,
+                              '_success': false,
+                              '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                            };
+
+                            console.log(response);
+
+                            req.response = response;
+                            next();
+                          }
+                        }
+                      });
+
+
+
+                    } else { // no entry // salesforce duplicate check
+
+                      var response =
+                      {
+                        'href': URL,
+                        '_success': false,
+                        '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                      };
+
+                      console.log(response);
+
+                      req.response = response;
+                      next();
+                    }
+                  }
+                });
+
+
+
+              } else { // no entry // salesforce duplicate check
+
+                var response =
+                {
+                  'href': URL,
+                  '_success': false,
+                  '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                };
+
+                console.log(response);
+
+                req.response = response;
+                next();
+              }
+            }
+          });
+
+
+
+        } else { // no entry // salesforce duplicate check
+
+          var response =
+          {
+            'href': URL,
+            '_success': false,
+            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+          };
+
+          console.log(response);
+
+          req.response = response;
+          next();
+        }
+      }
+    });
+  },
+
   insertSide : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
