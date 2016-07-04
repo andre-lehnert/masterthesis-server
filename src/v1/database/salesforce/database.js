@@ -95,11 +95,11 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
-  getSideByBar : function(req, res, next) {
+  getSidesByBar : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        sides.getSideByBar(req, res, org, oauth, next);                                // <--
+        sides.getSidesByBar(req, res, org, oauth, next);                                // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

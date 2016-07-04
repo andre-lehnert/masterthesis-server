@@ -217,7 +217,7 @@ module.exports = {
     });
   },
 
-  getSideByBar : function(req, res, org, oauth, next) {
+  getSidesByBar : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -375,7 +375,7 @@ module.exports = {
                             {
                               'href': URL,
                               '_success': true,
-                              '_count': results.totalSize,
+                              '_count': 4,
                               'objects': sides
                             };
 
