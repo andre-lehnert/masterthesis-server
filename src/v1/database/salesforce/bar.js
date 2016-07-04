@@ -1,8 +1,8 @@
 var nforce = require('nforce');
 
-var GET_ALL = 'SELECT label__c, calibrated__c, position__c, animation__c, token__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c';
-var GET_BY_ID = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE Id = \'[:id]\'';
-var GET_BY_LABEL = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE label__c = \'[:label]\'';
+var GET_ALL = 'SELECT label__c, calibrated__c, position__c, animation__c, token__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c';
+var GET_BY_ID = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE Id = \'[:id]\'';
+var GET_BY_LABEL = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE label__c = \'[:label]\'';
 
 module.exports = {
 
@@ -144,6 +144,10 @@ module.exports = {
         bar.set('animation__c',  req.body.animation__c);
         bar.set('color__c',  req.body.color__c);
         bar.set('brightness__c',  req.body.brightness__c);
+        bar.set('side_a__c',  req.body.side_a__c);
+        bar.set('side_b__c',  req.body.side_b__c);
+        bar.set('side_c__c',  req.body.side_c__c);
+        bar.set('side_d__c',  req.body.side_d__c);
         bar.set('device__c',  req.body.device__c);
 
         console.log(">> INSERT");
@@ -273,6 +277,10 @@ module.exports = {
           bar.set('animation__c',  req.body.animation__c);
           bar.set('color__c',  req.body.color__c);
           bar.set('brightness__c',  req.body.brightness__c);
+          bar.set('side_a__c',  req.body.side_a__c);
+          bar.set('side_b__c',  req.body.side_b__c);
+          bar.set('side_c__c',  req.body.side_c__c);
+          bar.set('side_d__c',  req.body.side_d__c);
           bar.set('device__c',  req.body.device__c);
 
           org.update({ sobject: bar, oauth: oauth }, function(err, result) {

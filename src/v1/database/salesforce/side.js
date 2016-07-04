@@ -1,8 +1,8 @@
 var nforce = require('nforce');
 
-var GET_ALL = 'SELECT Id, bar__c, label__c, led_0__c, led_2__c, led_1__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c';
-var GET_BY_ID = 'SELECT Id, bar__c, label__c, led_0__c, led_2__c, led_1__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c WHERE Id = \'[:id]\'';
-var GET_BY_LABEL = 'SELECT Id, bar__c, label__c, led_0__c, led_2__c, led_1__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c WHERE label__c = \'[:label]\'';
+var GET_ALL = 'SELECT Id, label__c, led_0__c, led_2__c, led_1__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c';
+var GET_BY_ID = 'SELECT Id, label__c, led_0__c, led_2__c, led_1__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c WHERE Id = \'[:id]\'';
+var GET_BY_LABEL = 'SELECT Id, label__c, led_0__c, led_2__c, led_1__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c WHERE label__c = \'[:label]\'';
 
 module.exports = {
 
@@ -128,7 +128,7 @@ module.exports = {
 
         var side = nforce.createSObject('Side__c');
           side.set('label__c', req.body.label__c);
-	  side.set('led_0__c', req.body.led_0__c);
+	        side.set('led_0__c', req.body.led_0__c);
           side.set('led_1__c', req.body.led_1__c);
           side.set('led_2__c', req.body.led_2__c);
           side.set('led_3__c', req.body.led_3__c);
@@ -139,8 +139,6 @@ module.exports = {
           side.set('led_8__c', req.body.led_8__c);
           side.set('led_9__c', req.body.led_9__c);
           side.set('led_10__c', req.body.led_10__c);
-          side.set('bar__c', req.body.bar__c);
-
 
         console.log(">> INSERT");
         console.log(side.toJSON());
@@ -259,17 +257,16 @@ module.exports = {
 
           var side = result.records[0];
           side.set('led_0__c', req.body.led_0__c);
-	  side.set('led_1__c', req.body.led_1__c);
-	  side.set('led_2__c', req.body.led_2__c);
-	  side.set('led_3__c', req.body.led_3__c);
-	  side.set('led_4__c', req.body.led_4__c);
-	  side.set('led_5__c', req.body.led_5__c);
-	  side.set('led_6__c', req.body.led_6__c);
-	  side.set('led_7__c', req.body.led_7__c);
-	  side.set('led_8__c', req.body.led_8__c);
-	  side.set('led_9__c', req.body.led_9__c);
-	  side.set('led_10__c', req.body.led_10__c);
-	  side.set('bar__c', req.body.bar__c);
+      	  side.set('led_1__c', req.body.led_1__c);
+      	  side.set('led_2__c', req.body.led_2__c);
+      	  side.set('led_3__c', req.body.led_3__c);
+      	  side.set('led_4__c', req.body.led_4__c);
+      	  side.set('led_5__c', req.body.led_5__c);
+      	  side.set('led_6__c', req.body.led_6__c);
+      	  side.set('led_7__c', req.body.led_7__c);
+      	  side.set('led_8__c', req.body.led_8__c);
+      	  side.set('led_9__c', req.body.led_9__c);
+      	  side.set('led_10__c', req.body.led_10__c);
 
 
 
