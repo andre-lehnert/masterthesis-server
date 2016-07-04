@@ -197,6 +197,7 @@ module.exports = {
 
           console.log(response);
           req.selectedSide = response.object._fields.label__c;
+          req.sideId = response.object._fields.id;
           req.response = response;
           next();
 
@@ -606,10 +607,6 @@ module.exports = {
       	  side.set('led_9__c', req.body.led_9__c);
       	  side.set('led_10__c', req.body.led_10__c);
 
-
-
-          side.set('led__c', req.body.led__c);
-
           org.update({ sobject: side, oauth: oauth }, function(err, result) {
 
             if (err) {
@@ -697,11 +694,11 @@ module.exports = {
 
   },
 
-  updateSides : function(req, res, org, oauth, next) {
+  updateSideByBar : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-    var param = req.params.id;
+    var param = req.sideId;
 
     console.log(">> GET Side BY ID: "+ param);
 
@@ -742,10 +739,6 @@ module.exports = {
       	  side.set('led_8__c', req.body.led_8__c);
       	  side.set('led_9__c', req.body.led_9__c);
       	  side.set('led_10__c', req.body.led_10__c);
-
-
-
-          side.set('led__c', req.body.led__c);
 
           org.update({ sobject: side, oauth: oauth }, function(err, result) {
 
