@@ -19,12 +19,13 @@ var CREDENTIALS =
 // Data Access
 var bars          = require('./bar'),
     animations    = require('./animation'),
+    sides         = require('./side'),
     tokens        = require('./token'),
     devices       = require('./device'),
     smartphones   = require('./smartphone'),
     apps          = require('./app'),
     notifications = require('./notification'),
-    invocations = require('./invocation');
+    invocations   = require('./invocation');
 
 
 module.exports = {
@@ -66,6 +67,47 @@ module.exports = {
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         bars.deleteBar(req, res, org, oauth, next);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  // --- Side ------------------------------------------------------------------
+  getSides : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sides.getSides(req, res, org, oauth, next);                               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getSide : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sides.getSide(req, res, org, oauth, next);                                // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertSide : function (req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sides.insertSide(req, res, org, oauth, next);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateSide : function (req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sides.updateSide(req, res, org, oauth, next);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteSide : function (req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sides.deleteSide(req, res, org, oauth, next);                             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

@@ -34,6 +34,7 @@ var OPERATIONS =
     'smartphones': '/smartphones',
     'notifications': '/notifications',
     'invocations': '/invocations',
+    'sides': '/sides',
     // more operations and /operations/js-files
 };
 
@@ -47,7 +48,7 @@ var API =
     URL+'/api/' + name + OPERATIONS.light,
     URL+'/api/' + name + OPERATIONS.animation,
     URL+'/api/' + name + OPERATIONS.status,
-    // Production API v2
+    // Production API v3
     URL+'/api/' + name + OPERATIONS.apps,
     URL+'/api/' + name + OPERATIONS.bars,
     URL+'/api/' + name + OPERATIONS.tokens,
@@ -55,7 +56,8 @@ var API =
     URL+'/api/' + name + OPERATIONS.devices,
     URL+'/api/' + name + OPERATIONS.smartphones,
     URL+'/api/' + name + OPERATIONS.notifications,
-    URL+'/api/' + name + OPERATIONS.invocations
+    URL+'/api/' + name + OPERATIONS.invocations,
+    URL+'/api/' + name + OPERATIONS.sides,
   ]
 };
 
