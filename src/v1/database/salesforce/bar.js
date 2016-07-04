@@ -101,9 +101,9 @@ module.exports = {
           };
 
           console.log(response);
-console.log('response.object.led__c'+ response.object._fields.led__c);
+          console.log('response.object.led__c'+ response.object._fields.led__c);
           req.ledControl = response.object._fields.led__c;
-console.log(' req.ledControl'+  req.ledControl);
+          console.log(' req.ledControl'+  req.ledControl);
 
           req.motorControl = response.object.motor__c;
           req.response = response;

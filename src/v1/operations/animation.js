@@ -37,18 +37,18 @@ console.log('Request Animation:');
 };
 
 var sendI2CRequest = function (req, res, next) {
-  
+
   var id, receiver, animation, speed, color, brightness;
 
   if (req.response._success) {
-	
+
 
     if (req.ledControl) {
- 
+
       receiver = req.ledControl;
       animation = req.response.object._fields.short_name__c;
       id = req.response.object._fields.id;
-      
+
       if (!req.params.color)
         color = 'ff0000';
       else
@@ -66,13 +66,13 @@ var sendI2CRequest = function (req, res, next) {
 
       console.log('>> SEND I2C REQUEST: '+receiver+', '+animation+', '+color+', '+brightness+', '+speed);
       i2c.animation(receiver, animation, color, brightness, speed);
-      req.body = 
-{ 
-"animation__c": id,
-"color__c": color, 
-"brightness__c": brightness, 
-"animation_speed__c": speed
-};
+      req.body =
+        {
+        "animation__c": id,
+        "color__c": color,
+        "brightness__c": brightness,
+        "animation_speed__c": speed
+        };
 
     } else {
       res.send('ERROR: sendI2CRequest(): No LED Controller');
@@ -85,7 +85,6 @@ var sendI2CRequest = function (req, res, next) {
 
 
 var updateBarAnimation = function (req, res, next) {
-
   db.updateBar(req, res, next);
 };
 
@@ -133,4 +132,3 @@ app.get('/:label/:name/:color/:brightness', [requestBar, requestAnimation, sendI
 app.get('/:label/:name/:color/:brightness/:speed', [requestBar, requestAnimation, sendI2CRequest, updateBarAnimation], function(req, res) {
  res.json(req.response);
 });
-

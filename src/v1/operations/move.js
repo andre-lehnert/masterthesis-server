@@ -32,16 +32,42 @@ var requestBar = function (req, res, next) {
 };
 
 var sendI2CRequest = function (req, res, next) {
-  console.log(req.resonse);
-  console.log(req.resonse);
 
-  if (req.resonse._success) {
+  console.log(req.response);
+
+  var id, receiver, targetPosition, speed;
+
+  if (req.response._success) {
+
+    receiver = req.motorControl;
+    id = req.response.object._fields.id;
+    targetPosition = req.params.position;
+
     if (!req.params.speed)
-      i2c.move(req.resonse.object.motor__c, req.params.position, 'half');
+      speed = 'half';
     else
-      i2c.move(req.resonse.object.motor__c, req.params.position, req.params.speed);
+      speed = req.params.speed;
+
+    // Send I2C Command
+    console.log('>> SEND I2C REQUEST: '+receiver+', '+targetPosition+', '+speed);
+    i2c.move(receiver, targetPosition, speed);
+
+    // New Position
+    req.body =
+      {
+      "position__c": targetPosition
+      };
+
+  } else {
+    res.send('ERROR: sendI2CRequest(): No Bar Found');
   }
+  next();
 };
+
+var updateBarPosition = function (req, res, next) {
+  db.updateBar(req, res, next);
+};
+
 
 
 // ---------------- Routing -----------------------------------------------
@@ -63,13 +89,13 @@ app.get('/:label', [requestBar], function(req, res) {
 /*
  * ## Move a bar to :position
  */
-app.get('/:label/:position', [requestBar, sendI2CRequest], function (req, res) {
+app.get('/:label/:position', [requestBar, sendI2CRequest, updateBarPosition], function (req, res) {
   res.json(req.response);
 });
 
 /*
  * ## Move a bar to :position with :speed
  */
-app.get('/:label/:position/:speed', [requestBar, sendI2CRequest], function (req, res) {
+app.get('/:label/:position/:speed', [requestBar, sendI2CRequest, updateBarPosition], function (req, res) {
   res.json(req.response);
 });
