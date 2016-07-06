@@ -352,6 +352,14 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  getNotificationByApp : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        notifications.getNotificationByApp(req, res, org, oauth, next);             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   getNotification : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
@@ -390,6 +398,14 @@ module.exports = {
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         invocations.getInvocations(req, res, org, oauth, next);                 // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getInvocationsByApp : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        invocations.getInvocationsByApp(req, res, org, oauth, next);             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

@@ -2,6 +2,7 @@ var nforce = require('nforce');
 
 var GET_ALL = 'SELECT Id, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c';
 var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c WHERE Id = \'[:id]\'';
+var GET_ALL_BY_APP = 'SELECT Id, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c WHERE app__c = \'[:id]\'';
 
 module.exports = {
 
@@ -24,7 +25,7 @@ module.exports = {
             };
 
             req.response = response;
-next();
+            next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -50,7 +51,63 @@ next();
             console.log(response);
 
             req.response = response;
-next();
+            next();
+          }
+        });
+  },
+
+  getNotificationByApp : function(req, res, org, oauth, next) {
+
+        var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+        var obj = req.params.id; // App ID
+
+        console.log(">> GET Notifications BY APP ID: "+ obj);
+
+        var query = GET_ALL_BY_APP.replace("[:id]", obj);
+
+        org.query({ query: query, oauth: oauth }, function(err, results){
+          if (err) {
+
+            console.log(err);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var response =
+            {
+              'href': URL,
+              '_success': false,
+              '_errors': err
+            };
+
+            req.response = response;
+            next();
+
+          } else if(!err) {
+            console.log('>> DB REQUEST');
+            console.log('QUERY: '+ GET_ALL);
+            console.log('RESPONSE: Entries = '+ results.totalSize);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var receivers = [];
+
+            for (var r in results.records) {
+              receivers.push(results.records[r]);
+            }
+
+            var response =
+            {
+              'href': URL,
+              '_success': true,
+              '_count': results.totalSize,
+              'objects': receivers
+            };
+
+            console.log(response);
+
+            req.response = response;
+            next();
           }
         });
   },

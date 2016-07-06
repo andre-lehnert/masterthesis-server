@@ -39,6 +39,15 @@ var deleteApp = function (req, res, next) {
     db.deleteApp(req, res, next);
 };
 
+
+var requestNotifications = function (req, res, next) {
+  db.getNotificationsByApp(req, res, next);
+};
+
+var requestInvocations = function (req, res, next) {
+  db.getInvocationsByApp(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
@@ -59,6 +68,34 @@ app.post('/', [insertApp], function(req, res) {
  * ## Get App by id
  */
 app.get('/:id', [requestApp], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get notifications
+ */
+app.get('/:id/notifications', [requestApp, requestNotifications], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get notifications
+ */
+app.get('/:id/notifications/:notification', [requestApp], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get invocations
+ */
+app.get('/:id/invocations', [requestApp], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get notifications
+ */
+app.get('/:id/notifications/:invocation', [requestApp], function(req, res) {
   res.json(req.response);
 });
 
