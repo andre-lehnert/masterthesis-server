@@ -57,6 +57,13 @@ var requestInvocation = function (req, res, next) {
   db.getInvocationByApp(req, res, next);
 };
 
+var insertNotification = function (req, res, next) {
+    db.insertNotification(req, res, next);
+};
+
+var insertInvocation = function (req, res, next) {
+    db.insertInvocation(req, res, next);
+};
 
 // ---------------- Routing ----------------------------------------------------
 
@@ -96,6 +103,13 @@ app.get('/:id/notifications/:notification', [requestNotification], function(req,
 });
 
 /*
+ * ## Insert new Notification
+ */
+app.post('/:id/notifications', [insertNotification], function(req, res) {
+  res.json(req.response);
+});
+
+/*
  * ## Get invocations
  */
 app.get('/:id/invocations', [requestInvocations], function(req, res) {
@@ -106,6 +120,13 @@ app.get('/:id/invocations', [requestInvocations], function(req, res) {
  * ## Get notifications
  */
 app.get('/:id/invocations/:invocation', [requestInvocation], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Insert new Invocation
+ */
+app.post('/:id/invocations', [insertInvocation], function(req, res) {
   res.json(req.response);
 });
 
