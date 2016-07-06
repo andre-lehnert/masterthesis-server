@@ -48,6 +48,16 @@ var requestInvocations = function (req, res, next) {
   db.getInvocationsByApp(req, res, next);
 };
 
+
+var requestNotification = function (req, res, next) {
+  db.getNotificationByApp(req, res, next);
+};
+
+var requestInvocation = function (req, res, next) {
+  db.getInvocationByApp(req, res, next);
+};
+
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
@@ -74,28 +84,28 @@ app.get('/:id', [requestApp], function(req, res) {
 /*
  * ## Get notifications
  */
-app.get('/:id/notifications', [requestApp, requestNotifications], function(req, res) {
+app.get('/:id/notifications', [requestNotifications], function(req, res) {
   res.json(req.response);
 });
 
 /*
  * ## Get notifications
  */
-app.get('/:id/notifications/:notification', [requestApp], function(req, res) {
+app.get('/:id/notifications/:notification', [requestNotification], function(req, res) {
   res.json(req.response);
 });
 
 /*
  * ## Get invocations
  */
-app.get('/:id/invocations', [requestApp], function(req, res) {
+app.get('/:id/invocations', [requestInvocations], function(req, res) {
   res.json(req.response);
 });
 
 /*
  * ## Get notifications
  */
-app.get('/:id/notifications/:invocation', [requestApp], function(req, res) {
+app.get('/:id/invocations/:invocation', [requestInvocation], function(req, res) {
   res.json(req.response);
 });
 

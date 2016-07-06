@@ -56,7 +56,7 @@ module.exports = {
         });
   },
 
-  getNotificationByApp : function(req, res, org, oauth, next) {
+  getNotificationsByApp : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -174,6 +174,73 @@ next();
 
           req.response = response;
 next();
+        }
+      }
+    });
+  },
+
+  getNotificationByApp : function(req, res, org, oauth, next) {
+
+    var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    var obj = req.params.notification; // /apps/{id}/notifications/{notification} <- ID
+
+    console.log(">> GET Notification BY ID: "+ obj);
+
+    var query = GET_BY_ID.replace("[:id]", obj);
+
+    org.query({ query: query, oauth: oauth }, function(err, result){
+      if (err) {
+
+        console.log(err);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        var response =
+        {
+          'href': URL,
+          '_success': false,
+          '_errors': err
+        };
+
+        req.response = response;
+        next();
+
+      } else if(!err) {
+
+        console.log('>> DB REQUEST');
+        console.log('QUERY: '+ query);
+        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        if (result.totalSize == 1) { // 1 entry
+
+          var response =
+          {
+            'href': URL,
+            '_success': true,
+            'object': result.records[0]
+          };
+
+          console.log(response);
+
+          req.response = response;
+          next();
+
+        } else { // no entry // salesforce duplicate check
+
+          var response =
+          {
+            'href': URL,
+            '_success': false,
+            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+          };
+
+          console.log(response);
+
+          req.response = response;
+          next();
         }
       }
     });
