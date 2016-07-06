@@ -187,7 +187,7 @@ app.get('/:label/sides/:side', [requestBar, requestSide], function(req, res) {
 /*
  * ## Get a bar by label (A1, A2, ...), side(a, b, c, d)  operation (new, add, remove)
  */
-app.get('/:label/:side/:operation', [requestBar, requestSide, sendSideI2CRequest, updateBarSides], function(req, res) {
+app.get('/:label/sides/:side/:operation', [requestBar, requestSide, sendSideI2CRequest, updateBarSides], function(req, res) {
  res.json(
    {
      "leds" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -198,21 +198,21 @@ app.get('/:label/:side/:operation', [requestBar, requestSide, sendSideI2CRequest
 /*
  * ## Get a bar by label (A1, A2, ...), side(a, b, c, d), operation (new, add, remove), led number (0-10),
  */
-app.get('/:label/:side/:operation/:led', [requestBar, requestSide, sendSideI2CRequest, updateBarSides], function(req, res) {
+app.get('/:label/sides/:side/:operation/:led', [requestBar, requestSide, sendSideI2CRequest, updateBarSides], function(req, res) {
  res.json(req.response);
 });
 
 /*
  * ## Get a bar by label (A1, A2, ...), side(a, b, c, d), operation (new, add, remove), led number (0-10), color (ff0000)
  */
-app.get('/:label/:side/:operation/:led/:color', [requestBar, requestSide, sendSideI2CRequest, updateBarSides], function(req, res) {
+app.get('/:label/sides/:side/:operation/:led/:color', [requestBar, requestSide, sendSideI2CRequest, updateBarSides], function(req, res) {
  res.json(req.response);
 });
 
 /*
  * ## Get a bar by label (A1, A2, ...), side(a, b, c, d), operation (new, add, remove), led number (0-10), color (ff0000), brightness (0-100)
  */
-app.get('/:label/:side/:operation/:led/:color/:brightness', [requestBar, requestSide, sendSideI2CRequest, updateBarSides], function(req, res) {
+app.get('/:label/sides/:side/:operation/:led/:color/:brightness', [requestBar, requestSide, sendSideI2CRequest, updateBarSides], function(req, res) {
  res.json(req.response);
 });
 
