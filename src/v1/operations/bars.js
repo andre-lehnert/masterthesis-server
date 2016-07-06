@@ -8,6 +8,8 @@ var bodyParser = require('body-parser'),
     api = require('./../rest-api'),
     // Database Access (salesforce REST-API)
     db = require('./../database/salesforce/database');
+
+    i2c = require('masterthesis-i2c-library');
     // Express.js Application
     app = module.exports = express();
 
@@ -66,10 +68,22 @@ var sendSideI2CRequest = function (req, res, next) {
       operation = req.params.operation;
       side = req.selectedSide;
 
+       var leds;
+
+      if (operation.toLowerCase() != 'new')
+        leds = Array(11); //[ null,  null,  null,  null,  null,  null,  null,  null,  null,  null,  null ];
+      else
+        leds = [ '000000','000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000' ];
+
+
+
       if (!req.params.color)
         color = 'ff0000';
       else
         color = req.params.color;
+
+      if (operation.toLowerCase() === 'remove')
+        color = '000000';
 
       if (!req.params.brightness)
         brightness = 100;
@@ -84,7 +98,6 @@ var sendSideI2CRequest = function (req, res, next) {
         operation = '-';
 
       lednumber = parseInt(req.params.led) + 1;
-      var leds = [ '000000','000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000' ];
 
       switch (lednumber) {
         case 1: leds[0] = color; break;
