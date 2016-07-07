@@ -3,6 +3,12 @@ var nforce = require('nforce');
 var GET_ALL = 'SELECT Id, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c';
 var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c WHERE Id = \'[:id]\'';
 var GET_ALL_BY_APP = 'SELECT Id, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c WHERE app__c = \'[:id]\'';
+var GET_ALL_BY_DATE = 'SELECT Id, Name, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c WHERE DAY_ONLY(datetime__c) = \'[:date]\'';
+var GET_ALL_BY_START_DATE = 'SELECT Id, Name, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c WHERE DAY_ONLY(datetime__c) >= \'[:start]\'';
+var GET_ALL_BY_END_DATE = 'SELECT Id, Name, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c WHERE DAY_ONLY(datetime__c) <= \'[:end]\'';
+var GET_ALL_BY_START_END_DATE = 'SELECT Id, Name, CreatedDate, LastModifiedDate, text__c, datetime__c, title__c, priority__c, contact__c, app__c FROM Notification__c WHERE DAY_ONLY(datetime__c) >= \'[:start]\' AND DAY_ONLY(datetime__c) <= \'[:end]\'';
+
+
 
 module.exports = {
 
@@ -10,7 +16,38 @@ module.exports = {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-        org.query({ query: GET_ALL, oauth: oauth }, function(err, results){
+        var query = GET_ALL;
+
+        if (typeof req.query.date != 'undefined') { // &date=2016-06-01
+
+          query = GET_ALL_BY_DATE.replace("[:date]", req.query.date);
+
+        } else if (typeof req.query.start != 'undefined') {
+          if (typeof req.query.end != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &start=2016-06-01
+
+            query = GET_ALL_BY_START_DATE.replace("[:start]", req.query.start);
+
+          }
+        } else if (typeof req.query.end != 'undefined') {
+          if (typeof req.query.start != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &end=2016-06-30
+
+            query = GET_ALL_BY_END_DATE.replace("[:end]", req.query.end);
+
+          }
+
+        }
+
+        console.log("QUERY: "+query);
+
+        org.query({ query: query, oauth: oauth }, function(err, results){
           if (err) {
 
             console.log(err);
