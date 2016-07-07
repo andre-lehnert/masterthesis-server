@@ -39,6 +39,42 @@ var deleteSmartphone = function (req, res, next) {
     db.deleteSmartphone(req, res, next);
 };
 
+
+var requestApps = function (req, res, next) {
+  db.getAppsBySmartphone(req, res, next);
+};
+
+var requestApp = function (req, res, next) {
+  db.getAppBySmartphone(req, res, next);
+};
+
+
+var requestNotifications = function (req, res, next) {
+  db.getNotificationsByApp(req, res, next);
+};
+
+var requestInvocations = function (req, res, next) {
+  db.getInvocationsByApp(req, res, next);
+};
+
+
+var requestNotification = function (req, res, next) {
+  db.getNotificationByApp(req, res, next);
+};
+
+var requestInvocation = function (req, res, next) {
+  db.getInvocationByApp(req, res, next);
+};
+
+
+var insertNotification = function (req, res, next) {
+    db.insertNotification(req, res, next);
+};
+
+var insertInvocation = function (req, res, next) {
+    db.insertInvocation(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
@@ -59,6 +95,62 @@ app.post('/', [insertSmartphone], function(req, res) {
  * ## Get Smartphone by id
  */
 app.get('/:id', [requestSmartphone], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get Smartphone Apps by id
+ */
+app.get('/:id/apps', [requestApps], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get Smartphone App by App id
+ */
+app.get('/:id/apps/:app', [requestApp], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get Smartphone Notifications by App id
+ */
+app.get('/:id/apps/:app/notifications', [requestNotifications], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get Smartphone Notification by App id
+ */
+app.get('/:id/apps/:app/notifications/:notification', [requestNotification], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Insert new Notification
+ */
+app.post('/:id/apps/:app/notifications', [insertNotification], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get Smartphone invocations by App id
+ */
+app.get('/:id/apps/:app/invocations', [requestInvocations], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get Smartphone invocation by App id
+ */
+app.get('/:id/apps/:app/invocations/:invocation', [requestInvocation], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Insert new Invocation
+ */
+app.post('/:id/apps/:app/invocations', [insertInvocation], function(req, res) {
   res.json(req.response);
 });
 

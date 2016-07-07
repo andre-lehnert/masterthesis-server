@@ -311,11 +311,27 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  getAppsBySmartphone : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        apps.getAppsBySmartphone(req, res, org, oauth, next);                               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   getApp : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         apps.getApp(req, res, org, oauth, next);                                // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getAppBySmartphone : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        apps.getAppBySmartphone(req, res, org, oauth, next);                               // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

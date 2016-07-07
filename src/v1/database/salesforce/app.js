@@ -2,6 +2,7 @@ var nforce = require('nforce');
 
 var GET_ALL = 'SELECT Id, CreatedDate, LastModifiedDate, name__c, author__c, package__c, version__c, color__c, animation__c, animation_speed__c, icon__c, smartphone__c, brightness__c FROM App__c';
 var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, name__c, author__c, package__c, version__c, color__c, animation__c, animation_speed__c, icon__c, smartphone__c, brightness__c FROM App__c WHERE Id = \'[:id]\'';
+var GET_ALL_BY_SMARTPHONE = 'SELECT Id, CreatedDate, LastModifiedDate, name__c, author__c, package__c, version__c, color__c, animation__c, animation_speed__c, icon__c, smartphone__c, brightness__c FROM App__c WHERE smartphone__c = \'[:id]\'';
 
 module.exports = {
 
@@ -24,7 +25,7 @@ module.exports = {
             };
 
             req.response = response;
-next();
+            next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -50,7 +51,63 @@ next();
             console.log(response);
 
             req.response = response;
-next();
+            next();
+          }
+        });
+  },
+
+  getAppsBySmartphone : function(req, res, org, oauth, next) {
+
+        var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+        var obj = req.params.id; // Smartphone ID
+
+        console.log(">> GET Apps BY SMARTPHONE ID: "+ obj);
+
+        var query = GET_ALL_BY_SMARTPHONE.replace("[:id]", obj);
+
+        org.query({ query: query, oauth: oauth }, function(err, results){
+          if (err) {
+
+            console.log(err);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var response =
+            {
+              'href': URL,
+              '_success': false,
+              '_errors': err
+            };
+
+            req.response = response;
+            next();
+
+          } else if(!err) {
+            console.log('>> DB REQUEST');
+            console.log('QUERY: '+ GET_ALL);
+            console.log('RESPONSE: Entries = '+ results.totalSize);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var receivers = [];
+
+            for (var r in results.records) {
+              receivers.push(results.records[r]);
+            }
+
+            var response =
+            {
+              'href': URL,
+              '_success': true,
+              '_count': results.totalSize,
+              'objects': receivers
+            };
+
+            console.log(response);
+
+            req.response = response;
+            next();
           }
         });
   },
@@ -80,7 +137,7 @@ next();
         };
 
         req.response = response;
-next();
+        next();
 
       } else if(!err) {
 
@@ -102,7 +159,7 @@ next();
           console.log(response);
 
           req.response = response;
-next();
+          next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -116,7 +173,74 @@ next();
           console.log(response);
 
           req.response = response;
-next();
+          next();
+        }
+      }
+    });
+  },
+
+  getAppBySmartphone : function(req, res, org, oauth, next) {
+
+    var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    var obj = req.params.app;
+
+    console.log(">> GET App BY ID: "+ obj);
+
+    var query = GET_BY_ID.replace("[:id]", obj);
+
+    org.query({ query: query, oauth: oauth }, function(err, result){
+      if (err) {
+
+        console.log(err);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        var response =
+        {
+          'href': URL,
+          '_success': false,
+          '_errors': err
+        };
+
+        req.response = response;
+        next();
+
+      } else if(!err) {
+
+        console.log('>> DB REQUEST');
+        console.log('QUERY: '+ query);
+        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        if (result.totalSize == 1) { // 1 entry
+
+          var response =
+          {
+            'href': URL,
+            '_success': true,
+            'object': result.records[0]
+          };
+
+          console.log(response);
+
+          req.response = response;
+          next();
+
+        } else { // no entry // salesforce duplicate check
+
+          var response =
+          {
+            'href': URL,
+            '_success': false,
+            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+          };
+
+          console.log(response);
+
+          req.response = response;
+          next();
         }
       }
     });
