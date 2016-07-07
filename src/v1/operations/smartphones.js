@@ -50,11 +50,11 @@ var requestApp = function (req, res, next) {
 
 
 var requestNotifications = function (req, res, next) {
-  db.getNotificationsByApp(req, res, next);
+  db.getNotificationsBySmartphoneApp(req, res, next);
 };
 
 var requestInvocations = function (req, res, next) {
-  db.getInvocationsByApp(req, res, next);
+  db.getInvocationsBySmartphoneApp(req, res, next);
 };
 
 

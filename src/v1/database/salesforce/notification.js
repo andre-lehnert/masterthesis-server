@@ -112,6 +112,62 @@ module.exports = {
         });
   },
 
+  getNotificationsBySmartphoneApp : function(req, res, org, oauth, next) {
+
+        var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+        var obj = req.params.app; // App ID
+
+        console.log(">> GET Notifications BY APP ID: "+ obj);
+
+        var query = GET_ALL_BY_APP.replace("[:id]", obj);
+
+        org.query({ query: query, oauth: oauth }, function(err, results){
+          if (err) {
+
+            console.log(err);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var response =
+            {
+              'href': URL,
+              '_success': false,
+              '_errors': err
+            };
+
+            req.response = response;
+            next();
+
+          } else if(!err) {
+            console.log('>> DB REQUEST');
+            console.log('QUERY: '+ GET_ALL);
+            console.log('RESPONSE: Entries = '+ results.totalSize);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var receivers = [];
+
+            for (var r in results.records) {
+              receivers.push(results.records[r]);
+            }
+
+            var response =
+            {
+              'href': URL,
+              '_success': true,
+              '_count': results.totalSize,
+              'objects': receivers
+            };
+
+            console.log(response);
+
+            req.response = response;
+            next();
+          }
+        });
+  },
+
   getNotification : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -137,7 +193,7 @@ module.exports = {
         };
 
         req.response = response;
-next();
+        next();
 
       } else if(!err) {
 
@@ -159,7 +215,7 @@ next();
           console.log(response);
 
           req.response = response;
-next();
+          next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -173,7 +229,7 @@ next();
           console.log(response);
 
           req.response = response;
-next();
+          next();
         }
       }
     });
