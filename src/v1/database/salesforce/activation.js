@@ -10,6 +10,7 @@ var GET_ALL_BY_START_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start
 
 var GET_ALL_BY_SMARTPHONE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, smartphone__c, total_time__c, end__c FROM Activation__c WHERE smartphone__c = \'[:id]\'';
 var GET_ALL_BY_SMARTPHONE_AND_BY_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, smartphone__c, total_time__c, end__c FROM Activation__c WHERE smartphone__c = \'[:id]\' AND DAY_ONLY(start__c) = [:date] ORDER BY start__c';
+var GET_ALL_BY_SMARTPHONE_AND_BY_START_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, smartphone__c, total_time__c, end__c FROM Activation__c WHERE smartphone__c = \'[:id]\' AND DAY_ONLY(start__c) >= [:start] ORDER BY start__c';
 var GET_ALL_BY_SMARTPHONE_AND_BY_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, smartphone__c, total_time__c, end__c FROM Activation__c WHERE smartphone__c = \'[:id]\' AND DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
 var GET_ALL_BY_SMARTPHONE_AND_BY_START_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, smartphone__c, total_time__c, end__c FROM Activation__c WHERE smartphone__c = \'[:id]\' AND DAY_ONLY(start__c) >= [:start] AND DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
 
