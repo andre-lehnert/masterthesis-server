@@ -3,6 +3,8 @@ var nforce = require('nforce');
 var GET_ALL = 'SELECT label__c, calibrated__c, position__c, animation__c, token__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c';
 var GET_BY_ID = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE Id = \'[:id]\'';
 var GET_BY_LABEL = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE label__c = \'[:label]\'';
+var GET_ALL_BY_DEVICE = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE device__c = \'[:id]\'';
+
 
 module.exports = {
 
@@ -55,6 +57,52 @@ module.exports = {
           }
         });
   },
+
+  /*
+   * NO EXPRESS METHOD
+   */
+  getBarsByDevice : function(device, callback, org, oauth) {
+
+    console.log(">> GET BARS BY DEVICE: "+ device);
+
+    var query = GET_ALL_BY_DEVICE.replace("[:id]", device);
+
+    org.query({ query: query, oauth: oauth }, function(err, results) {
+
+          if (err) {
+
+            console.log(err);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var response =
+            {
+              'href': URL,
+              '_success': false,
+              '_errors': err
+            };
+
+            callback(response);
+
+          } else if(!err) {
+            console.log('>> DB REQUEST');
+            console.log('QUERY: '+ GET_ALL);
+            console.log('RESPONSE: Entries = '+ results.totalSize);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var receivers = [];
+
+            for (var r in results.records) {
+              receivers.push(results.records[r]._fields);
+            }
+
+            console.log(receivers);
+            callback(receivers);
+          }
+        });
+  },
+
 
   getBar : function(req, res, org, oauth, next) {
 

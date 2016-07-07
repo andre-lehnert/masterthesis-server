@@ -39,6 +39,13 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  getBarsByDevice : function(device, callback) {
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        bars.getBarsByDevice(device, callback, org, oauth);                       // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   getBar : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
