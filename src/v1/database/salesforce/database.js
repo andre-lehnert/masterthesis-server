@@ -26,6 +26,7 @@ var bars          = require('./bar'),
     apps          = require('./app'),
     notifications = require('./notification'),
     invocations   = require('./invocation');
+    activations   = require('./activation');
 
 
 module.exports = {
@@ -486,6 +487,63 @@ module.exports = {
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         invocations.deleteInvocation(req, res, org, oauth, next);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  // --- Activations -----------------------------------------------------------
+  getActivations : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        activations.getActivations(req, res, org, oauth, next);                 // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getActivationsBySmartphone : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        activations.getActivationsBySmartphone(req, res, org, oauth, next);             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getActivation : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        activations.getActivation(req, res, org, oauth, next);                  // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getActivationBySmartphone : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        activations.getActivationByApp(req, res, org, oauth, next);                  // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertActivation : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        activations.insertActivation(req, res, org, oauth, next);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateActivation : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        activations.updateActivation(req, res, org, oauth, next);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteActivation : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        activations.deleteActivation(req, res, org, oauth, next);               // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

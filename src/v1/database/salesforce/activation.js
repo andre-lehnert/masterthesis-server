@@ -1,11 +1,12 @@
 var nforce = require('nforce');
 
-var GET_ALL = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c';
-var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE Id = \'[:id]\'';
-var GET_ALL_BY_APP = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c = \'[:id]\'';
+var GET_ALL = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, smartphone__c, total_time__c, end__c FROM Activation__c';
+var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, smartphone__c, total_time__c, end__c FROM Activation__c WHERE Id = \'[:id]\'';
+var GET_ALL_BY_SMARTPHONE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, smartphone__c, total_time__c, end__c FROM Activation__c WHERE smartphone__c = \'[:id]\'';
+
 module.exports = {
 
-  getInvocations : function(req, res, org, oauth, next) {
+  getActivations : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
@@ -55,15 +56,15 @@ module.exports = {
         });
   },
 
-  getInvocationsByApp : function(req, res, org, oauth, next) {
+  getActivationsBySmartphone : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-        var obj = req.params.id; // App ID
+         var obj = req.params.app; // Smartphone ID
 
-        console.log(">> GET Invocation BY APP ID: "+ obj);
+        console.log(">> GET Activation BY SMARTPHONE ID: "+ obj);
 
-        var query = GET_ALL_BY_APP.replace("[:id]", obj);
+        var query = GET_ALL_BY_SMARTPHONE.replace("[:id]", obj);
 
         org.query({ query: query, oauth: oauth }, function(err, results){
           if (err) {
@@ -111,69 +112,13 @@ module.exports = {
         });
   },
 
-  getInvocationsBySmartphoneApp : function(req, res, org, oauth, next) {
-
-        var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
-
-         var obj = req.params.app; // App ID
-
-        console.log(">> GET Invocation BY APP ID: "+ obj);
-
-        var query = GET_ALL_BY_APP.replace("[:id]", obj);
-
-        org.query({ query: query, oauth: oauth }, function(err, results){
-          if (err) {
-
-            console.log(err);
-
-            // -----------------------------------------------------------------
-            // Set Response Object
-            var response =
-            {
-              'href': URL,
-              '_success': false,
-              '_errors': err
-            };
-
-            req.response = response;
-            next();
-
-          } else if(!err) {
-            console.log('>> DB REQUEST');
-            console.log('QUERY: '+ GET_ALL);
-            console.log('RESPONSE: Entries = '+ results.totalSize);
-
-            // -----------------------------------------------------------------
-            // Set Response Object
-            var receivers = [];
-
-            for (var r in results.records) {
-              receivers.push(results.records[r]);
-            }
-
-            var response =
-            {
-              'href': URL,
-              '_success': true,
-              '_count': results.totalSize,
-              'objects': receivers
-            };
-
-            console.log(response);
-
-            req.response = response;
-            next();
-          }
-        });
-  },
-
-  getInvocation : function(req, res, org, oauth, next) {
+  getActivation : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
     var obj = req.params.id;
 
-    console.log(">> GET Invocation BY ID: "+ obj);
+    console.log(">> GET Activation BY ID: "+ obj);
 
     var query = GET_BY_ID.replace("[:id]", obj);
 
@@ -234,13 +179,13 @@ module.exports = {
     });
   },
 
-  getInvocationByApp : function(req, res, org, oauth, next) {
+  getActivationBySmartphone : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-    var obj = req.params.invocation; // /apps/{id}/invocations/{invocation}
+    var obj = req.params.activation; // /apps/{id}/activations/{activation}
 
-    console.log(">> GET Invocation BY ID: "+ obj);
+    console.log(">> GET Activation BY ID: "+ obj);
 
     var query = GET_BY_ID.replace("[:id]", obj);
 
@@ -301,14 +246,14 @@ module.exports = {
     });
   },
 
-  insertInvocation : function(req, res, org, oauth, next) {
+  insertActivation : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-        var obj = nforce.createSObject('Invocation__c');
+        var obj = nforce.createSObject('Activation__c');
         obj.set('start__c', req.body.start__c);
         obj.set('end__c', req.body.end__c);
-        obj.set('app__c', req.body.app__c);
+        obj.set('smartphone__c', req.body.app__c);
 
 
         console.log(">> INSERT");
@@ -393,13 +338,13 @@ module.exports = {
         });
   },
 
-  updateInvocation : function(req, res, org, oauth, next) {
+  updateActivation : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
     var obj = req.params.id;
 
-    console.log(">> UPDATE Invocation BY LABEL: "+ obj);
+    console.log(">> UPDATE Activation BY ID: "+ obj);
 
     var query = GET_BY_ID.replace("[:id]", obj);
 
@@ -519,13 +464,13 @@ module.exports = {
 
   },
 
-  deleteInvocation : function(req, res, org, oauth, next) {
+  deleteActivation : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
     var obj = req.params.id;
 
-    console.log(">> DELETE Invocation BY ID: "+ obj);
+    console.log(">> DELETE Activation BY ID: "+ obj);
 
     var query = GET_BY_ID.replace("[:id]", obj);
 

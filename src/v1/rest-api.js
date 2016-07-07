@@ -35,6 +35,7 @@ var OPERATIONS =
     'notifications': '/notifications',
     'invocations': '/invocations',
     'sides': '/sides',
+    'activations': '/activations'
     // more operations and /operations/js-files
 };
 
@@ -58,6 +59,7 @@ var API =
     URL+'/api/' + name + OPERATIONS.notifications,
     URL+'/api/' + name + OPERATIONS.invocations,
     URL+'/api/' + name + OPERATIONS.sides,
+    URL+'/api/' + name + OPERATIONS.activations,
   ]
 };
 

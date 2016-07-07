@@ -75,6 +75,19 @@ var insertInvocation = function (req, res, next) {
     db.insertInvocation(req, res, next);
 };
 
+
+var requestActivations = function (req, res, next) {
+  db.getActivationsBySmartphone(req, res, next);
+};
+
+var requestActivation = function (req, res, next) {
+  db.getActivationBySmartphone(req, res, next);
+};
+
+var insertActivation = function (req, res, next) {
+    db.insertActivation(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
@@ -153,6 +166,29 @@ app.get('/:id/apps/:app/invocations/:invocation', [requestInvocation], function(
 app.post('/:id/apps/:app/invocations', [insertInvocation], function(req, res) {
   res.json(req.response);
 });
+
+
+/*
+ * ## Get Smartphone Activations by App id
+ */
+app.get('/:id/activations', [requestActivations], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Get Smartphone Activation by App id
+ */
+app.get('/:id/activations/:activation', [requestActivation], function(req, res) {
+  res.json(req.response);
+});
+
+/*
+ * ## Insert new Activation
+ */
+app.post('/:id/activations', [insertActivation], function(req, res) {
+  res.json(req.response);
+});
+
 
 /*
  * ## Update an Smartphone by id
