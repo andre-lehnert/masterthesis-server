@@ -2,14 +2,57 @@ var nforce = require('nforce');
 
 var GET_ALL = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c';
 var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE Id = \'[:id]\'';
+
+var GET_ALL_BY_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE DAY_ONLY(start__c) = [:date] ORDER BY start__c';
+var GET_ALL_BY_START_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE DAY_ONLY(start__c) >= [:start] ORDER BY start__c';
+var GET_ALL_BY_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
+var GET_ALL_BY_START_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE DAY_ONLY(start__c) >= [:start] AND DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
+
 var GET_ALL_BY_APP = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c = \'[:id]\'';
+var GET_ALL_BY_APP_AND_BY_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c = \'[:id]\' AND DAY_ONLY(start__c) = [:date] ORDER BY start__c';
+var GET_ALL_BY_APP_AND_BY_START_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c = \'[:id]\' AND DAY_ONLY(start__c) >= [:start] ORDER BY start__c';
+var GET_ALL_BY_APP_AND_BY_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c = \'[:id]\' AND DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
+var GET_ALL_BY_APP_AND_BY_START_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c = \'[:id]\' AND DAY_ONLY(start__c) >= [:start] AND DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
+
+
 module.exports = {
 
   getInvocations : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-        org.query({ query: GET_ALL, oauth: oauth }, function(err, results){
+        var query = GET_ALL;
+
+        if (typeof req.query.date != 'undefined') { // &date=2016-06-01
+
+          query = GET_ALL_BY_DATE.replace("[:date]", req.query.date);
+
+        } else if (typeof req.query.start != 'undefined') {
+          if (typeof req.query.end != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &start=2016-06-01
+
+            query = GET_ALL_BY_START_DATE.replace("[:start]", req.query.start);
+
+          }
+        } else if (typeof req.query.end != 'undefined') {
+          if (typeof req.query.start != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &end=2016-06-30
+
+            query = GET_ALL_BY_END_DATE.replace("[:end]", req.query.end);
+
+          }
+
+        }
+
+        console.log("QUERY: "+query);
+
+        org.query({ query: query, oauth: oauth }, function(err, results){
           if (err) {
 
             console.log(err);
@@ -61,9 +104,40 @@ module.exports = {
 
         var obj = req.params.id; // App ID
 
-        console.log(">> GET Invocation BY APP ID: "+ obj);
+        console.log(">> GET invocations BY APP ID: "+ obj);
 
-        var query = GET_ALL_BY_APP.replace("[:id]", obj);
+        var query = GET_ALL_BY_APP;
+
+        if (typeof req.query.date != 'undefined') { // &date=2016-06-01
+
+          query = GET_ALL_BY_APP_AND_BY_DATE.replace("[:date]", req.query.date);
+
+        } else if (typeof req.query.start != 'undefined') {
+          if (typeof req.query.end != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_APP_AND_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &start=2016-06-01
+
+            query = GET_ALL_BY_APP_AND_BY_START_DATE.replace("[:start]", req.query.start);
+
+          }
+        } else if (typeof req.query.end != 'undefined') {
+          if (typeof req.query.start != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_APP_AND_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &end=2016-06-30
+
+            query = GET_ALL_BY_APP_AND_BY_END_DATE.replace("[:end]", req.query.end);
+
+          }
+
+        }
+
+        console.log("QUERY: "+query);
+
+        query = query.replace("[:id]", obj);
 
         org.query({ query: query, oauth: oauth }, function(err, results){
           if (err) {
@@ -115,11 +189,42 @@ module.exports = {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-         var obj = req.params.app; // App ID
+        var obj = req.params.app; // App ID
 
-        console.log(">> GET Invocation BY APP ID: "+ obj);
+        console.log(">> GET invocations BY APP ID: "+ obj);
 
-        var query = GET_ALL_BY_APP.replace("[:id]", obj);
+        var query = GET_ALL_BY_APP;
+
+        if (typeof req.query.date != 'undefined') { // &date=2016-06-01
+
+          query = GET_ALL_BY_APP_AND_BY_DATE.replace("[:date]", req.query.date);
+
+        } else if (typeof req.query.start != 'undefined') {
+          if (typeof req.query.end != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_APP_AND_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &start=2016-06-01
+
+            query = GET_ALL_BY_APP_AND_BY_START_DATE.replace("[:start]", req.query.start);
+
+          }
+        } else if (typeof req.query.end != 'undefined') {
+          if (typeof req.query.start != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_APP_AND_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &end=2016-06-30
+
+            query = GET_ALL_BY_APP_AND_BY_END_DATE.replace("[:end]", req.query.end);
+
+          }
+
+        }
+
+        console.log("QUERY: "+query);
+
+        query = query.replace("[:id]", obj);
 
         org.query({ query: query, oauth: oauth }, function(err, results){
           if (err) {
