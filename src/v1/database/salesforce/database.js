@@ -519,7 +519,7 @@ module.exports = {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
-        activations.getActivationByApp(req, res, org, oauth, next);                  // <--
+        activations.getActivationBySmartphone(req, res, org, oauth, next);                  // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

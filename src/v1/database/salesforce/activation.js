@@ -60,7 +60,7 @@ module.exports = {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-         var obj = req.params.app; // Smartphone ID
+         var obj = req.params.id; // Smartphone ID
 
         console.log(">> GET Activation BY SMARTPHONE ID: "+ obj);
 
@@ -253,7 +253,7 @@ module.exports = {
         var obj = nforce.createSObject('Activation__c');
         obj.set('start__c', req.body.start__c);
         obj.set('end__c', req.body.end__c);
-        obj.set('smartphone__c', req.body.app__c);
+        obj.set('smartphone__c', req.body.smartphone__c);
 
 
         console.log(">> INSERT");
@@ -374,7 +374,7 @@ module.exports = {
           var obj = result.records[0];
           obj.set('start__c', req.body.start__c);
           obj.set('end__c', req.body.end__c);
-          obj.set('app__c', req.body.app__c);
+          obj.set('smartphone__c', req.body.smartphone__c);
 
           org.update({ sobject: obj, oauth: oauth }, function(err, result) {
 
