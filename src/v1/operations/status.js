@@ -15,13 +15,32 @@ var express = require('express'),
 
 var OPERATION = '/status';
 
+// ---------------- Operations --------------------------------------------
+
+var requestBars = function (req, res, next) {
+  db.getBars(req, res, next);
+};
+
+var requestBar = function (req, res, next) {
+  db.getBar(req, res, next);
+};
+
+var requestToken = function (req, res, next) {
+  db.getTokenByBar(req, res, next);
+};
+
 // ---------------- Routing ----------------------------------------------------
 
-/*
- * ## List all receivers
- */
-app.get('/', function(req, res) {
+ /*
+  * ## List all receivers
+  */
+ app.get('/', [requestBars], function(req, res) {
+  res.json(req.response);
+ });
 
-  db.getBars(req, res);
-
-});
+ /*
+  * ## Get bar by label
+  */
+ app.get('/:label', [requestBar, requestToken], function(req, res) {
+  res.json(req.response);
+ });

@@ -25,7 +25,7 @@ module.exports = {
             };
 
             req.response = response;
-next();
+            next();
 
           } else if(!err) {
             console.log('>> DB REQUEST');
@@ -51,7 +51,7 @@ next();
             console.log(response);
 
             req.response = response;
-next();
+            next();
           }
         });
   },
@@ -81,7 +81,7 @@ next();
         };
 
         req.response = response;
-next();
+        next();
 
       } else if(!err) {
 
@@ -103,7 +103,7 @@ next();
           console.log(response);
 
           req.response = response;
-next();
+          next();
 
         } else { // no entry // salesforce duplicate check
 
@@ -117,7 +117,74 @@ next();
           console.log(response);
 
           req.response = response;
-next();
+          next();
+        }
+      }
+    });
+  },
+
+  getTokenByBar : function(req, res, org, oauth, next) {
+
+    var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    var obj = req.token;
+
+    console.log(">> GET TOKEN BY LABEL: "+ obj);
+
+    var query = GET_BY_LABEL.replace("[:label]", obj);
+
+    org.query({ query: query, oauth: oauth }, function(err, result){
+      if (err) {
+
+        console.log(err);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        var response =
+        {
+          'href': URL,
+          '_success': false,
+          '_errors': err
+        };
+
+        req.response = response;
+        next();
+
+      } else if(!err) {
+
+        console.log('>> DB REQUEST');
+        console.log('QUERY: '+ query);
+        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        if (result.totalSize == 1) { // 1 entry
+
+          var response =
+          {
+            'href': URL,
+            '_success': true,
+            'object': result.records[0]
+          };
+
+          console.log(response);
+
+          req.response = response;
+          next();
+
+        } else { // no entry // salesforce duplicate check
+
+          var response =
+          {
+            'href': URL,
+            '_success': false,
+            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+          };
+
+          console.log(response);
+
+          req.response = response;
+          next();
         }
       }
     });

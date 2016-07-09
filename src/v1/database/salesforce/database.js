@@ -201,6 +201,14 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  getTokenByBar : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        tokens.getTokenByBar(req, res, org, oauth, next);                           // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   insertToken : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
