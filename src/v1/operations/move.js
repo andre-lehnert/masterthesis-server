@@ -55,13 +55,7 @@ var sendI2CRequest = function (req, res, next) {
     req.position = targetPosition;
     req.speed = speed;
 
-    i2c.move(receiver, targetPosition, speed);
-
-    // // New Position
-    // req.body =
-    //   {
-    //   "position__c": targetPosition
-    //   };
+    i2c.move(req, res, next);
 
   } else {
     res.send('ERROR: sendI2CRequest(): No Bar Found');

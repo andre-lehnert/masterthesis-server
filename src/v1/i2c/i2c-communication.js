@@ -4,16 +4,20 @@ var wire  = new i2c(MASTER, {device: '/dev/i2c-1'}); // point to your i2c addres
 
 module.exports = {
 
-  scan : function(target, command, callback, res, next) {
+  scan : function(target, command, callback, req, res, next) {
+
+console.log('I2C:scan: '+target+', '+command);
 
     wire.scan(function(err, data) {
       // result contains an array of addresses
       if (!err) {
         console.log('I2C RECEIVERS: '+data);
 
-        if (typeof command != 'undefined' && typeof target != 'undefined')
-          if (command != 'SCAN')
-            callback(data, target, command, res, next);
+        if (typeof command != 'undefined' && typeof target != 'undefined') {
+          if (command != 'SCAN') {
+            callback(data, target, command, req, res, next);
+          } 
+        } else { console.log('ERROR: command or taget missing'); }
       } else {
         console.log('ERROR: '+err);
       }
@@ -21,7 +25,7 @@ module.exports = {
 
   },
 
-  send : function(address, message, res, response) {
+  send : function(address, message, req, res, next) {
 
       console.log("SEND COMMAND ["+address+"]: "+message);
       res.done = true;
@@ -37,30 +41,42 @@ module.exports = {
 
         if (err != null) {
           console.log("ERROR: "+err)
-          response(res);
+          next();
         } else {
-          res.success = true;
-          response(res);
+
+          if (req.update === 'position') {
+
+console.log('I2C:send: >> Update Position: '+req.position);
+
+            // New Position
+            req.body =
+              {
+                "position__c": req.position
+              };
+          } 
+
+          req.success = true;
+          next();
         }
       });
   },
 
-  request : function(address, res, response) {
+  request : function(address, req, res, next) {
 
       console.log("REQUEST ["+address+"]");
-      res.done = true;
+      req.done = true;
 
       wire.setAddress(address);
 
       wire.readByte(function(err, result) {
         if (err != null) {
           console.log("ERROR: "+err);
-          response(res);
+          next();
         } else {
           console.log("RECEIVE ["+address+"]: "+result);
-          res.success = true;
-          res.value = result;
-          response(res);
+          req.success = true;
+          req.value = result;
+          next();
         }
       });
   }

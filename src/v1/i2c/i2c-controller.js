@@ -3,12 +3,15 @@ var i2c = require('./i2c-communication'),
 
 // --- Functions ---------------------------------------------------------------
 
-var handleMove = function(receivers, target, command, res, next) {
+var handleMove = function(receivers, target, command, req, res, next) {
     // var res = {};
     // res.done = false;
     // res.success = false;
     // res.value = -1;
     //
+
+console.log('I2C:handleMove: ['+receivers+'], '+target+', '+command);
+
     if (receivers.length === 0) {
 
       console.log('NO I2C RECEIVER FOUND');
@@ -18,7 +21,12 @@ var handleMove = function(receivers, target, command, res, next) {
       receivers.forEach(function(val, index, array) {
 
         if (parseInt(target) === val) {
-            i2c.send(parseInt(target), command, res, next);
+
+console.log('I2C:handleMove: receiver ['+target+'] available');
+            
+            req.update = 'position';
+
+            i2c.send(parseInt(target), command, req, res, next);
         }
       });
     }
@@ -34,6 +42,8 @@ module.exports = {
     var receiver = req.receiver,
         position = req.position,
         speed = req.speed;
+
+console.log('I2C:move: '+receiver+', '+position+' , '+speed);
 
       // -------------------------------------------------------------------------
       // 1) Validate
@@ -70,8 +80,10 @@ module.exports = {
         }
       }
 
+console.log('I2C:move:validation: OK');
+
       // 2) Scan, check available receivers, execute move
-      i2c.scan(receiver, api.getMoveMessage(position, speed), handleMove, res, next);
+      i2c.scan(receiver, api.getMoveMessage(position, speed), handleMove, req, res, next);
   },
 
   // ----------------------------------------------------------------------

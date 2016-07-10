@@ -11,6 +11,7 @@ var api = {
       LIGHT: 'LIGHT:[side]/[operation]/[led]/[color]/[brightness]',
       ANIMATION: 'ANI:[animation]/[color]/[brightness]/[speed]'
     }
+  }
 };
 
 
