@@ -10,7 +10,7 @@ var bodyParser = require('body-parser'),
     // Database Access (salesforce REST-API)
     db = require('./../database/salesforce/database'),
 
-    i2c = require('masterthesis-i2c-library');
+    i2c = require('./../i2c/i2c-controller');
     // Express.js Application
     app = module.exports = express();
 
@@ -50,18 +50,24 @@ var sendI2CRequest = function (req, res, next) {
 
     // Send I2C Command
     console.log('>> SEND I2C REQUEST: '+receiver+', '+targetPosition+', '+speed);
+
+    req.receiver = receiver;
+    req.position = targetPosition;
+    req.speed = speed;
+
     i2c.move(receiver, targetPosition, speed);
 
-    // New Position
-    req.body =
-      {
-      "position__c": targetPosition
-      };
+    // // New Position
+    // req.body =
+    //   {
+    //   "position__c": targetPosition
+    //   };
 
   } else {
     res.send('ERROR: sendI2CRequest(): No Bar Found');
+    next();
   }
-  next();
+  // next();
 };
 
 var updateBarPosition = function (req, res, next) {

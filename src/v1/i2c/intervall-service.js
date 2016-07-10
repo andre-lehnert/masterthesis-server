@@ -2,7 +2,7 @@
 
 // Database Access (salesforce REST-API)
 var db = require('./../database/salesforce/database'),
-    i2c = require('masterthesis-i2c-library');
+    i2c = require('./../i2c/i2c-controller');
 
 var tick = 0;
 
