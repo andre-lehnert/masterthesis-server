@@ -17,35 +17,31 @@ angular
 
     $log.debug("ApiBrowserController");
 
-    $scope.apiVersion = '0';
+    $scope.apiVersion = '1';
     $scope.uriPraefix = 'api/v';
     $scope.details;
-
-    $scope.findVersion =  $scope.apiVersion;
 
     // tabs
     $scope.tabs = [
           { name: 'Operations', title: 'Operations' },
           { name: 'Details', title: 'Details' },
-          { name: 'Examples', title: 'Example API Invokations' },
           { name: 'Results', title: 'Results' },
         ];
+
     var selected = null,
         previous = null;
     $scope.selectedIndex = 0;
     $scope.$watch('selectedIndex', function(current, old){
       previous = selected;
       selected = $scope.tabs[current];
-      if ( current + 1 ) $log.debug('New Tab: ' + selected.name);
+      if ( current + 1) $log.debug('New Tab: ' + selected.name);
     });
 
     // general information
     $http({method: 'GET' , url: $scope.uriPraefix +  $scope.apiVersion}).
         success(function(data, status) {
-          console.log(data);
-          $scope.title = data.description;
-          $scope.apiVersion = data.version;
-          $scope.operations = data.api;
+          $scope.title = 'API '+data.name;
+          $scope.operations = data.operations;
         }).
         error(function(data, status) {
           console.log(data || "Request failed");
@@ -54,19 +50,14 @@ angular
 
       // 0. search api version
       $scope.searchAPI = function() {
-
-           $http({method: 'GET' , url: $scope.uriPraefix +  $scope.findVersion}).
+           $http({method: 'GET' , url: $scope.uriPraefix +  $scope.apiVersion}).
               success(function(data, status) {
-                console.log(data);
                 $scope.title = data.description;
-                $scope.apiVersion = data.version;
-                $scope.author = data.author;
-                $scope.operations = data.api;
+                $scope.operations = data.operations;
               }).
               error(function(data, status) {
                 console.log(data || "Request failed");
-                $scope.findVersion = '';
-                $scope.apiVersion = 'not found';
+                $scope.apiVersion = '';
                 $scope.operations = '';
                 $scope.details = [];
             });
@@ -75,16 +66,27 @@ angular
 
       };
 
-
+      $scope.details = [];
 
       // 1. operations > details
       $scope.setDetail = function(uri) {
 
+        $scope.details = [];
 
-          $http({method: 'GET' , url: $scope.uriPraefix + $scope.apiVersion + uri}).
+          $http({method: 'GET' , url: uri}).
               success(function(data, status) {
-                console.log(data);
-                $scope.details = data.urls;
+                //console.log(data);
+
+                data.objects.forEach(function(element, index, arr) {
+
+                  if (typeof element.label__c != 'undefined' && data.href.indexOf("sides") < 0) {
+                    //console.log(element.label__c);
+                    $scope.details.push(uri + '/' + element.label__c);
+                  } else if (typeof element.id != 'undefined') {
+                    //console.log(element.id);
+                    $scope.details.push(uri + '/' + element.id);
+                  }
+                });
               }).
               error(function(data, status) {
                 console.log(data || "Request failed");
@@ -95,46 +97,40 @@ angular
 
       };
 
-      // 2. details > examples
-      $scope.setExample = function(example) {
-
-        $scope.examples = [];
-
-        var url = example.url;
-        var tempUrl = url;
-        var temp = '';
-        $log.debug('Example URI: ' + example);
-        console.log(example);
-        // iterate params
-
-
-
-        for (var i = 0; i < example.params.length; i++) {
-
-          // iterate example values
-          for (var j = 0; j < example.params[i].values.length; j++) {
-              // replace parameter placeholder with example values
-
-              temp = tempUrl.replace(example.params[i].param, example.params[i].values[j]);
-
-              if (temp.indexOf(':') == -1) {
-                $scope.examples.push('/' + $scope.uriPraefix + $scope.apiVersion + temp);              
-              } else {
-                tempUrl = temp;
-
-              }
-          }
-        }
-
-        $scope.selectedIndex++; // next tab
-      };
+      $scope.response = "";
 
       // 3. examples > results
       $scope.invokeExample = function(uri) {
+        $scope.response = "";
 
         $http({method: 'GET' , url: uri}).
             success(function(data, status) {
-              console.log(data);
+
+              var keys = [];
+              for (var key in data.object) {
+
+                if (data.object[key] != null)
+                  if (key == 'animation__c') {
+                    data.object[key] = 'http://localhost:8080/api/v1/animations/'+data.object[key];
+                  } else if (key.indexOf("side_") > -1) {
+                    data.object[key] = 'http://localhost:8080/api/v1/sides/'+data.object[key];
+                  } else if (key == 'device__c') {
+                    data.object[key] = 'http://localhost:8080/api/v1/devices/'+data.object[key];
+                  } else if (key == 'app__c') {
+                    data.object[key] = 'http://localhost:8080/api/v1/apps/'+data.object[key];
+                  } else if (key == 'token__c') {
+                    data.object[key] = 'http://localhost:8080/api/v1/tokens/'+data.object[key];
+                  } else if (key == 'smartphone__c') {
+                    data.object[key] = 'http://localhost:8080/api/v1/smartphones/'+data.object[key];
+                  } else if (key == 'bar__c') {
+                    data.object[key] = 'http://localhost:8080/api/v1/bars/'+data.object[key];
+                  } else if (key == 'notification__c') {
+                    data.object[key] = 'http://localhost:8080/api/v1/notifications/'+data.object[key];
+                  } else if (key == 'invocation__c') {
+                    data.object[key] = 'http://localhost:8080/api/v1/invocations/'+data.object[key];
+                  }
+              }
+
               $scope.response = data;
             }).
             error(function(data, status) {

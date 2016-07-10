@@ -25,7 +25,7 @@
             <tr ng-repeat="row in bars.rows">
               <td class="md-title">{{row.number}}</td>
               <td ng-repeat="col in row.cols">
-                <md-button ng-class="col.class" ng-click="selectBar(col)" aria-label="Bar">
+                <md-button ng-class="col.class" ng-disabled="! col.active" ng-click="selectBar(col)" aria-label="Bar">
                   <span class="md-title">{{col.name}}</span>
                 </md-button>
               </td>
@@ -38,9 +38,34 @@
     </div>
 </div>
 
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- Card: Bar Token -->
+<div  layout="row" ng-show="isBarSelected" class="animate-show">
+      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">Token</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+
+            <!-- Wait for response -->
+            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isTokenReceived"></md-progress-linear>
+
+            <!-- JSON Response -->
+            <md-input-container class="md-block" ng-show="isTokenReceived">
+              <p ng-hide="isTokenValid">No Token found!</p>
+              <json-formatter json="token" open="3" ng-show="isTokenValid"></json-formatter>
+            </md-input-container>
+
+          </md-card-content>
+        </md-card>
+    </div>
+</div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- Card #2: Choose target bar position -->
+<!-- Card: Choose target bar position -->
 <div  layout="row" ng-show="isBarSelected" class="animate-show">
       <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
         <md-card>
@@ -112,7 +137,7 @@
 
             <!-- JSON Response -->
             <md-input-container class="md-block" ng-show="isMoveResponseReceived">
-              <json-formatter json="moveResponse.json" open="3" style="margin-top: 40px"></json-formatter>
+              <json-formatter json="moveResponse.json" open="3"></json-formatter>
             </md-input-container>
 
           </md-card-content>
@@ -198,7 +223,7 @@
             <!-- JSON Response -->
 
             <md-input-container class="md-block" ng-show="isAnimationResponseReceived">
-              <json-formatter json="animationResponse.json" open="3" style="margin-top: 40px"></json-formatter>
+              <json-formatter json="animationResponse.json" open="3"></json-formatter>
             </md-input-container>
 
 

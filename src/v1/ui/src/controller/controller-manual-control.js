@@ -239,6 +239,28 @@ $scope.isAnimationReceived = false;
     $scope.isBarReceived = false;
     $scope.isAnimationReceived = false;
 
+    $scope.isMoveRequestSend = false;
+    $scope.isMoveResponseReceived = false;
+
+    $scope.moveRequest = {};
+    $scope.moveRequest.text = '';
+    $scope.moveRequest.i2c = '';
+
+    $scope.moveResponse = {};
+    $scope.moveResponse.json = {};
+
+    $scope.isAnimationRequestSend = false;
+    $scope.isAnimationResponseReceived = false;
+
+    $scope.animationRequest = {};
+    $scope.animationRequest.text = '';
+
+    $scope.animationResponse = {};
+    $scope.animationResponse.json = {};
+
+    $scope.isTokenReceived = false;
+    $scope.isTokenValid = false;
+    $scope.token = {};
 
 
     $log.debug("Selected Bar: "+ bar.name);
@@ -268,6 +290,25 @@ $scope.isAnimationReceived = false;
         error(function(data, status) {
           console.log(data || "Request failed");
       });
+
+    // GET token
+    var url = $scope.uriPraefix + '/status/'+$scope.selectedBar.name.toLowerCase();
+    console.log('GET '+ url);
+    $http({method: 'GET' , url: url}).
+        success(function(data, status) {
+          console.log(data);
+
+          $scope.isTokenReceived = true;
+
+          if (data._success && data.object.label__c) {
+            $scope.isTokenValid = true;       
+            $scope.token = data.object;
+          }
+        }).
+        error(function(data, status) {
+          console.log(data || "Request failed");
+      });
+
 
     $scope.isBarSelected = true;
 
@@ -322,7 +363,17 @@ $scope.moveResponse.json = {};
 $scope.sendMove = function () {
     $log.debug(">> MOVE: Position = "+$scope.barPosition+ ", Stepper Mode: "+ $scope.barStepperMode);
 
-    $scope.isMoveRequestSend = true;
+    $scope.isMoveRequestSend = false;
+    $scope.isMoveResponseReceived = false;
+
+    $scope.moveRequest = {};
+    $scope.moveRequest.text = '';
+    $scope.moveRequest.i2c = '';
+
+    $scope.moveResponse = {};
+    $scope.moveResponse.json = {};
+
+
 
     var uri = $scope.uriPraefix + '/move/'
        + $scope.selectedBar.name.toLowerCase() + '/' // :barReceiver
@@ -342,6 +393,8 @@ $scope.sendMove = function () {
         error(function(data, status) {
           console.log(data || "Request failed");
       });
+
+    $scope.isMoveRequestSend = true;
 };
 
 // -----------------------------------------------------------------------------
@@ -366,10 +419,20 @@ $scope.sendMove = function () {
     $scope.animationResponse = {};
     $scope.animationResponse.json = {};
 
+
+
     // 4. Send Request
     $scope.sendAnimation = function () {
+      $scope.isAnimationRequestSend = false;
+      $scope.isAnimationResponseReceived = false;
 
-         $scope.isAnimationRequestSend = true;
+      $scope.animationRequest = {};
+      $scope.animationRequest.text = '';
+
+      $scope.animationResponse = {};
+      $scope.animationResponse.json = {};
+
+
 
          var color = rgb2hex($scope.barColor);
          $log.debug(color);
@@ -399,6 +462,8 @@ $scope.sendMove = function () {
              error(function(data, status) {
                console.log(data || "Request failed");
            });
+
+       $scope.isAnimationRequestSend = true;
     };
 
 
