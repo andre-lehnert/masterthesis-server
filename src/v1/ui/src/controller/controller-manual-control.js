@@ -262,6 +262,8 @@ $scope.isAnimationReceived = false;
             $scope.barAnimation = "";
             $scope.horizontalSlider.value = 0;
           }
+
+          $scope.refreshSlider();
         }).
         error(function(data, status) {
           console.log(data || "Request failed");
@@ -355,47 +357,44 @@ $scope.sendMove = function () {
          $log.debug("Selected animation: " + animation);
     };
 
-    $scope.isRequestSend = false;
-    $scope.isResponseReceived = false;
+    $scope.isAnimationRequestSend = false;
+    $scope.isAnimationResponseReceived = false;
 
-    $scope.request = {};
-    $scope.request.text = '';
-    $scope.request.i2c = '';
+    $scope.animationRequest = {};
+    $scope.animationRequest.text = '';
 
-    $scope.response = {};
-    $scope.response.json = {};
-    $scope.response.i2c = '';
+    $scope.animationResponse = {};
+    $scope.animationResponse.json = {};
 
     // 4. Send Request
     $scope.sendAnimation = function () {
 
-      $log.debug(">> ANIMATION: Position = "+$scope.barPosition+ ", Stepper Mode: "+ $scope.barStepperMode);
-
-         $scope.isRequestSend = true;
+         $scope.isAnimationRequestSend = true;
 
          var color = rgb2hex($scope.barColor);
          $log.debug(color);
          var brightness = rgba2brigthness($scope.barColor);
          $log.debug(brightness + "%");
 
-         var uri = $scope.uriPraefix + $scope.apiVersion + '/update/'
+         $log.debug(">> ANIMATION: Name: "+$scope.barAnimation.toLowerCase()+", Color: #"+color+", Brightness: "+ brightness+" %");
+
+         var uri = $scope.uriPraefix + '/animation/'
             + $scope.selectedBar.name.toLowerCase() + '/' // :barReceiver
-            + $scope.barPosition + '/' // :position
             + $scope.barAnimation.toLowerCase() + '/' // :animation
             + color + '/' // :color
             + brightness + '/' // :brightness
-            + '100' + '/'; // :speed
+            + $scope.animationSpeed; // :speed
 
             $log.debug(uri);
-            $scope.request.text = uri;
+            $scope.animationRequest.text = uri;
 
 
          $http({method: 'GET' , url: uri}).
              success(function(data, status) {
                $log.debug(data);
-               $scope.response.json = data;
+               $scope.animationResponse.json = data;
 
-               $scope.isResponseReceived = true;
+               $scope.isAnimationResponseReceived = true;
              }).
              error(function(data, status) {
                console.log(data || "Request failed");

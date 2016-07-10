@@ -173,6 +173,41 @@
 </div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- Animation: Request & Response -->
+<div layout="row" ng-show="isAnimationRequestSend" class="animate-show">
+      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">REST-Request</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+
+            <!-- REST Request -->
+            <md-input-container class="md-block">
+              <label></label>
+              <textarea ng-model="animationRequest.text" rows="2" md-select-on-focus style="height:30px"></textarea>
+            </md-input-container>
+
+            <span class="md-headline">JSON-Response</span>
+            <!-- spacer --> <div style="height: 25px"></div>
+
+            <!-- Response -->
+            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isAnimationResponseReceived"></md-progress-linear>
+
+            <!-- JSON Response -->
+            <md-input-container class="md-block" ng-show="isAnimationResponseReceived">
+              <label></label>
+              <textarea ng-model="animationResponse.text" rows="2" md-select-on-focus style="height:30px"></textarea>
+            </md-input-container>
+
+          </md-card-content>
+        </md-card>
+    </div>
+</div>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- Card #4: Update Bar Status / Set new configuration -->
 <div  layout="row" ng-show="isBarSelected" class="animate-show">
       <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
