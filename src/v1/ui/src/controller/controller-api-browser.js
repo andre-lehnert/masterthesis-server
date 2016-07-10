@@ -106,7 +106,6 @@ angular
         $http({method: 'GET' , url: uri}).
             success(function(data, status) {
 
-              var keys = [];
               for (var key in data.object) {
 
                 if (data.object[key] != null)

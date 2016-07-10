@@ -301,7 +301,7 @@ $scope.isAnimationReceived = false;
           $scope.isTokenReceived = true;
 
           if (data._success && data.object.label__c) {
-            $scope.isTokenValid = true;       
+            $scope.isTokenValid = true;
             $scope.token = data.object;
           }
         }).
@@ -387,6 +387,31 @@ $scope.sendMove = function () {
         success(function(data, status) {
 
           $log.debug(data);
+
+          for (var key in data.object) {
+
+            if (data.object[key] != null)
+              if (key == 'animation__c') {
+                data.object[key] = 'http://localhost:8080/api/v1/animations/'+data.object[key];
+              } else if (key.indexOf("side_") > -1) {
+                data.object[key] = 'http://localhost:8080/api/v1/sides/'+data.object[key];
+              } else if (key == 'device__c') {
+                data.object[key] = 'http://localhost:8080/api/v1/devices/'+data.object[key];
+              } else if (key == 'app__c') {
+                data.object[key] = 'http://localhost:8080/api/v1/apps/'+data.object[key];
+              } else if (key == 'token__c') {
+                data.object[key] = 'http://localhost:8080/api/v1/tokens/'+data.object[key];
+              } else if (key == 'smartphone__c') {
+                data.object[key] = 'http://localhost:8080/api/v1/smartphones/'+data.object[key];
+              } else if (key == 'bar__c') {
+                data.object[key] = 'http://localhost:8080/api/v1/bars/'+data.object[key];
+              } else if (key == 'notification__c') {
+                data.object[key] = 'http://localhost:8080/api/v1/notifications/'+data.object[key];
+              } else if (key == 'invocation__c') {
+                data.object[key] = 'http://localhost:8080/api/v1/invocations/'+data.object[key];
+              }
+          }
+
           $scope.moveResponse.json = data;
           $scope.isMoveResponseReceived = true;
         }).
@@ -455,6 +480,31 @@ $scope.sendMove = function () {
          $http({method: 'GET' , url: uri}).
              success(function(data, status) {
                $log.debug(data);
+
+               for (var key in data.object) {
+
+                 if (data.object[key] != null)
+                   if (key == 'animation__c') {
+                     data.object[key] = 'http://localhost:8080/api/v1/animations/'+data.object[key];
+                   } else if (key.indexOf("side_") > -1) {
+                     data.object[key] = 'http://localhost:8080/api/v1/sides/'+data.object[key];
+                   } else if (key == 'device__c') {
+                     data.object[key] = 'http://localhost:8080/api/v1/devices/'+data.object[key];
+                   } else if (key == 'app__c') {
+                     data.object[key] = 'http://localhost:8080/api/v1/apps/'+data.object[key];
+                   } else if (key == 'token__c') {
+                     data.object[key] = 'http://localhost:8080/api/v1/tokens/'+data.object[key];
+                   } else if (key == 'smartphone__c') {
+                     data.object[key] = 'http://localhost:8080/api/v1/smartphones/'+data.object[key];
+                   } else if (key == 'bar__c') {
+                     data.object[key] = 'http://localhost:8080/api/v1/bars/'+data.object[key];
+                   } else if (key == 'notification__c') {
+                     data.object[key] = 'http://localhost:8080/api/v1/notifications/'+data.object[key];
+                   } else if (key == 'invocation__c') {
+                     data.object[key] = 'http://localhost:8080/api/v1/invocations/'+data.object[key];
+                   }
+               }
+
                $scope.animationResponse.json = data;
 
                $scope.isAnimationResponseReceived = true;
