@@ -112,8 +112,7 @@
 
             <!-- JSON Response -->
             <md-input-container class="md-block" ng-show="isMoveResponseReceived">
-              <label></label>
-              <textarea ng-model="moveResponse.text" rows="2" md-select-on-focus style="height:30px"></textarea>
+              <json-formatter json="moveResponse.json" open="3" style="margin-top: 40px"></json-formatter>
             </md-input-container>
 
           </md-card-content>
@@ -197,10 +196,11 @@
             <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isAnimationResponseReceived"></md-progress-linear>
 
             <!-- JSON Response -->
+
             <md-input-container class="md-block" ng-show="isAnimationResponseReceived">
-              <label></label>
-              <textarea ng-model="animationResponse.text" rows="2" md-select-on-focus style="height:30px"></textarea>
+              <json-formatter json="animationResponse.json" open="3" style="margin-top: 40px"></json-formatter>
             </md-input-container>
+
 
           </md-card-content>
         </md-card>
