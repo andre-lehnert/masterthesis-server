@@ -80,8 +80,46 @@ console.log('I2C:handleAnimation: receiver ['+target+'] available');
     }
 };
 
+var handleStatus = function(receivers, target, command, req, res, next) {
 
+console.log('I2C:handleStatus: ['+receivers+'], '+target+', '+command);
 
+    if (receivers.length === 0) {
+
+      console.log('NO I2C RECEIVER FOUND');
+
+    } else {
+
+      receivers.forEach(function(val, index, array) {
+
+        if (parseInt(target) === val) {
+
+console.log('I2C:handleStatus: receiver ['+target+'] available');
+
+            req.update = 'status';
+
+            i2c.request(parseInt(target), req, res, updateToken);
+        }
+      });
+    }
+};
+
+var getTokenId = function(req, res, next) {
+
+  console.log('I2C:getTokenId: TokenLabel: '+req.token);
+
+  // 1) Get Token Id
+  db.getToken(req, res, updateTokenId);
+};
+
+// 2) Update Bar Token Id
+var updateTokenId = function(req, res, next) {
+
+  console.log('I2C:updateTokenId: TokenLabel: '+req.token);
+
+  // 2) Update Bar Token Id
+  
+};
 
 module.exports = {
 
@@ -286,9 +324,7 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
     * @param  {String} receiver
     * @return {Number}
     */
-   status : function(req, res, next) {
-
-     var receiver = req.receiver;
+   status : function(receiver) {
 
      // -------------------------------------------------------------------
      // Validate
@@ -304,8 +340,14 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
 
      console.log('I2C:status:validation: OK');
 
+     var req = {},
+         req.receiver = receiver,
+         res = {},
+         req.token = -1,
+         next = function() {};
+
      // 2) Scan, check available receivers, execute light
-     //i2c.scan(receiver, api.getStaMessage(animation, color, brightness,speed), handleAnimation, req, res, next);
+     i2c.scan(receiver, api.getStatusMessage(), handleStatus, req, res, next);
 
     //  var rsp = i2c.sendRequest( receiver );
     //  console.log("REQUEST: "+receiver+" -> "+rsp);

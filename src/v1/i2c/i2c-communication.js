@@ -102,12 +102,11 @@ console.log('I2C:send: >> Update Animation: '+req.animation);
       wire.readByte(function(err, result) {
         if (err != null) {
           console.log("ERROR: "+err);
-          next();
         } else {
           console.log("RECEIVE ["+address+"]: "+result);
           req.success = true;
-          req.value = result;
-          next();
+          req.token = result;
+          next(req, res, next);
         }
       });
   }

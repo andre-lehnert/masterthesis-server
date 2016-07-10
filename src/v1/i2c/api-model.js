@@ -9,7 +9,8 @@ var api = {
       UP: 'UP:[steps]',
       DOWN: 'DOWN:[steps]',
       LIGHT: 'LIGHT:[side]/[operation]/[led]/[color]/[brightness]',
-      ANIMATION: 'ANI:[animation]/[color]/[brightness]/[speed]'
+      ANIMATION: 'ANI:[animation]/[color]/[brightness]/[speed]',
+      STATUS: 'STATUS'
     }
   }
 };
@@ -96,6 +97,13 @@ module.exports = {
 
     msg = msg.replace("[param]", param);
 
+    return msg;
+  },
+
+  // -----------------------------------------------------------------------------
+  // STATUS
+  getStatusMessage : function() {
+    var msg = api.debug.v2.STATUS;
     return msg;
   }
 

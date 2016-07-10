@@ -9,4 +9,4 @@ var config = require('./.config').configuration,
 console.log('DEVICE: '+config.DEVICE);
 
 
-service.start(config.DEVICE, 100);
+service.start(config.DEVICE, 1000);
