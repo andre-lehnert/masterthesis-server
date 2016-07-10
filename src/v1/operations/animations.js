@@ -58,20 +58,20 @@ app.post('/', [insertAnimation], function(req, res) {
 /*
  * ## Get animation by name
  */
-app.get('/:name', [requestAnimation], function(req, res) {
+app.get('/:id', [requestAnimation], function(req, res) {
   res.json(req.response);
 });
 
 /*
  * ## Update an animation by name
  */
-app.put('/:name', [updateAnimation], function(req, res) {
+app.put('/:id', [updateAnimation], function(req, res) {
   res.json(req.response);
 });
 
 /*
  * ## Delete an animation by name
  */
-app.delete('/:name', [deleteAnimation], function(req, res) {
+app.delete('/:id', [deleteAnimation], function(req, res) {
   res.json(req.response);
 });

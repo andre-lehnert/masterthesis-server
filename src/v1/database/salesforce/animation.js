@@ -56,11 +56,11 @@ module.exports = {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-    var animation = req.params.name;
+    var animation = req.params.id;
 
-    console.log(">> GET ANIMATION BY NAME: "+ animation);
+    console.log(">> GET ANIMATION BY ID: "+ animation);
 
-    var query = GET_BY_NAME.replace("[:name]", animation);
+    var query = GET_BY_ID.replace("[:id]", animation);
 
     org.query({ query: query, oauth: oauth }, function(err, result){
       if (err) {
@@ -210,11 +210,11 @@ module.exports = {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-    var animation = req.params.name;
+    var animation = req.params.id;
 
-    console.log(">> GET ANIMATION BY NAME: "+ animation);
+    console.log(">> GET ANIMATION BY ID: "+ animation);
 
-    var query = GET_BY_NAME.replace("[:name]", animation);
+    var query = GET_BY_ID.replace("[:id]", animation);
 
     org.query({ query: query, oauth: oauth }, function(err, result) {
 
@@ -332,11 +332,11 @@ module.exports = {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-    var animation = req.params.name;
+    var animation = req.params.id;
 
-    console.log(">> DELETE ANIMATION BY NAME: "+ animation);
+    console.log(">> GET ANIMATION BY ID: "+ animation);
 
-    var query = GET_BY_NAME.replace("[:name]", animation);
+    var query = GET_BY_ID.replace("[:id]", animation);
 
     org.query({ query: query, oauth: oauth }, function(err, result) {
 

@@ -11,7 +11,7 @@
       <md-card>
         <md-card-title>
           <md-card-title-text>
-            <span class="md-headline">1. Bar Selection</span>
+            <span class="md-headline">Bar Selection</span>
           </md-card-title-text>
         </md-card-title>
         <md-card-content>
@@ -46,21 +46,76 @@
         <md-card>
           <md-card-title>
             <md-card-title-text>
-              <span class="md-headline">2. Position of Bar</span>
+              <span class="md-headline">Position of Bar</span>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
 
+            <!-- Target Position -->
             <div style="margin: 1% 0 1% 0">
               <div class="vertical-slider">
                <rzslider rz-slider-model="barPosition" rz-slider-options="verticalSlider.options"  class="md-title"></rzslider>
              </div>
            </div>
 
+           <!-- Stepper Mode -->
+           <!-- spacer --> <div style="height: 25px"></div>
+           <span class="md-headline">Movement Speed</span>
+
+           <div style="margin: 3% 0 0 1%">
+             <md-radio-group ng-model="barStepperMode">
+               <md-radio-button value="{{mode.step}}"
+                 ng-repeat="mode in stepperModes" ng-checked="true"
+                 class="md-primary"
+                 aria-label="{{mode.step}}">{{mode.speed}}</md-radio-button>
+             </md-radio-group>
+           </div>
+
+           <!-- Send MOVE command -->
+           <md-button class="md-raised md-subhead" aria-label="Move" ng-click="sendMove()">
+               Move
+           </md-button>
+
           </md-card-content>
         </md-card>
     </div>
 </div>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- Move: Request & Response -->
+<div layout="row" ng-show="isMoveRequestSend" class="animate-show">
+      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">REST-Request</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+
+            <!-- REST Request -->
+            <md-input-container class="md-block">
+              <label></label>
+              <textarea ng-model="moveRequest.text" rows="2" md-select-on-focus style="height:30px"></textarea>
+            </md-input-container>
+
+            <span class="md-headline">JSON-Response</span>
+            <!-- spacer --> <div style="height: 25px"></div>
+            
+            <!-- Response -->
+            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isMoveResponseReceived"></md-progress-linear>
+
+            <!-- JSON Response -->
+            <md-input-container class="md-block" ng-show="isMoveResponseReceived">
+              <label></label>
+              <textarea ng-model="moveRequest.text" rows="2" md-select-on-focus style="height:30px"></textarea>
+            </md-input-container>
+
+          </md-card-content>
+        </md-card>
+    </div>
+</div>
+
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- Card #3: Choose Color, Animation & Duration -->
 <div  layout="row" ng-show="isBarSelected" class="animate-show">
@@ -68,7 +123,7 @@
         <md-card>
           <md-card-title>
             <md-card-title-text>
-              <span class="md-headline">3. Color & Animation</span>
+              <span class="md-headline">Color & Animation</span>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
@@ -85,16 +140,21 @@
                   <md-radio-button value="{{animation}}"
                     ng-repeat="animation in animations" ng-checked="true"
                     class="md-primary"
-                    ng-click="selectAnimation(animation)">{{animation}}</md-radio-button>
+                    ng-click="selectAnimation(animation)"
+                    aria-label="">{{animation}}</md-radio-button>
                 </md-radio-group>
               </div>
 
-              <!-- Duration -->
-              <h3 class="md-subtitle">Animation duration:</h3>
+              <!-- Speed -->
+              <h3 class="md-subtitle">Animation speed:</h3>
               <div style="margin: 3% 0 0 1%">
-                <rzslider rz-slider-model="animationDuration" rz-slider-options="horizontalSlider.options"  class="md-title"></rzslider>
+                <rzslider rz-slider-model="animationSpeed" rz-slider-options="horizontalSlider.options"  class="md-title"></rzslider>
               </div>
 
+              <!-- Update bar animation -->
+              <md-button class="md-raised md-subhead" aria-label="Update" ng-click="sendAnimation()">
+                  Animate
+              </md-button>
 
           </md-card-content>
         </md-card>
@@ -108,15 +168,12 @@
         <md-card>
           <md-card-title>
             <md-card-title-text>
-              <span class="md-headline">4. Update Status</span>
+              <span class="md-headline">LED Control</span>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
 
-            <!-- Update bar status -->
-            <md-button class="md-raised md-subhead" aria-label="Update" ng-click="sendUpdate()">
-                Update
-            </md-button>
+
 
           </md-card-content>
         </md-card>
