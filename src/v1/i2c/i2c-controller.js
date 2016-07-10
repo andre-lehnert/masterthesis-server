@@ -1,6 +1,6 @@
 var i2c = require('./i2c-communication'),
-    api = require('./api-model');
-
+    api = require('./api-model'),
+    db  = require('./../database/salesforce/database');
 // --- Functions ---------------------------------------------------------------
 
 var handleMove = function(receivers, target, command, req, res, next) {
@@ -82,7 +82,7 @@ console.log('I2C:handleAnimation: receiver ['+target+'] available');
 
 var handleStatus = function(receivers, target, command, req, res, next) {
 
-console.log('I2C:handleStatus: ['+receivers+'], '+target+', '+command);
+//console.log('I2C:handleStatus: ['+receivers+'], '+target+', '+command);
 
     if (receivers.length === 0) {
 
@@ -94,11 +94,11 @@ console.log('I2C:handleStatus: ['+receivers+'], '+target+', '+command);
 
         if (parseInt(target) === val) {
 
-console.log('I2C:handleStatus: receiver ['+target+'] available');
+//console.log('I2C:handleStatus: receiver ['+target+'] available');
 
             req.update = 'status';
 
-            i2c.request(parseInt(target), req, res, updateToken);
+            i2c.request(parseInt(target), req, res, getTokenId);
         }
       });
     }
@@ -106,19 +106,40 @@ console.log('I2C:handleStatus: receiver ['+target+'] available');
 
 var getTokenId = function(req, res, next) {
 
-  console.log('I2C:getTokenId: TokenLabel: '+req.token);
-
-  // 1) Get Token Id
-  db.getToken(req, res, updateTokenId);
+//  console.log('I2C:getTokenId: TokenLabel: '+req.token);
+  
+  if (req.token > 0) {
+    // 1) Get Token Id
+    db.getTokenByDevice(req, res, updateTokenId);
+  } else {
+    req.response = {};
+    req.response._fields = {};
+    req.response._fields.id = null //'';
+    updateTokenId(req, res, next);
+  }
 };
 
 // 2) Update Bar Token Id
 var updateTokenId = function(req, res, next) {
 
-  console.log('I2C:updateTokenId: TokenLabel: '+req.token);
+//  console.log('I2C:updateTokenId: TokenLabel: '+req.token+' ID: '+req.response._fields.id+ ' OLD TokenId: '+req.tokenid+', OLD LABEL: '+req.response._fields.label__c);
+//  console.log(req.tokenid);
+//  console.log(req.response._fields.id);
+ 
+  if (req.tokenid != req.response._fields.id) {
 
-  // 2) Update Bar Token Id
-  
+    req.tokenid = req.response._fields.id;
+   
+    req.body = { 'token__c' : req.response._fields.id };
+
+  //console.log('>> Update Bar ['+req.params.label+']');
+
+    // 2) Update Bar Token Id
+    db.updateBarByDevice(req, res, next);
+
+  } else {
+//    console.log('>> TOKEN NOT CHANGED');
+  }  
 };
 
 module.exports = {
@@ -169,7 +190,7 @@ console.log('I2C:move: '+receiver+', '+position+' , '+speed);
         }
       }
 
-console.log('I2C:move:validation: OK');
+//console.log('I2C:move:validation: OK');
 
       // 2) Scan, check available receivers, execute move
       i2c.scan(receiver, api.getMoveMessage(position, speed), handleMove, req, res, next);
@@ -259,7 +280,7 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
       }
     }
 
-    console.log('I2C:light:validation: OK');
+    //console.log('I2C:light:validation: OK');
 
     // 2) Scan, check available receivers, execute light
     i2c.scan(receiver, api.getLightMessage(side.toLowerCase(), operation, led, color, brightness), handleLight, req, res, next);
@@ -312,7 +333,7 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
      if (typeof speed === 'undefined' || speed === '')
         speed = 50;
 
-     console.log('I2C:light:validation: OK');
+     //console.log('I2C:light:validation: OK');
 
      // 2) Scan, check available receivers, execute light
      i2c.scan(receiver, api.getAnimationMessage(animation, color, brightness,speed), handleAnimation, req, res, next);
@@ -324,7 +345,11 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
     * @param  {String} receiver
     * @return {Number}
     */
-   status : function(receiver) {
+   status : function(bar) {
+
+     var receiver = bar.motor__c,
+         barlabel = bar.label__c,
+         token = bar.token__c;
 
      // -------------------------------------------------------------------
      // Validate
@@ -338,20 +363,19 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
        return false;
      }
 
-     console.log('I2C:status:validation: OK');
+     var req = {};
+         req.receiver = receiver;
+         req.token = -1;
+         req.tokenid = token;
+         req.params = {};
+         req.params.label = barlabel;
 
-     var req = {},
-         req.receiver = receiver,
-         res = {},
-         req.token = -1,
-         next = function() {};
+     var res = {};
+     var next = function() {};
 
      // 2) Scan, check available receivers, execute light
      i2c.scan(receiver, api.getStatusMessage(), handleStatus, req, res, next);
 
-    //  var rsp = i2c.sendRequest( receiver );
-    //  console.log("REQUEST: "+receiver+" -> "+rsp);
-    //  return 4; // 01-cb-18-4f-0e-00-00-96
    }
 };
 

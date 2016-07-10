@@ -28,9 +28,9 @@ module.exports = {
             next();
 
           } else if(!err) {
-            console.log('>> DB REQUEST');
+            //console.log('>> DB REQUEST');
             console.log('QUERY: '+ GET_ALL);
-            console.log('RESPONSE: Entries = '+ results.totalSize);
+            //console.log('RESPONSE: Entries = '+ results.totalSize);
 
             // -----------------------------------------------------------------
             // Set Response Object
@@ -85,9 +85,9 @@ module.exports = {
 
       } else if(!err) {
 
-        console.log('>> DB REQUEST');
+        //console.log('>> DB REQUEST');
         console.log('QUERY: '+ query);
-        console.log('RESPONSE: Entries = '+ result.totalSize);
+        //console.log('RESPONSE: Entries = '+ result.totalSize);
 
         // -----------------------------------------------------------------
         // Set Response Object
@@ -129,6 +129,19 @@ module.exports = {
 
     var obj = req.token;
 
+    if (obj == null) {
+      var response =
+        {
+          'href': URL,
+          '_success': true,
+          'object': {}
+        };
+
+        req.response = response;
+        next();
+
+    } else {
+
     console.log(">> GET TOKEN BY ID: "+ obj);
 
     var query = GET_BY_ID.replace("[:id]", obj);
@@ -152,9 +165,9 @@ module.exports = {
 
       } else if(!err) {
 
-        console.log('>> DB REQUEST');
+        //console.log('>> DB REQUEST');
         console.log('QUERY: '+ query);
-        console.log('RESPONSE: Entries = '+ result.totalSize);
+        //console.log('RESPONSE: Entries = '+ result.totalSize);
 
         // -----------------------------------------------------------------
         // Set Response Object
@@ -167,7 +180,7 @@ module.exports = {
             'object': result.records[0]
           };
 
-          console.log(response);
+          //console.log(response);
 
           req.response = response;
           next();
@@ -181,10 +194,45 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
 
-          console.log(response);
+          //console.log(response);
 
           req.response = response;
           next();
+        }
+      }
+    });
+   }
+  },
+
+    getTokenByDevice : function(req, res, org, oauth, next) {
+
+    var obj = req.token;
+
+    //console.log(">> GET TOKEN BY LABEL: "+ obj);
+
+    var query = GET_BY_LABEL.replace("[:label]", obj);
+
+    org.query({ query: query, oauth: oauth }, function(err, result){
+      if (err) {
+
+        console.log('Database Token: '+err);
+
+      } else if(!err) {
+
+        //console.log('>> DB REQUEST');
+        //console.log('QUERY: '+ query);
+        //console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        if (result.totalSize == 1) { // 1 entry
+
+          req.response = result.records[0];
+          next(req, res);
+
+        } else { // no entry // salesforce duplicate check
+    
+          console.log('Database Token: No entry found');
         }
       }
     });

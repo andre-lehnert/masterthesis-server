@@ -70,6 +70,14 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  updateBarByDevice : function (req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        bars.updateBarByDevice(req, res, org, oauth, next);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   deleteBar : function (req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
@@ -206,6 +214,14 @@ module.exports = {
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         tokens.getTokenByBar(req, res, org, oauth, next);                           // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getTokenByDevice : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        tokens.getTokenByDevice(req, res, org, oauth, next);                           // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

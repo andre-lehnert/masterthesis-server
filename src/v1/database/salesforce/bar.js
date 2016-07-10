@@ -30,9 +30,9 @@ module.exports = {
             next();
 
           } else if(!err) {
-            console.log('>> DB REQUEST');
+            //console.log('>> DB REQUEST');
             console.log('QUERY: '+ GET_ALL);
-            console.log('RESPONSE: Entries = '+ results.totalSize);
+            //console.log('RESPONSE: Entries = '+ results.totalSize);
 
             // -----------------------------------------------------------------
             // Set Response Object
@@ -63,7 +63,7 @@ module.exports = {
    */
   getBarsByDevice : function(device, callback, org, oauth) {
 
-    console.log(">> GET BARS BY DEVICE: "+ device);
+//    console.log(">> GET BARS BY DEVICE: "+ device);
 
     var query = GET_ALL_BY_DEVICE.replace("[:id]", device);
 
@@ -71,7 +71,7 @@ module.exports = {
 
           if (err) {
 
-            console.log(err);
+            //console.log(err);
 
             // -----------------------------------------------------------------
             // Set Response Object
@@ -85,9 +85,9 @@ module.exports = {
             callback(response);
 
           } else if(!err) {
-            console.log('>> DB REQUEST');
-            console.log('QUERY: '+ GET_ALL);
-            console.log('RESPONSE: Entries = '+ results.totalSize);
+            //console.log('>> DB REQUEST');
+            //console.log('QUERY: '+ GET_ALL);
+            //console.log('RESPONSE: Entries = '+ results.totalSize);
 
             // -----------------------------------------------------------------
             // Set Response Object
@@ -97,7 +97,7 @@ module.exports = {
               receivers.push(results.records[r]._fields);
             }
 
-            console.log(receivers);
+            //console.log(receivers);
             callback(receivers);
           }
         });
@@ -133,9 +133,9 @@ module.exports = {
 
       } else if(!err) {
 
-        console.log('>> DB REQUEST');
-        console.log('QUERY: '+ query);
-        console.log('RESPONSE: Entries = '+ result.totalSize);
+        //console.log('>> DB REQUEST');
+        //console.log('QUERY: '+ query);
+        //console.log('RESPONSE: Entries = '+ result.totalSize);
 
         // -----------------------------------------------------------------
         // Set Response Object
@@ -148,7 +148,7 @@ module.exports = {
             'object': result.records[0]
           };
 
-          console.log(response);
+          //console.log(response);
           req.ledControl = response.object._fields.led__c;
           req.motorControl = response.object._fields.motor__c;
           req.sideA = response.object._fields.side_a__c;
@@ -168,7 +168,7 @@ module.exports = {
             '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
           };
 
-          console.log(response);
+          //console.log(response);
 
           req.response = response;
           next();
@@ -295,7 +295,7 @@ module.exports = {
     org.query({ query: query, oauth: oauth }, function(err, result) {
 
       if (err) {
-        console.log(err);
+        //console.log(err);
         var response =
         {
           'href': URL,
@@ -307,9 +307,9 @@ module.exports = {
 
       } else if(!err) {
 
-        console.log('>> DB REQUEST');
+        //console.log('>> DB REQUEST');
         console.log('QUERY: '+ query);
-        console.log('RESPONSE: Entries = '+ result.totalSize);
+        //console.log('RESPONSE: Entries = '+ result.totalSize);
 
         // -----------------------------------------------------------------
         // UPDATE
@@ -336,7 +336,7 @@ module.exports = {
           org.update({ sobject: bar, oauth: oauth }, function(err, result) {
 
             if (err) {
-              console.log(err);
+              //console.log(err);
               var response =
               {
                 'href': URL,
@@ -353,7 +353,7 @@ module.exports = {
               org.query({ query: query, oauth: oauth }, function(err, result) {
 
                 if (err) {
-                  console.log(err);
+                  //console.log(err);
                   var response =
                   {
                     'href': URL,
@@ -365,9 +365,9 @@ module.exports = {
 
                 } else if(!err) {
 
-                  console.log('>> DB REQUEST');
+                  //console.log('>> DB REQUEST');
                   console.log('QUERY: '+ query);
-                  console.log('RESPONSE: Entries = '+ result.totalSize);
+                  //console.log('RESPONSE: Entries = '+ result.totalSize);
 
                   // -----------------------------------------------------------------
                   // Set Response Object
@@ -416,6 +416,46 @@ module.exports = {
           next();
         }
       }
+    });
+
+  },
+
+  updateBarByDevice : function(req, res, org, oauth, next) {
+
+    var barLabel = req.params.label;
+
+    console.log(">> UPDATE BAR BY LABEL: "+ barLabel);
+
+    var query = GET_BY_LABEL.replace("[:label]", barLabel);
+
+    org.query({ query: query, oauth: oauth }, function(err, result) {
+
+      if (err) {
+        console.log(err);
+      
+      } else if(!err) {
+
+        //console.log('>> DB REQUEST');
+        //console.log('QUERY: '+ query);
+        //console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // UPDATE
+        if (result.totalSize == 1) { // 1 entry
+
+          var bar = result.records[0];
+          bar.set('token__c', req.body.token__c);
+          
+          org.update({ sobject: bar, oauth: oauth }, function(err, result) {
+
+            if (err)
+              console.log(err);
+                        
+          });
+     
+       }
+      }
+
     });
 
   },

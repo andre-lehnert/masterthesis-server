@@ -6,8 +6,6 @@ module.exports = {
 
   scan : function(target, command, callback, req, res, next) {
 
-console.log('I2C:scan: '+target+', '+command);
-
     wire.scan(function(err, data) {
       // result contains an array of addresses
       if (!err) {
@@ -94,7 +92,7 @@ console.log('I2C:send: >> Update Animation: '+req.animation);
 
   request : function(address, req, res, next) {
 
-      console.log("REQUEST ["+address+"]");
+      //console.log("REQUEST ["+address+"]");
       req.done = true;
 
       wire.setAddress(address);
