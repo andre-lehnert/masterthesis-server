@@ -64,23 +64,24 @@ var sendI2CRequest = function (req, res, next) {
       else
         speed = req.params.speed;
 
+      req.receiver = receiver;
+      req.animation = animation;
+      req.color = color;
+      req.brightness = brightness;
+      req.speed = speed;
+
       console.log('>> SEND I2C REQUEST: '+receiver+', '+animation+', '+color+', '+brightness+', '+speed);
-      i2c.animation(receiver, animation, color, brightness, speed);
-      req.body =
-        {
-        "animation__c": id,
-        "color__c": color,
-        "brightness__c": brightness,
-        "animation_speed__c": speed
-        };
+      i2c.animation(req, res, next);
 
     } else {
       res.send('ERROR: sendI2CRequest(): No LED Controller');
+      next();
     }
   } else {
     res.send('ERROR: sendI2CRequest(): No Animation Found');
+    next();
   }
-  next();
+
 };
 
 

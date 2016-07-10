@@ -61,7 +61,6 @@ var sendI2CRequest = function (req, res, next) {
     res.send('ERROR: sendI2CRequest(): No Bar Found');
     next();
   }
-  // next();
 };
 
 var updateBarPosition = function (req, res, next) {

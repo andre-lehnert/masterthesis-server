@@ -23,7 +23,7 @@ console.log('I2C:handleMove: ['+receivers+'], '+target+', '+command);
         if (parseInt(target) === val) {
 
 console.log('I2C:handleMove: receiver ['+target+'] available');
-            
+
             req.update = 'position';
 
             i2c.send(parseInt(target), command, req, res, next);
@@ -31,6 +31,57 @@ console.log('I2C:handleMove: receiver ['+target+'] available');
       });
     }
 };
+
+var handleLight = function(receivers, target, command, req, res, next) {
+
+console.log('I2C:handleLight: ['+receivers+'], '+target+', '+command);
+
+    if (receivers.length === 0) {
+
+      console.log('NO I2C RECEIVER FOUND');
+
+    } else {
+
+      receivers.forEach(function(val, index, array) {
+
+        if (parseInt(target) === val) {
+
+console.log('I2C:handleLight: receiver ['+target+'] available');
+
+            req.update = 'light';
+
+            i2c.send(parseInt(target), command, req, res, next);
+        }
+      });
+    }
+};
+
+var handleAnimation = function(receivers, target, command, req, res, next) {
+
+console.log('I2C:handleAnimation: ['+receivers+'], '+target+', '+command);
+
+    if (receivers.length === 0) {
+
+      console.log('NO I2C RECEIVER FOUND');
+
+    } else {
+
+      receivers.forEach(function(val, index, array) {
+
+        if (parseInt(target) === val) {
+
+console.log('I2C:handleAnimation: receiver ['+target+'] available');
+
+            req.update = 'animation';
+
+            i2c.send(parseInt(target), command, req, res, next);
+        }
+      });
+    }
+};
+
+
+
 
 module.exports = {
 
@@ -87,16 +138,9 @@ console.log('I2C:move:validation: OK');
   },
 
   // ----------------------------------------------------------------------
-  /**
+
+  /*
    *
-   *
-   * @param  {String} receiver
-   * @param  {String} side
-   * @param  {String} operation
-   * @param  {Number} led
-   * @param  {String} color
-   * @param  {Number} brightness
-   * @return {Boolean}
    */
   light : function(req, res, next) {
 
@@ -175,19 +219,17 @@ console.log('I2C:move:validation: OK');
       }
     }
 
-    //i2c.sendMessage( receiver, api.getLightMessage(side.toLowerCase(), operation, led, color, brightness) );
+    console.log('I2C:light:validation: OK');
+
+    // 2) Scan, check available receivers, execute light
+    i2c.scan(receiver, api.getLightMessage(side.toLowerCase(), operation, led, color, brightness), handleLight, req, res, next);
+
   },
 
   // ----------------------------------------------------------------------
+
   /**
    *
-   *
-   * @param  {String} receiver
-   * @param  {String} animation
-   * @param  {String} color
-   * @param  {Number} brightness
-   * @param  {Number} speed
-   * @return {Boolean}
    */
    animation : function(req, res, next) {
 
@@ -230,9 +272,10 @@ console.log('I2C:move:validation: OK');
      if (typeof speed === 'undefined' || speed === '')
         speed = 50;
 
-    //  i2c.sendMessage( receiver, api.getAnimationMessage(animation, color, brightness,speed) );
-     //
-    //  return true;
+     console.log('I2C:light:validation: OK');
+
+     // 2) Scan, check available receivers, execute light
+     i2c.scan(receiver, api.getAnimationMessage(animation, color, brightness,speed), handleAnimation, req, res, next);
    },
 
    /**
@@ -242,7 +285,7 @@ console.log('I2C:move:validation: OK');
     * @return {Number}
     */
    status : function(req, res, next) {
-     
+
      var receiver = req.receiver;
 
      // -------------------------------------------------------------------
@@ -256,6 +299,11 @@ console.log('I2C:move:validation: OK');
      ) {
        return false;
      }
+
+     console.log('I2C:status:validation: OK');
+
+     // 2) Scan, check available receivers, execute light
+     //i2c.scan(receiver, api.getStaMessage(animation, color, brightness,speed), handleAnimation, req, res, next);
 
     //  var rsp = i2c.sendRequest( receiver );
     //  console.log("REQUEST: "+receiver+" -> "+rsp);

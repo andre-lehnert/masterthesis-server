@@ -45,7 +45,6 @@ var sendI2CRequest = function (req, res, next) {
 
   if (req.response._success) {
 
-
     if (req.ledControl) {
 
       operation = req.params.operation;
@@ -54,11 +53,11 @@ var sendI2CRequest = function (req, res, next) {
       if (operation.toLowerCase() != 'new' &&
           typeof lednumber == 'undefined') {
 
-         res.json(
-         {
-           "leds" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-         });
-	 next();
+          res.json(
+          {
+             "leds" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          });
+	        next();
 
       } else if (operation.toLowerCase() == 'new') {
         lednumber = 0;
@@ -68,10 +67,11 @@ var sendI2CRequest = function (req, res, next) {
       id = req.response.object._fields.id;
       operation = req.params.operation;
       side = req.selectedSide;
-       var leds;
+
+      var leds;
 
       if (operation.toLowerCase() != 'new')
-        leds = Array(11); //[ null,  null,  null,  null,  null,  null,  null,  null,  null,  null,  null ];
+        leds = Array(11);
       else
         leds = [ '000000','000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000' ];
 
@@ -96,7 +96,7 @@ var sendI2CRequest = function (req, res, next) {
         operation = '-';
 
       lednumber = parseInt(req.params.led) + 1;
-                  
+
       switch (lednumber) {
         case 1: leds[0] = color; break;
         case 2: leds[1] = color; break;
@@ -112,34 +112,31 @@ var sendI2CRequest = function (req, res, next) {
         default: break;
       }
 
+      req.leds = leds;
+      req.side = side;
 
-      console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness);
-      i2c.light(receiver, side, operation, lednumber, color, brightness);
-      req.body =
-        {
-          "led_0__c": leds[0],
-          "led_1__c": leds[1],
-          "led_2__c": leds[2],
-          "led_3__c": leds[3],
-          "led_4__c": leds[4],
-          "led_5__c": leds[5],
-          "led_6__c": leds[6],
-          "led_7__c": leds[7],
-          "led_8__c": leds[8],
-          "led_9__c": leds[9],
-          "led_10__c": leds[10],
-          "label__c": side
-        };
+      req.receiver = receiver;
+      req.side = side;
+      req.operation = operation;
+      req.lednumber = lednumber;
+      req.color = color;
+      req.brightness = brightness;
+
       req.sideId = id;
       console.log('ID: '+req.sideId );
 
+      console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness);
+      i2c.light(req, res, next);
+
     } else {
       res.send('ERROR: sendI2CRequest(): No LED Controller');
+      next();
     }
   } else {
     res.send('ERROR: sendI2CRequest(): No Side Found');
+    next();
   }
-  next();
+
 };
 
 
