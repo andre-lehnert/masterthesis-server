@@ -45,21 +45,21 @@ app.controller('ControlController', function($scope, $log, $rootScope, $http, $t
           { 'name': 'A1',
             'class': 'md-fab md-primary md-hue-2',
             'position': 0,
-            'animation': { 'id': '', 'name': 'switch-off', 'color': 'rgba(255,255,255,0.5)', 'speed': 10, },
+            'animation': { 'id': '', 'name': 'switch-off', 'color': 'rgba(255,255,255,0.5)', 'speed': 0, },
             'object': {},
             'active': false
           },
           { 'name': 'B1',
             'class': 'md-fab md-primary',
             'position': 0,
-            'animation': { 'id': '', 'name': 'switch-off', 'color': 'rgba(255,255,255,0.5)', 'speed': 20, },
+            'animation': { 'id': '', 'name': 'switch-off', 'color': 'rgba(255,255,255,0.5)', 'speed': 0, },
             'object': {},
             'active': false
           },
           { 'name': 'C1',
             'class': 'md-fab md-primary md-hue-1',
             'position': 0,
-            'animation': { 'id': '', 'name': 'switch-off', 'color': 'rgba(255,255,255,0.5)', 'speed': 30, },
+            'animation': { 'id': '', 'name': 'switch-off', 'color': 'rgba(255,255,255,0.5)', 'speed': 0, },
             'object': {},
             'active': false
           },
@@ -230,9 +230,16 @@ $scope.stepperModes = [
   $scope.barPosition = 0; // Position Slider Model
   $scope.barColor = ''; // Color of selectedBar
 
+$scope.isBarReceived = false;
+$scope.isAnimationReceived = false;
 
     // 1. Select bar
   $scope.selectBar = function (bar) {
+
+    $scope.isBarReceived = false;
+    $scope.isAnimationReceived = false;
+
+
 
     $log.debug("Selected Bar: "+ bar.name);
     $scope.selectedBar = bar;
@@ -245,6 +252,9 @@ $scope.stepperModes = [
     $http({method: 'GET' , url: url}).
         success(function(data, status) {
           console.log(data);
+
+          $scope.isAnimationReceived = true;
+
           if (data._success && data.object) {
             $scope.horizontalSlider.value = data.object.animation_speed__c;
             $scope.barAnimation = data.object.name__c; // LED Animation
@@ -278,6 +288,8 @@ $scope.stepperModes = [
     $scope.selectedBar.class = 'md-fab';
 
     $scope.refreshSlider();
+
+    $scope.isBarReceived = true;
   };
 
   // 2. Set bar position
@@ -355,8 +367,10 @@ $scope.sendMove = function () {
     $scope.response.i2c = '';
 
     // 4. Send Request
-    $scope.sendUpdate = function () {
-         $log.debug("Request: ");
+    $scope.sendAnimation = function () {
+
+      $log.debug(">> ANIMATION: Position = "+$scope.barPosition+ ", Stepper Mode: "+ $scope.barStepperMode);
+
          $scope.isRequestSend = true;
 
          var color = rgb2hex($scope.barColor);

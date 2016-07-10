@@ -51,30 +51,35 @@
           </md-card-title>
           <md-card-content>
 
+            <!-- Wait for response -->
+            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isBarReceived"></md-progress-linear>
+
             <!-- Target Position -->
-            <div style="margin: 1% 0 1% 0">
+            <div style="margin: 1% 0 1% 0" ng-show="isBarReceived">
               <div class="vertical-slider">
                <rzslider rz-slider-model="barPosition" rz-slider-options="verticalSlider.options"  class="md-title"></rzslider>
              </div>
            </div>
 
-           <!-- Stepper Mode -->
-           <!-- spacer --> <div style="height: 25px"></div>
-           <span class="md-headline">Movement Speed</span>
+           <div ng-show="isBarReceived">
+             <!-- Stepper Mode -->
+             <!-- spacer --> <div style="height: 25px"></div>
+             <span class="md-headline">Movement Speed</span>
 
-           <div style="margin: 3% 0 0 1%">
-             <md-radio-group ng-model="barStepperMode">
-               <md-radio-button value="{{mode.step}}"
-                 ng-repeat="mode in stepperModes" ng-checked="true"
-                 class="md-primary"
-                 aria-label="{{mode.step}}">{{mode.speed}}</md-radio-button>
-             </md-radio-group>
-           </div>
+             <div style="margin: 3% 0 0 1%">
+               <md-radio-group ng-model="barStepperMode">
+                 <md-radio-button value="{{mode.step}}"
+                   ng-repeat="mode in stepperModes" ng-checked="true"
+                   class="md-primary"
+                   aria-label="{{mode.step}}">{{mode.speed}}</md-radio-button>
+               </md-radio-group>
+             </div>
 
-           <!-- Send MOVE command -->
-           <md-button class="md-raised md-subhead" aria-label="Move" ng-click="sendMove()">
-               Move
-           </md-button>
+             <!-- Send MOVE command -->
+             <md-button class="md-raised md-subhead" aria-label="Move" ng-click="sendMove()">
+                 Move
+             </md-button>
+            </div>
 
           </md-card-content>
         </md-card>
@@ -101,14 +106,14 @@
 
             <span class="md-headline">JSON-Response</span>
             <!-- spacer --> <div style="height: 25px"></div>
-            
+
             <!-- Response -->
             <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isMoveResponseReceived"></md-progress-linear>
 
             <!-- JSON Response -->
             <md-input-container class="md-block" ng-show="isMoveResponseReceived">
               <label></label>
-              <textarea ng-model="moveRequest.text" rows="2" md-select-on-focus style="height:30px"></textarea>
+              <textarea ng-model="moveResponse.text" rows="2" md-select-on-focus style="height:30px"></textarea>
             </md-input-container>
 
           </md-card-content>
@@ -127,35 +132,41 @@
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
-              <!-- Color Picker -->
-              <md-button  class="md-raised md-subhead" aria-label="Color"colorpicker="rgba"
-                  ng-model="barColor"
-                  style="background-color: {{barColor}};">
-                  Choose Color
-              </md-button>
 
-              <!-- Animation -->
-              <div style="margin: 3% 0 0 1%">
-                <md-radio-group ng-model="barAnimation">
-                  <md-radio-button value="{{animation}}"
-                    ng-repeat="animation in animations" ng-checked="true"
-                    class="md-primary"
-                    ng-click="selectAnimation(animation)"
-                    aria-label="">{{animation}}</md-radio-button>
-                </md-radio-group>
+              <!-- Wait for response -->
+              <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isAnimationReceived"></md-progress-linear>
+
+              <div ng-show="isAnimationReceived">
+                <!-- Color Picker -->
+                <md-button  class="md-raised md-subhead" aria-label="Color"colorpicker="rgba"
+                    ng-model="barColor"
+                    style="background-color: {{barColor}};">
+                    Choose Color
+                </md-button>
+
+                <!-- Animation -->
+                <div style="margin: 3% 0 0 1%">
+                  <md-radio-group ng-model="barAnimation">
+                    <md-radio-button value="{{animation}}"
+                      ng-repeat="animation in animations" ng-checked="true"
+                      class="md-primary"
+                      ng-click="selectAnimation(animation)"
+                      aria-label="">{{animation}}</md-radio-button>
+                  </md-radio-group>
+                </div>
+
+                <!-- Speed -->
+                <h3 class="md-subtitle">Animation speed:</h3>
+                <div style="margin: 3% 0 0 1%">
+                  <rzslider rz-slider-model="animationSpeed" rz-slider-options="horizontalSlider.options"  class="md-title"></rzslider>
+                </div>
+
+                <!-- Update bar animation -->
+                <md-button class="md-raised md-subhead" aria-label="Animate" ng-click="sendAnimation()">
+                    Animate
+                </md-button>
+
               </div>
-
-              <!-- Speed -->
-              <h3 class="md-subtitle">Animation speed:</h3>
-              <div style="margin: 3% 0 0 1%">
-                <rzslider rz-slider-model="animationSpeed" rz-slider-options="horizontalSlider.options"  class="md-title"></rzslider>
-              </div>
-
-              <!-- Update bar animation -->
-              <md-button class="md-raised md-subhead" aria-label="Update" ng-click="sendAnimation()">
-                  Animate
-              </md-button>
-
           </md-card-content>
         </md-card>
     </div>

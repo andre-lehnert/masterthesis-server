@@ -32,8 +32,8 @@ var requestBar = function (req, res, next) {
 };
 
 var requestAnimation = function (req, res, next) {
-console.log('Request Animation:');
-  db.getAnimation(req, res, next);
+  console.log('Request Animation:');
+  db.getAnimationByName(req, res, next);
 };
 
 var sendI2CRequest = function (req, res, next) {

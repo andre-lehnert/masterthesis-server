@@ -117,6 +117,71 @@ module.exports = {
     });
   },
 
+  getAnimationByName : function(req, res, org, oauth, next) {
+
+    var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    var animation = req.params.name;
+
+    console.log(">> GET ANIMATION BY NAME: "+ animation);
+
+    var query = GET_BY_NAME.replace("[:name]", animation);
+
+    org.query({ query: query, oauth: oauth }, function(err, result){
+      if (err) {
+
+        console.log(err);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        var response =
+        {
+          'href': URL,
+          '_success': false,
+          '_errors': err
+        };
+
+        req.response = response;
+        next();
+
+      } else if(!err) {
+
+        console.log('>> DB REQUEST');
+        console.log('QUERY: '+ query);
+        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // Set Response Object
+        if (result.totalSize == 1) { // 1 entry
+
+          var response =
+          {
+            'href': URL,
+            '_success': true,
+            'object': result.records[0]
+          };
+
+          console.log(response);
+          req.response = response;
+	         next();
+
+        } else { // no entry // salesforce duplicate check
+
+          var response =
+          {
+            'href': URL,
+            '_success': false,
+            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+          };
+
+          console.log(response);
+          req.response = response;
+          next();
+        }
+      }
+    });
+  },
+
   insertAnimation : function(req, res, org, oauth, next) {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;

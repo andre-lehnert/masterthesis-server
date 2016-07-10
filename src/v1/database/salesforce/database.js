@@ -168,6 +168,14 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  getAnimationByName : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        animations.getAnimationByName(req, res, org, oauth, next);                    // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   insertAnimation : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
