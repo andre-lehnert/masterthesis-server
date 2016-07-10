@@ -1,0 +1,186 @@
+<div  layout="row">
+  <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+    <h2 class="md-display-1"></h2>
+  </div>
+</div>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- Card #1: Choose bar -->
+<div  layout="row">
+  <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+      <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">1. Bar Selection</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+          <!-- Bar Selection -->
+          <div style="margin: 5% 0 5% 0">
+          <table>
+            <tr class="table-center">
+              <td></td>
+              <td class="md-title" ng-repeat="c in bars.cols">{{c}}</td>
+            </tr>
+            <tr ng-repeat="row in bars.rows">
+              <td class="md-title">{{row.number}}</td>
+              <td ng-repeat="col in row.cols">
+                <md-button ng-class="col.class" ng-click="selectBar(col)" aria-label="Bar">
+                  <span class="md-title">{{col.name}}</span>
+                </md-button>
+              </td>
+            </tr>
+          </table>
+        </div>
+        </md-card-content>
+      </md-card>
+
+    </div>
+</div>
+
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- Card #2: Choose target bar position -->
+<div  layout="row" ng-show="isBarSelected" class="animate-show">
+      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">2. Position of Bar</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+
+            <div style="margin: 1% 0 1% 0">
+              <div class="vertical-slider">
+               <rzslider rz-slider-model="barPosition" rz-slider-options="verticalSlider.options"  class="md-title"></rzslider>
+             </div>
+           </div>
+
+          </md-card-content>
+        </md-card>
+    </div>
+</div>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- Card #3: Choose Color, Animation & Duration -->
+<div  layout="row" ng-show="isBarSelected" class="animate-show">
+      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">3. Color & Animation</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+              <!-- Color Picker -->
+              <md-button  class="md-raised md-subhead" aria-label="Color"colorpicker="rgba"
+                  ng-model="barColor"
+                  style="background-color: {{barColor}};">
+                  Choose Color
+              </md-button>
+
+              <!-- Animation -->
+              <div style="margin: 3% 0 0 1%">
+                <md-radio-group ng-model="barAnimation">
+                  <md-radio-button value="{{animation}}"
+                    ng-repeat="animation in animations" ng-checked="true"
+                    class="md-primary"
+                    ng-click="selectAnimation(animation)">{{animation}}</md-radio-button>
+                </md-radio-group>
+              </div>
+
+              <!-- Duration -->
+              <h3 class="md-subtitle">Animation duration:</h3>
+              <div style="margin: 3% 0 0 1%">
+                <rzslider rz-slider-model="animationDuration" rz-slider-options="horizontalSlider.options"  class="md-title"></rzslider>
+              </div>
+
+
+          </md-card-content>
+        </md-card>
+    </div>
+</div>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- Card #4: Update Bar Status / Set new configuration -->
+<div  layout="row" ng-show="isBarSelected" class="animate-show">
+      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">4. Update Status</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+
+            <!-- Update bar status -->
+            <md-button class="md-raised md-subhead" aria-label="Update" ng-click="sendUpdate()">
+                Update
+            </md-button>
+
+          </md-card-content>
+        </md-card>
+    </div>
+</div>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- Card #5: Request & Response -->
+<div  layout="row" ng-show="isRequestSend" class="animate-show">
+      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">5. Request</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+
+            <!-- REST Request -->
+            <md-input-container class="md-block">
+              <label>REST-Request</label>
+              <textarea ng-model="request.text" rows="2" md-select-on-focus style="height:30px"></textarea>
+            </md-input-container>
+
+            <!-- I2C Request -->
+            <md-input-container class="md-block">
+              <label>I²C-Request</label>
+              <textarea ng-model="request.i2c" rows="2" md-select-on-focus style="height:30px"></textarea>
+            </md-input-container>
+
+          </md-card-content>
+        </md-card>
+    </div>
+</div>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- Card #6: Response -->
+<div  layout="row" ng-show="isRequestSend" class="animate-show">
+      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">6. Response</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+
+            <!-- Response -->
+            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isResponseReceived"></md-progress-linear>
+
+            <md-input-container class="md-block" ng-show="isResponseReceived">
+              <label>I²C-Response</label>
+              <textarea ng-model="response.i2c" rows="2" md-select-on-focus style="height:30px"></textarea>
+            </md-input-container>
+
+            <md-input-container class="md-block" ng-show="isResponseReceived">
+              <label>REST-Response</label>
+              <textarea ng-model="response.json" rows="2" md-select-on-focus style="height:30px"></textarea>
+              <json-formatter json="response.json" open="3" style="margin-top: 40px"></json-formatter>
+            </md-input-container>
+
+
+
+          </md-card-content>
+        </md-card>
+    </div>
+</div>

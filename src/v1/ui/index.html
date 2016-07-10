@@ -1,0 +1,116 @@
+<html lang="en" >
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NotiVis</title>
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css"/>
+  <link rel="stylesheet" type="text/css" href="https://rawgit.com/buberdds/angular-bootstrap-colorpicker/master/css/colorpicker.css"/>
+  <link rel="stylesheet" href="https://raw.githubusercontent.com/jtblin/angular-chart.js/master/dist/angular-chart.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/json-formatter/0.6.0/json-formatter.min.css" />
+
+  <link rel="stylesheet" href="/css/angular-material-layout.css" />
+</head>
+<body>
+
+  <!-- AngularJS Application -->
+  <div layout="column"  ng-cloak="" class="sidenavdemoBasicUsage toolbardemoBasicUsage" ng-app="NotiVisApplication">
+
+    <div ng-controller="MenuController">
+
+      <header>
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <!-- Toogle SideNav -->
+            <md-button class="md-icon-button" aria-label="Settings" ng-click="toggleLeft()" >
+              <i class="material-icons">view_headline</i>
+            </md-button>
+            <!-- Title -->
+            <h1 class="md-headline">
+              <span>{{currentPage.text}}</span>
+            </h1>
+            <span flex></span>
+          </div>
+        </md-toolbar>
+      </header>
+
+
+      <!-- SideNav -->
+      <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" >
+        <!-- SideNav Title -->
+        <md-toolbar class="md-theme-indigo" >
+          <p class="md-toolbar-tools">NotiVis</p>
+        </md-toolbar>
+
+        <!-- Control List -->
+        <md-list >
+          <a href="{{page.path}}" style="color: rgba(0,0,0, 0.54); text-decoration: none;"  class="sidenav-link" ng-repeat="page in mainPages" ng-click="navigateTo(page);">
+            <md-list-item class="sidenav-list-item">
+              <i class="material-icons">{{page.icon}}</i>
+              <span class="md-subhead">{{page.text}}</span>
+            </md-list-item>
+          </a>
+          <md-divider ></md-divider>
+           <a href="{{page.path}}" style="color: rgba(0,0,0, 0.54); text-decoration: none;" class="sidenav-link" ng-repeat="page in subPages" ng-click="navigateTo(page);">
+             <md-list-item class="sidenav-list-item">
+               <i class="material-icons">{{page.icon}}</i>
+               <span class="md-subhead">{{page.text}}</span>
+             </md-list-item>
+           </a>
+        </md-list>
+      </md-sidenav>
+
+    </div>
+
+    <!-- Page View -->
+    <div ng-view id="content"></div>
+    <!-- Page View -->
+
+    <footer><!-- Andre Lehnert, 2016 --></footer>
+
+  </div>
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+
+  <!-- AngularJS Slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
+  <script src="https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js"></script>
+
+  <!-- Color Picker -->
+  <script src="https://rawgit.com/buberdds/angular-bootstrap-colorpicker/master/js/bootstrap-colorpicker-module.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.1.1/Chart.min.js"></script>
+  <script src="http://jtblin.github.io/angular-chart.js/dist/angular-chart.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/json-formatter/0.6.0/json-formatter.min.js"></script>
+
+  <!-- Your application bootstrap  -->
+  <script type="text/javascript" src="/src/application.js"></script>
+    <!-- AngularJS - Modules -->
+    <!-- Navigation & Routing -->
+    <script type="text/javascript" src="/src/controller/controller-navigation.js"></script>
+    <!-- Main Pages -->
+    <script type="text/javascript" src="/src/controller/controller-timeline.js"></script>
+    <script type="text/javascript" src="/src/controller/controller-manual-control.js"></script>
+    <script type="text/javascript" src="/src/controller/controller-dashboard.js"></script>
+    <script type="text/javascript" src="/src/controller/controller-api-browser.js"></script>
+    <!-- Sub Pages -->
+    <script type="text/javascript" src="/src/controller/controller-devices.js"></script>
+    <script type="text/javascript" src="/src/controller/controller-help.js"></script>
+    <script type="text/javascript" src="/src/controller/controller-settings.js"></script>
+    <script type="text/javascript" src="/src/controller/controller-share.js"></script>
+</body>
+</html>

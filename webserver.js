@@ -59,13 +59,7 @@ var VERSIONS =
  * ## ROOT
  */
 app.get('/', function(req, res) {
-
-    var API =
-    {
-      'echo' : 'HTML Output -> API Browser'
-    };
-
-    res.json(API);
+    res.sendfile(__dirname + 'client/index.html');
 })
 
 /*
