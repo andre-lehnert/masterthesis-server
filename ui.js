@@ -10,7 +10,7 @@ var config = require('./.config').configuration;
 
 // define url and port to concat REST-URLs
 var BASEURL     = config.BASEURL,
-    PORT        = config.PORT,
+    PORT        = 80,
     URL         = BASEURL+':'+PORT;
 
 module.exports.serverUrl = URL;
@@ -20,10 +20,6 @@ module.exports.serverUrl = URL;
 var express = require('express'),
     path = require('path'),
 
-    // REST-API v1
-    v1 = require('./src/v1/rest-api').api,
-    // further versions: v2 = require('./src/v2/rest-api').api,
-
     // Express.js Application
     app = module.exports = express();
 
@@ -31,27 +27,6 @@ app.use(express.static(path.resolve(__dirname, 'src/v1/ui')));
 app.set('_URL', URL);
 app.set('_PORT', PORT);
 
-// add the middleware to the stack
-// app.use(org.express.oauth({
-//   onSuccess: '/test/query',
-//   onError: '/oauth/error'
-// }));
-
-
-
-// ---------------- Versions ---------------------------------------------------
-
-/*
- * ## define the versions
- */
-var VERSIONS =
-{
-  'href': URL+'/api',
-  'versions': [
-    v1
-    // further versions
-  ]
-};
 
 // ---------------- Routing ----------------------------------------------------
 
@@ -61,25 +36,6 @@ var VERSIONS =
 app.get('/', function(req, res) {
     res.sendfile(__dirname + 'src/v1/ui/index.html');
 })
-
-/*
- * ## route to display versions
- */
-app.get('/api', function(req, res) {
-    res.json(VERSIONS);
-})
-
-/*
- * ## versioned routes go in the src/{version}/rest-api directory
- * - import the routes
- */
-for (var k in VERSIONS.versions) {
-    // e.g. ./src/v0/rest-api.js
-    app.use(
-      '/api/' + VERSIONS.versions[k].name,
-      require('./src/' + VERSIONS.versions[k].name + '/rest-api')
-    );
-}
 
 // ---------------- Run Application --------------------------------------------
 

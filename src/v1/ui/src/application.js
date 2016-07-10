@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('NotiVisApplication',
+var app = angular.module('TaNo',
 [
     'ngMaterial',
     'ngMessages',

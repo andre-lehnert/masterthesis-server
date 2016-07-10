@@ -11,7 +11,7 @@ angular
                                     ] )
 
 // constants
-.constant('MODULE_VERSION', '0.0.1')
+.constant('MODULE_VERSION', '0.0.2')
 
 
 // // // // // // // // // // // // // // // // // // // // // // // // //
@@ -23,10 +23,20 @@ app.controller('ControlController', function($scope, $log, $rootScope, $http, $t
     $log.debug("ControlController");
 
 
-    $scope.apiVersion = '0'; // <- Change
-    $scope.uriPraefix = 'api/v';
+    $scope.uriPraefix = 'http://192.168.178.27:8080/api/';
+    $scope.apiVersion = 'v1';
 
     // 1. Select bar
+    var url = $scope.uriPraefix +  $scope.apiVersion + '/bars';
+    console.log('GET '+ url);
+    $http({method: 'GET' , url: url}).
+        success(function(data, status) {
+          console.log(data);
+
+        }).
+        error(function(data, status) {
+          console.log(data || "Request failed");
+      });
 
     //TODO Get current bar state
     // - available bars
@@ -40,17 +50,17 @@ app.controller('ControlController', function($scope, $log, $rootScope, $http, $t
         'cols': [
           { 'name': 'A1',
             'class': 'md-fab md-primary md-hue-2',
-            'position': 10,
+            'position': 0,
             'animation': { 'name': 'Blink', 'color': 'rgba(10,255,0,1)', 'duration': 10, }
           },
           { 'name': 'B1',
             'class': 'md-fab md-primary',
-            'position': 20,
+            'position': 0,
             'animation': { 'name': 'Loading', 'color': 'rgba(20,255,100,1)', 'duration': 20, }
           },
           { 'name': 'C1',
             'class': 'md-fab md-primary md-hue-1',
-            'position': 30,
+            'position': 0,
             'animation': { 'name': 'None', 'color': 'rgba(30,255,255,1)', 'duration': 30, }
           },
         ]
@@ -202,7 +212,7 @@ app.controller('ControlController', function($scope, $log, $rootScope, $http, $t
     $scope.request = {};
     $scope.request.text = '';
     $scope.request.i2c = '';
-    
+
     $scope.response = {};
     $scope.response.json = {};
     $scope.response.i2c = '';

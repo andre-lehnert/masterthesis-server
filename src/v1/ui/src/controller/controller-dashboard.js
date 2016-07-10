@@ -2,8 +2,8 @@
 angular
 .module( 'app.controller.dashboard', [
                                       'ngMaterial',
-                                      'ngMessages',
-                                      'chart.js'
+                                      'ngMessages'//,
+                                      //'chart.js'
                                     ] )
 
 // constants
