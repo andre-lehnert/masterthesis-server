@@ -79,7 +79,7 @@ console.log('I2C:send: >> Update Animation: '+req.animation);
 
             req.body =
               {
-              "animation__c": req.animation,
+              "animation__c": req.id,
               "color__c": req.color,
               "brightness__c": req.brightness,
               "animation_speed__c": req.speed

@@ -129,9 +129,9 @@ module.exports = {
 
     var obj = req.token;
 
-    console.log(">> GET TOKEN BY LABEL: "+ obj);
+    console.log(">> GET TOKEN BY ID: "+ obj);
 
-    var query = GET_BY_LABEL.replace("[:label]", obj);
+    var query = GET_BY_ID.replace("[:id]", obj);
 
     org.query({ query: query, oauth: oauth }, function(err, result){
       if (err) {

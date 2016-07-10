@@ -147,9 +147,11 @@ console.log('I2C:move:validation: OK');
     var receiver = req.receiver,
         side = req.side,
         operation = req.operation,
-        led = req.led,
+        led = req.lednumber,
         color = req.color,
         brightness = req.brightness;
+
+console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+', '+brightness);
 
     // --------------------------------------------------------------------
     // 1) Validate

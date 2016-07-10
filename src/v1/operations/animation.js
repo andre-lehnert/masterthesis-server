@@ -65,6 +65,7 @@ var sendI2CRequest = function (req, res, next) {
         speed = req.params.speed;
 
       req.receiver = receiver;
+      req.id = id;
       req.animation = animation;
       req.color = color;
       req.brightness = brightness;
