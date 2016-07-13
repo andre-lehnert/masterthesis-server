@@ -1,0 +1,13 @@
+[
+  { "led": 11, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 10, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 9, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 8, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 7, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 6, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 5, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 4, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 3, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 2, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" },
+  { "led": 1, "colorA": "rgba(0,0,0,0.5)", "colorB": "rgba(0,0,0,0.5)", "colorC": "rgba(0,0,0,0.5)", "colorD": "rgba(0,0,0,0.5)" }
+]

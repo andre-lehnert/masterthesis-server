@@ -278,5 +278,5 @@
       ]
     }
   ],
-  "defaultColumnClasses": ["md-fab md-primary md-hue-2", "md-fab md-primary", "md-fab md-primary md-hue-1"]
+  "defaultColumnClasses": ["md-fab md-primary md-hue-2", "md-fab md-primary", "md-fab md-primary md-hue-1", "md-fab md-primary md-hue-2", "md-fab md-primary", "md-fab md-primary md-hue-1"]
 }

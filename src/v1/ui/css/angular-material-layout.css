@@ -78,3 +78,75 @@ th, td {
 .animate-show.ng-hide {
   opacity: 0;
 }
+
+.text-center {
+  text-align:center;
+}
+
+.bar-side {
+  height:70px;
+  border-left: 1px #dddddd solid;
+  border-right: 1px #dddddd solid;
+  text-align:center;
+}
+
+.deg30 {
+  background: linear-gradient(
+    30deg,
+    #dddddd,
+    #dddddd 50%,
+    #ffffff 50%,
+    #ffffff
+  );
+}
+
+.deg-30 {
+  background: linear-gradient(
+    -30deg,
+    #dddddd,
+    #dddddd 50%,
+    #ffffff 50%,
+    #ffffff
+  );
+}
+
+.deg30-blank {
+  background: linear-gradient(
+    30deg,
+    #ffffff,
+    #eeeeee 50%,
+    #ffffff 50%,
+    #ffffff
+  );
+  border-right: 1px #dddddd solid;
+}
+
+.deg-30-blank {
+  background: linear-gradient(
+    -30deg,
+    #ffffff,
+    #eeeeee 50%,
+    #ffffff 50%,
+    #ffffff
+  );
+}
+
+.deg30-inverted {
+  background: linear-gradient(
+    30deg,
+    #ffffff,
+    #ffffff 50%,
+    #dddddd 50%,
+    #dddddd
+  );
+}
+
+.deg-30-inverted {
+  background: linear-gradient(
+    -30deg,
+    #ffffff,
+    #ffffff 50%,
+    #dddddd 50%,
+    #dddddd
+  );
+}

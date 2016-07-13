@@ -1,8 +1,8 @@
 var nforce = require('nforce');
 
-var GET_ALL = 'SELECT Id, label__c, led_0__c, led_2__c, led_1__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c';
-var GET_BY_ID = 'SELECT Id, label__c, led_0__c, led_2__c, led_1__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c WHERE Id = \'[:id]\'';
-var GET_BY_LABEL = 'SELECT Id, label__c, led_0__c, led_2__c, led_1__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c WHERE label__c = \'[:label]\'';
+var GET_ALL = 'SELECT Id, label__c, led_0__c, led_1__c, led_2__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c';
+var GET_BY_ID = 'SELECT Id, label__c, led_0__c, led_1__c, led_2__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c WHERE Id = \'[:id]\'';
+var GET_BY_LABEL = 'SELECT Id, label__c, led_0__c, led_1__c, led_2__c, led_3__c, led_4__c, led_5__c, led_6__c, led_7__c, led_8__c, led_9__c, led_10__c, CreatedDate, LastModifiedDate FROM Side__c WHERE label__c = \'[:label]\'';
 
 module.exports = {
 

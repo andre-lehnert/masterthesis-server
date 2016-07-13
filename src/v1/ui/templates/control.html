@@ -82,7 +82,7 @@
             <!-- Target Position -->
             <div style="margin: 1% 0 1% 0" ng-show="isBarReceived">
               <div class="vertical-slider">
-               <rzslider rz-slider-model="barPosition" rz-slider-options="verticalSlider.options"  class="md-title"></rzslider>
+               <rzslider rz-slider-model="barPosition" rz-slider-options="movementSpeedSlider.options"  class="md-title"></rzslider>
              </div>
            </div>
 
@@ -162,7 +162,7 @@
 
               <div ng-show="isAnimationReceived">
                 <!-- Color Picker -->
-                <md-button  class="md-raised md-subhead" aria-label="Color"colorpicker="rgba"
+                <md-button  class="md-raised md-subhead" aria-label="Color" colorpicker="rgba"
                     ng-model="barColor"
                     style="background-color: {{barColor}};">
                     Choose Color
@@ -182,7 +182,7 @@
                 <!-- Speed -->
                 <h3 class="md-subtitle">Animation speed:</h3>
                 <div style="margin: 3% 0 0 1%">
-                  <rzslider rz-slider-model="animationSpeed" rz-slider-options="horizontalSlider.options"  class="md-title"></rzslider>
+                  <rzslider rz-slider-model="animationSpeed" rz-slider-options="animationSpeedSlider.options"  class="md-title"></rzslider>
                 </div>
 
                 <!-- Update bar animation -->
@@ -233,18 +233,91 @@
 </div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- Card #4: Update Bar Status / Set new configuration -->
+<!-- Card: Bar Side LED Control -->
 <div  layout="row" ng-show="isBarSelected" class="animate-show">
       <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
         <md-card>
           <md-card-title>
             <md-card-title-text>
-              <span class="md-headline">LED Control</span>
+              <span class="md-headline">Bar sides LED lighting</span>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
 
+            {{$scope.barSides}}
 
+            <table  style="height: 150px">
+              <tr style="height:70px">
+                <td style="width: 120px" class="deg-30 text-center">D</td>
+                <td style="width: 120px" class="deg30 text-center">C</td>
+
+                <td style="width: 5%"></td>
+
+                <td style="width: 120px" class="deg-30 text-center">B</td>
+                <td style="width: 120px" class="deg30 text-center">A</td>
+              <tr>
+              <tr style="height:70px">
+                <td class="deg30-inverted md-headline text-center bar-side">A</td>
+                <td class="deg-30-inverted md-headline text-center bar-side">B</td>
+
+                <td></td>
+
+                <td class="deg30-inverted md-headline text-center bar-side">C</td>
+                <td class="deg-30-inverted md-headline text-center bar-side">D</td>
+              <tr>
+
+              <tr ng-repeat="side in barSides">
+                <td class="bar-side">
+                  <md-button class="md-fab md-raised" style="background-color: {{side.colorA}};" colorpicker="rgb" ng-model="side.colorA">
+                    <span class="md-title">{{side.led}}</span>
+                  </md-button>
+                </td>
+                <td class="bar-side">
+                  <md-button class="md-fab" style="background-color: {{side.colorB}};" colorpicker="rgb" ng-model="side.colorB" >
+                    <span class="md-title">{{side.led}}</span>
+                  </md-button>
+                </td>
+
+                <td></td>
+
+                <td class="bar-side">
+                  <md-button class="md-fab md-raised" style="background-color: {{side.colorC}};" colorpicker="rgb" ng-model="side.colorC">
+                    <span class="md-title">{{side.led}}</span>
+                  </md-button>
+                </td>
+                <td class="bar-side">
+                  <md-button class="md-fab" style="background-color: {{side.colorD}};" colorpicker="rgb" ng-model="side.colorD" >
+                    <span class="md-title">{{side.led}}</span>
+                  </md-button>
+                </td>
+              <tr>
+
+              <tr style="height:70px">
+                <td class="deg30-blank"></td>
+                <td class="deg-30-blank"></td>
+
+                <td></td>
+
+                <td class="deg30-blank"></td>
+                <td class="deg-30-blank"></td>
+              <tr>
+
+            </table>
+
+            <!-- spacer --> <div style="height: 25px"></div>
+
+            <!-- brightness -->
+            <h3 class="md-subtitle">Lighting brightness:</h3>
+            <div style="margin: 3% 0 0 1%">
+              <rzslider rz-slider-model="lightingBrightness" rz-slider-options="lightingBrightnessSlider.options"  class="md-title"></rzslider>
+            </div>
+
+            <!-- spacer --> <div style="height: 25px"></div>
+
+            <!-- Update bar side lighting -->
+            <md-button class="md-raised md-subhead" aria-label="Lighting" ng-click="sendLighting()">
+                Update Lighting
+            </md-button>
 
           </md-card-content>
         </md-card>

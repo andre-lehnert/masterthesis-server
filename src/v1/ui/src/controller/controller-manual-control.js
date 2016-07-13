@@ -26,7 +26,7 @@ app.controller('ControlController', function($scope, $log, $rootScope, $http, $t
     $scope.uriPraefix = '/api/v1';
 
     // Default slider configuration
-    $scope.verticalSlider = {
+    $scope.movementSpeedSlider = {
           value: 0,
           options: {
               floor: 0,
@@ -39,7 +39,7 @@ app.controller('ControlController', function($scope, $log, $rootScope, $http, $t
               translate: function(value) { return value + ' %'; }
           }
       };
-      $scope.horizontalSlider = {
+      $scope.animationSpeedSlider = {
             value: 0,
             options: {
                 floor: 0,
@@ -52,10 +52,24 @@ app.controller('ControlController', function($scope, $log, $rootScope, $http, $t
                 translate: function(value) { return value + ' %'; }
             }
         };
+        $scope.lightingBrightnessSlider = {
+              value: 0,
+              options: {
+                  floor: 0,
+                  ceil: 100,
+                  vertical: false,
+                  showSelectionBar: true,
+                  step: 1,
+                  getSelectionBarColor: function(value) { return 'rgb(63,81,181)'; },
+                  getPointerColor: function(value) { return 'rgb(63,81,181)'; },
+                  translate: function(value) { return value + ' %'; }
+              }
+          };
 
 // --- Get available bars ------------------------------------------------------
 
 $scope.bars = {};
+$scope.barSides = [];
 
 $scope.getBars = function() {
 
@@ -63,13 +77,13 @@ $scope.getBars = function() {
   .success(function(data) {
 
      $scope.bars = data; // Get JSON
-     console.log(data);
+     //console.log(data);
 
      var url = $scope.uriPraefix + '/bars';
      console.log('GET '+ url);
      $http({method: 'GET', url: url}) // Get available bars (Salesforce.com)
        .success(function(data, status) {
-         console.log(data);
+         //console.log(data);
 
          data.objects.forEach(function(bar, i, a) {
            $scope.bars.rows.forEach(function(row, j, b) {
@@ -95,6 +109,15 @@ $scope.getBars = function() {
              });
            });
          });
+
+
+         $http({method: 'GET', url: './src/model/side-lighting.json'})
+         .success(function(data) {
+            $scope.barSides = data; // Get JSON
+          })
+          .error(function(data) {
+            console.log('ERROR: Loading side-lighting.json');
+          });
 
 
        })
@@ -197,7 +220,7 @@ $scope.isAnimationReceived = false;
           $scope.isAnimationReceived = true;
 
           if (data._success && data.object) {
-            $scope.horizontalSlider.value = data.object.animation_speed__c;
+            $scope.animationSpeedSlider.value = data.object.animation_speed__c;
             $scope.barAnimation = data.object.name__c; // LED Animation
           } else {
             $scope.barAnimation = "";
@@ -227,6 +250,97 @@ $scope.isAnimationReceived = false;
         error(function(data, status) {
           console.log(data || "Request failed");
       });
+
+    // GET side A
+   var url = $scope.uriPraefix + '/sides/'+$scope.selectedBar.object.side_a__c;
+   console.log('GET '+ url);
+   $http({method: 'GET' , url: url})
+      .success(function(dataA) {
+
+        console.log(dataA);
+
+        var i = 0;
+        for (var key in dataA.object) {
+          if (key.indexOf("led_") > -1 ) {
+              console.log(i+': '+dataA.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+dataA.object[key]));
+              var hex = hex2rgb('#'+dataA.object[key]);
+              $scope.barSides[10 - i].colorA = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+              i++;
+          }
+        }
+
+       // GET side B
+       var url = $scope.uriPraefix + '/sides/'+$scope.selectedBar.object.side_b__c;
+       console.log('GET '+ url);
+       $http({method: 'GET' , url: url})
+          .success(function(data, status) {
+
+            console.log(data);
+
+            var i = 0;
+            for (var key in data.object) {
+              if (key.indexOf("led_") > -1 ) {
+                  console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
+                  var hex = hex2rgb('#'+data.object[key]);
+                  $scope.barSides[10 - i].colorB = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                  i++;
+              }
+            }
+
+            // GET side C
+           var url = $scope.uriPraefix + '/sides/'+$scope.selectedBar.object.side_c__c;
+           console.log('GET '+ url);
+           $http({method: 'GET' , url: url})
+              .success(function(data, status) {
+
+                console.log(data);
+
+                var i = 0;
+                for (var key in data.object) {
+                  if (key.indexOf("led_") > -1 ) {
+                      console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
+                      var hex = hex2rgb('#'+data.object[key]);
+                      $scope.barSides[10 - i].colorC = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                      i++;
+                  }
+                }
+
+                // GET side D
+               var url = $scope.uriPraefix + '/sides/'+$scope.selectedBar.object.side_d__c;
+               console.log('GET '+ url);
+               $http({method: 'GET' , url: url})
+                  .success(function(data, status) {
+
+                    console.log(data);
+
+                    var i = 0;
+                    for (var key in data.object) {
+                      if (key.indexOf("led_") > -1 ) {
+                          console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
+                          var hex = hex2rgb('#'+data.object[key]);
+                          $scope.barSides[10 - i].colorD = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                          i++;
+                      }
+                    }
+                  })
+                  .error(function(data, status) {
+                    console.log(data || "Request failed");
+                });
+              })
+              .error(function(data, status) {
+                console.log(data || "Request failed");
+            });
+          })
+          .error(function(data, status) {
+            console.log(data || "Request failed");
+        });
+
+      })
+      .error(function(data, status) {
+        console.log(data || "Request failed");
+    });
+
+
 
 
     $scope.isBarSelected = true;
@@ -436,7 +550,26 @@ $scope.sendMove = function () {
     };
 
 
+    // -----------------------------------------------------------------------------
+
+
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // #0033ff -> hexToRgb("#0033ff").g = 51
 function hex2rgb(hex) {

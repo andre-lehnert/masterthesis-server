@@ -10,7 +10,7 @@ var config = require('./.config').configuration;
 
 // define url and port to concat REST-URLs
 var BASEURL     = config.BASEURL,
-    PORT        = 80,
+    PORT        = 8080,
     URL         = BASEURL+':'+PORT;
 
 module.exports.serverUrl = URL;
