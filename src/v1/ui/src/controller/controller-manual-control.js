@@ -25,87 +25,86 @@ app.controller('ControlController', function($scope, $log, $rootScope, $http, $t
 
     $scope.uriPraefix = '/api/v1';
 
-    // $scope._bars = [
-    //   A1 : {},
-    //   A2 : {},
-    //   A3 : {},
-    //   B1 : {},
-    //   B2 : {},
-    //   B3 : {},
-    //   C1 : {},
-    //   C2 : {},
-    //   C3 : {}
-    // ];
-
-  $scope.bars = require('./../model/bars');
-
-  // Default slider configuration
-  $scope.verticalSlider = {
-        value: 0,
-        options: {
-            floor: 0,
-            ceil: 100,
-            vertical: true,
-            showSelectionBar: true,
-            step: 5,
-            getSelectionBarColor: function(value) { return 'rgb(63,81,181)'; },
-            getPointerColor: function(value) { return 'rgb(63,81,181)'; },
-            translate: function(value) { return value + ' %'; }
-        }
-    };
-    $scope.horizontalSlider = {
+    // Default slider configuration
+    $scope.verticalSlider = {
           value: 0,
           options: {
               floor: 0,
               ceil: 100,
-              vertical: false,
+              vertical: true,
               showSelectionBar: true,
-              step: 1,
+              step: 5,
               getSelectionBarColor: function(value) { return 'rgb(63,81,181)'; },
               getPointerColor: function(value) { return 'rgb(63,81,181)'; },
               translate: function(value) { return value + ' %'; }
           }
       };
+      $scope.horizontalSlider = {
+            value: 0,
+            options: {
+                floor: 0,
+                ceil: 100,
+                vertical: false,
+                showSelectionBar: true,
+                step: 1,
+                getSelectionBarColor: function(value) { return 'rgb(63,81,181)'; },
+                getPointerColor: function(value) { return 'rgb(63,81,181)'; },
+                translate: function(value) { return value + ' %'; }
+            }
+        };
 
 // --- Get available bars ------------------------------------------------------
 
+$scope.bars = {};
+
 $scope.getBars = function() {
-    var url = $scope.uriPraefix + '/bars';
-    console.log('GET '+ url);
-    $http({method: 'GET' , url: url}).
-        success(function(data, status) {
-          console.log(data);
 
-          data.objects.forEach(function(bar, i, a) {
-            $scope.bars.rows.forEach(function(row, j, b) {
-              row.cols.forEach(function(item, k, c) {
-                console.log(bar.label__c +' - '+ item.name +' = '+ (bar.label__c == item.name));
-                if (bar.label__c == item.name) {
-                  $scope.bars.rows[j].cols[k].object = bar; // full object
-                  $scope.bars.rows[j].cols[k].position = bar.position__c;
+  $http({method: 'GET', url: './src/model/bars.json'})
+  .success(function(data) {
 
-                  $scope.bars.rows[j].cols[k].animation.id = bar.animation__c;
+     $scope.bars = data; // Get JSON
+     console.log(data);
 
-                  var hex = hex2rgb('#'+bar.color__c);
-                  var brightness = (parseInt(bar.brightness__c) / 100);
+     var url = $scope.uriPraefix + '/bars';
+     console.log('GET '+ url);
+     $http({method: 'GET', url: url}) // Get available bars (Salesforce.com)
+       .success(function(data, status) {
+         console.log(data);
 
-                  $scope.bars.rows[j].cols[k].animation.color = 'rgba('+hex.r+','+hex.g+','+hex.b+','+brightness+')';
+         data.objects.forEach(function(bar, i, a) {
+           $scope.bars.rows.forEach(function(row, j, b) {
+             row.cols.forEach(function(item, k, c) {
+               console.log(bar.label__c +' - '+ item.name +' = '+ (bar.label__c == item.name));
+               if (bar.label__c == item.name) {
+                 $scope.bars.rows[j].cols[k].object = bar; // full object
+                 $scope.bars.rows[j].cols[k].position = bar.position__c;
 
-                  $scope.bars.rows[j].cols[k].animation.speed = bar.animation_speed__c;
+                 $scope.bars.rows[j].cols[k].animation.id = bar.animation__c;
 
-                  $scope.bars.rows[j].cols[k].active = true;
+                 var hex = hex2rgb('#'+bar.color__c);
+                 var brightness = (parseInt(bar.brightness__c) / 100);
 
-                  console.log($scope.bars.rows[j].cols[k]);
-                }
-              });
-            });
-          });
+                 $scope.bars.rows[j].cols[k].animation.color = 'rgba('+hex.r+','+hex.g+','+hex.b+','+brightness+')';
+
+                 $scope.bars.rows[j].cols[k].animation.speed = bar.animation_speed__c;
+
+                 $scope.bars.rows[j].cols[k].active = true;
+
+                 console.log($scope.bars.rows[j].cols[k]);
+               }
+             });
+           });
+         });
 
 
-        }).
-        error(function(data, status) {
-          console.log(data || "Request failed");
-      });
+       })
+       .error(function(data, status) {
+         console.log(data || "Request failed");
+     });
+   })
+  .error(function(data) {
+    console.log('ERROR: '+data);
+   });
 };
 
 $scope.getBars();
