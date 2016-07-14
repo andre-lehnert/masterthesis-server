@@ -56,6 +56,28 @@ console.log('I2C:handleLight: receiver ['+target+'] available');
     }
 };
 
+var handleLightAll = function(receivers, target, command, req, res, next) {
+
+  console.log('I2C:handleLightAll: ['+receivers+'], '+target+', '+command);
+
+  if (receivers.length === 0) {
+
+    console.log('NO I2C RECEIVER FOUND');
+
+  } else {
+
+    receivers.forEach(function(val, index, array) {
+
+      if (parseInt(target) === val) {
+
+        console.log('I2C:handleLightAll: receiver ['+target+'] available');
+          req.update = 'lightAll';
+          i2c.sendAll(parseInt(target), command, req, res, next);
+      }
+    });
+  }
+};
+
 var handleAnimation = function(receivers, target, command, req, res, next) {
 
 console.log('I2C:handleAnimation: ['+receivers+'], '+target+', '+command);
@@ -107,7 +129,7 @@ var handleStatus = function(receivers, target, command, req, res, next) {
 var getTokenId = function(req, res, next) {
 
 //  console.log('I2C:getTokenId: TokenLabel: '+req.token);
-  
+
   if (req.token > 0) {
     // 1) Get Token Id
     db.getTokenByDevice(req, res, updateTokenId);
@@ -125,11 +147,11 @@ var updateTokenId = function(req, res, next) {
 //  console.log('I2C:updateTokenId: TokenLabel: '+req.token+' ID: '+req.response._fields.id+ ' OLD TokenId: '+req.tokenid+', OLD LABEL: '+req.response._fields.label__c);
 //  console.log(req.tokenid);
 //  console.log(req.response._fields.id);
- 
+
   if (req.tokenid != req.response._fields.id) {
 
     req.tokenid = req.response._fields.id;
-   
+
     req.body = { 'token__c' : req.response._fields.id };
 
   //console.log('>> Update Bar ['+req.params.label+']');
@@ -139,7 +161,7 @@ var updateTokenId = function(req, res, next) {
 
   } else {
 //    console.log('>> TOKEN NOT CHANGED');
-  }  
+  }
 };
 
 module.exports = {
@@ -376,7 +398,36 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
      // 2) Scan, check available receivers, execute light
      i2c.scan(receiver, api.getStatusMessage(), handleStatus, req, res, next);
 
+   },
+
+   lightAll : function(req, res, next) {
+
+     var receiver = req.body.receiver;
+        //  sideA = req.body.sideA,
+        //  sideB = req.body.sideB,
+        //  sideC = req.body.sideC,
+        //  sideD = req.body.sideD,
+        //  brightness = req.brightness;
+
+     console.log('I2C:lightAll: '+receiver);
+
+     // --------------------------------------------------------------------
+     // 1) Validate
+     if (
+       typeof receiver === 'undefined' ||
+       receiver < 0 ||
+       receiver < 0x10 ||
+       receiver > 0x6e ||
+       receiver === 0x0f
+     ) {
+       return false;
+     }
+
+     // 2) Scan, check available receivers, execute light
+     i2c.scan(receiver, '', handleLightAll, req, res, next);
+
    }
+
 };
 
 // ------------------------------------------------------------------------

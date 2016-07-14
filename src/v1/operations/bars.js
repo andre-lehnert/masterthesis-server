@@ -116,7 +116,7 @@ var sendSideI2CRequest = function (req, res, next) {
 
 
       console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness);
-      
+
       req.receiver = receiver;
         req.operation = operation;
         req.lednumber = lednumber;
@@ -125,8 +125,8 @@ var sendSideI2CRequest = function (req, res, next) {
         req.side = side;
         req.leds = leds;
         i2c.light(req, res, next);
-        
-      
+
+
       //i2c.light(receiver, side, operation, lednumber, color, brightness);
       req.body =
         {
@@ -152,82 +152,14 @@ var sendSideI2CRequest = function (req, res, next) {
   } else {
     res.send('ERROR: sendI2CRequest(): No Side Found');
   }
-  
+
 };
 
-var sendSideI2CRequests = function (req, res, next) {
+var sendFullBarUpdateI2CRequest = function (req, res, next) {
 
-  var id, receiver, side, operation = '+', brightness;
+  console.log('>> Quick I2C: '+req.body);
 
-  if (req.response._success) {
-
-    if (req.ledControl) {
-
-      receiver = req.ledControl;
-      id = req.response.object._fields.id;
-      side = req.selectedSide;
-
-      var leds;
-
-      if (operation.toLowerCase() != 'new')
-        leds = Array(11); //[ null,  null,  null,  null,  null,  null,  null,  null,  null,  null,  null ];
-      else
-        leds = [ '000000','000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000', '000000' ];
-
-
-
-      if (!req.params.brightness)
-        brightness = 100;
-      else
-        brightness = parseInt(req.params.brightness);
-
-      var lednumber = 1;
-      var leds = [];
-
-      for (var key in req.body) {
-
-        console.log('Key: '+key+ ' >> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+req.body[key]+', '+brightness);
-        
-        req.receiver = receiver;
-        req.operation = operation;
-        req.lednumber = lednumber;
-        req.color =  req.body[key];
-	req.brightness = brightness;
-	req.side = side; 
-        req.leds = leds;
-	i2c.light(req, res, next);
-        
-
-//        leds.push(req.body[key]);
-
-        lednumber++;
-      }
-
-      req.body =
-        {
-          "led_0__c": leds[0],
-          "led_1__c": leds[1],
-          "led_2__c": leds[2],
-          "led_3__c": leds[3],
-          "led_4__c": leds[4],
-          "led_5__c": leds[5],
-          "led_6__c": leds[6],
-          "led_7__c": leds[7],
-          "led_8__c": leds[8],
-          "led_9__c": leds[9],
-          "led_10__c": leds[10],
-          "label__c": side
-        };
-      req.sideId = id;
-      console.log('ID: '+req.sideId );
-
-    } else {
-      res.send('ERROR: sendI2CRequest(): No LED Controller');
-    }
-  } else {
-    res.send('ERROR: sendI2CRequest(): No Side Found');
-  }
- 
+  i2c.lightAll(req, res, next);
 };
 
 var updateBarSides = function (req, res, next) {
@@ -282,7 +214,13 @@ app.get('/:label/sides/:side', [requestBar, requestSide], function(req, res) {
  res.json(req.response);
 });
 
-app.put('/:label/sides/:side', [requestBar, requestSide, sendSideI2CRequests, updateBarSides], function(req, res) {
+/*
+ * Fast I2C Request
+ */
+app.put('/:label/sides/:side', [sendFullBarUpdateI2CRequest, updateBarSides], function(req, res) {
+ res.json(req.response);
+});
+app.put('/:label/sides/:side/:brightness', [sendFullBarUpdateI2CRequest, updateBarSides], function(req, res) {
  res.json(req.response);
 });
 
