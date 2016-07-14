@@ -593,7 +593,7 @@ $scope.sendMove = function () {
 
     // --- SEND LIGHTING -------------------------------------------------------
 
-    $scope.lightingBrightness = 75;
+    $scope.lightingBrightness = 100;
 
     $scope.isLightingRequestSend = false;
     $scope.isLightingResponseReceived = false;
