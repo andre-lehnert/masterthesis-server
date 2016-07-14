@@ -5,7 +5,7 @@ var GET_BY_ID = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDa
 var GET_BY_LABEL = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id  FROM Token__c WHERE label__c = [:label]';
 var GET_BY_APP = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id  FROM Token__c WHERE app__c = [:app]';
 var GET_ALL_INACTIVE = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id NOT IN (SELECT token__c FROM Bar__c)';
-var GET_ALL_INACTIVE = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id IN (SELECT token__c FROM Bar__c)';
+var GET_ALL_ACTIVE = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id IN (SELECT token__c FROM Bar__c)';
 
 module.exports = {
 
@@ -23,7 +23,7 @@ module.exports = {
           query = GET_ALL_ACTIVE;
         }
 
-        org.query({ query: , oauth: oauth }, function(err, results){
+        org.query({ query: query, oauth: oauth }, function(err, results){
           if (err) {
 
             console.log(err);
