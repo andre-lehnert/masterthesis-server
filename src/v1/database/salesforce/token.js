@@ -3,6 +3,9 @@ var nforce = require('nforce');
 var GET_ALL = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c';
 var GET_BY_ID = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id = \'[:id]\'';
 var GET_BY_LABEL = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id  FROM Token__c WHERE label__c = [:label]';
+var GET_BY_APP = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id  FROM Token__c WHERE app__c = [:app]';
+var GET_ALL_INACTIVE = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id NOT IN (SELECT token__c FROM Bar__c)';
+var GET_ALL_INACTIVE = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id IN (SELECT token__c FROM Bar__c)';
 
 module.exports = {
 
@@ -10,7 +13,17 @@ module.exports = {
 
         var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
 
-        org.query({ query: GET_ALL, oauth: oauth }, function(err, results){
+        var query = GET_ALL;
+
+        if (req.query.state == 'unbound') {
+          query = GET_BY_APP.replace("[:app]", "null");
+        } else if (req.query.state == 'inactive') {
+          query = GET_ALL_INACTIVE;
+        } else if (req.query.state == 'active') {
+          query = GET_ALL_ACTIVE;
+        }
+
+        org.query({ query: , oauth: oauth }, function(err, results){
           if (err) {
 
             console.log(err);
@@ -231,7 +244,7 @@ module.exports = {
           next(req, res);
 
         } else { // no entry // salesforce duplicate check
-    
+
           console.log('Database Token: No entry found');
         }
       }
