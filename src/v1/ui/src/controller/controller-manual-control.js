@@ -755,7 +755,22 @@ $scope.sendMove = function () {
         });
     };
 
+    $scope.sendResetLighting = function(side) {
 
+      var uri = $scope.uriPraefix + '/bars/'
+         + $scope.selectedBar.name.toLowerCase() + '/'
+         + 'sides' + '/'
+         + side + '/new';
+
+      $http({method: 'GET' , url: uri}).
+          success(function(data) {
+            $log.debug("SUCCESS: Reset Side "+side);               
+          }).
+          error(function(data, status) {
+            console.log(data || "Request failed");
+        });
+
+    };
 
 });
 
