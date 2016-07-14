@@ -329,33 +329,33 @@ $scope.isSideReceived = false;
                     $scope._barSides = $scope.barSides; // copy
                     $scope.barSidesInitialized = true;
 
-                    $scope.$watch('barSides', function() {
-
-                      if ($scope.barSidesInitialized) $scope.barSidesInitialized = false;
-                      else {
-
-                        var i = 0;
-                        $scope.barSides.forEach(function(item, index, array) {
-                          // side A changed?
-                          if ($scope.barSides[index].colorA != $scope._barSides[index].colorA) {
-                            console.log(index+': A changed from '+$scope._barSides[index].colorA+' to '+$scope.barSides[index].colorA);
-                          }
-                          if ($scope.barSides[index].colorB != $scope._barSides[index].colorB) {
-                            console.log(index+': B changed from '+$scope._barSides[index].colorB+' to '+$scope.barSides[index].colorB);
-                          }
-                          if ($scope.barSides[index].colorC != $scope._barSides[index].colorC) {
-                            console.log(index+': C changed from '+$scope._barSides[index].colorC+' to '+$scope.barSides[index].colorC);
-                          }
-                          if ($scope.barSides[index].colorD != $scope._barSides[index].colorD) {
-                            console.log(index+': D changed from '+$scope._barSides[index].colorD+' to '+$scope.barSides[index].colorD);
-                          }
-
-                          i++;
-                        });
-
-                      }
-
-                    }, true);
+                    // $scope.$watch('barSides', function() {
+                    //
+                    //   if ($scope.barSidesInitialized) $scope.barSidesInitialized = false;
+                    //   else {
+                    //
+                    //     var i = 0;
+                    //     $scope.barSides.forEach(function(item, index, array) {
+                    //       // side A changed?
+                    //       if ($scope.barSides[index].colorA != $scope._barSides[index].colorA) {
+                    //         console.log(index+': A changed from '+$scope._barSides[index].colorA+' to '+$scope.barSides[index].colorA);
+                    //       }
+                    //       if ($scope.barSides[index].colorB != $scope._barSides[index].colorB) {
+                    //         console.log(index+': B changed from '+$scope._barSides[index].colorB+' to '+$scope.barSides[index].colorB);
+                    //       }
+                    //       if ($scope.barSides[index].colorC != $scope._barSides[index].colorC) {
+                    //         console.log(index+': C changed from '+$scope._barSides[index].colorC+' to '+$scope.barSides[index].colorC);
+                    //       }
+                    //       if ($scope.barSides[index].colorD != $scope._barSides[index].colorD) {
+                    //         console.log(index+': D changed from '+$scope._barSides[index].colorD+' to '+$scope.barSides[index].colorD);
+                    //       }
+                    //
+                    //       i++;
+                    //     });
+                    //
+                    //   }
+                    //
+                    // }, true);
 
                     $scope.isSideReceived = true;
                     $scope.refreshSlider();
@@ -764,12 +764,92 @@ $scope.sendMove = function () {
 
       $http({method: 'GET' , url: uri}).
           success(function(data) {
-            $log.debug("SUCCESS: Reset Side "+side);               
+            $log.debug("SUCCESS: Reset Side "+side);
+
+            updateSide(side);
           }).
           error(function(data, status) {
             console.log(data || "Request failed");
         });
 
+    };
+
+    var updateSide = function(side) {
+
+      // GET side
+      if (side == 'A') {
+         var url = $scope.uriPraefix + '/sides/'+$scope.selectedBar.object.side_a__c;
+         console.log('GET '+ url);
+         $http({method: 'GET' , url: url})
+            .success(function(data, status) {
+              var i = 0;
+              for (var key in data.object) {
+                if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
+                    var hex = hex2rgb('#'+data.object[key]);
+                    $scope.barSides[10 - i].colorA = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                    i++;
+                }
+              }
+
+            })
+            .error(function(data, status) {
+              console.log(data || "Request failed");
+          });
+      } else if (side == 'B') {
+         var url = $scope.uriPraefix + '/sides/'+$scope.selectedBar.object.side_b__c;
+         console.log('GET '+ url);
+         $http({method: 'GET' , url: url})
+            .success(function(data, status) {
+              var i = 0;
+              for (var key in data.object) {
+                if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
+                    var hex = hex2rgb('#'+data.object[key]);
+                    $scope.barSides[10 - i].colorB = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                    i++;
+                }
+              }
+
+            })
+            .error(function(data, status) {
+              console.log(data || "Request failed");
+          });
+      } else if (side == 'C') {
+         var url = $scope.uriPraefix + '/sides/'+$scope.selectedBar.object.side_c__c;
+         console.log('GET '+ url);
+         $http({method: 'GET' , url: url})
+            .success(function(data, status) {
+              var i = 0;
+              for (var key in data.object) {
+                if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
+                    var hex = hex2rgb('#'+data.object[key]);
+                    $scope.barSides[10 - i].colorC = 'rgba('+hex.r+','+hex.g+','+hex.b+', 1)';
+                    i++;
+                }
+              }
+
+            })
+            .error(function(data, status) {
+              console.log(data || "Request failed");
+          });
+      } else if (side == 'D') {
+         var url = $scope.uriPraefix + '/sides/'+$scope.selectedBar.object.side_d__c;
+         console.log('GET '+ url);
+         $http({method: 'GET' , url: url})
+            .success(function(data, status) {
+              var i = 0;
+              for (var key in data.object) {
+                if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
+                    var hex = hex2rgb('#'+data.object[key]);
+                    $scope.barSides[10 - i].colorD = 'rgba('+hex.r+','+hex.g+','+hex.b+', 1)';
+                    i++;
+                }
+              }
+
+            })
+            .error(function(data, status) {
+              console.log(data || "Request failed");
+          });
+      }
     };
 
 });
