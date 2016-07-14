@@ -1,6 +1,7 @@
 // var i2c = require('i2c');
 // var MASTER = 0x0f;
 // var wire  = new i2c(MASTER, {device: '/dev/i2c-1'}); // point to your i2c address, debug provides REPL interface
+// var api = require('./api-model');
 
 module.exports = {
 
@@ -26,7 +27,7 @@ module.exports = {
   send : function(address, message, req, res, next) {
 
 //       console.log("SEND COMMAND ["+address+"]: "+message);
-//       res.done = true;
+//       req.done = true;
 //
 //       wire.setAddress(address);
 //       var bytes = [];
@@ -107,6 +108,38 @@ module.exports = {
       //     next(req, res, next);
       //   }
       // });
+  },
+
+  sendAll : function(address, message, req, res, next) {
+
+      // console.log("SEND COMMAND ["+address+"]: "+message);
+      // req.done = true;
+      //
+      // writeLightingSide(address, req.body.sideJson.sides, 0, writeLightingSide, req, res, next);
   }
 
+};
+
+var writeLightingSide = function(address, sides, index, callback, req, res, next) {
+// console.log(index);
+//   wire.setAddress(address);
+//   var bytes = [];
+//   var message = api.getLightMessage(sides[index].name, '+', sides[index].led, sides[index].color, sides[index].brightness)
+//   console.log(message);
+//
+//   for (var i = 0; i < message.length; ++i) {
+//     bytes.push(message.charCodeAt(i));
+//   }
+//
+//   wire.writeBytes(0, bytes, function(err) {
+//
+//     if (index < sides.length - 1) {
+//       callback(address, sides, index + 1, writeLightingSide, req, res, next);
+//     } else {
+//       console.log('I2C Lighting All >> COMPLETE');
+//       req.success = true;
+//       next();
+//     }
+//
+//   });
 };

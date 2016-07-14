@@ -114,21 +114,14 @@ console.log('I2C:send: >> Update Animation: '+req.animation);
 
       console.log("SEND COMMAND ["+address+"]: "+message);
       req.done = true;
-      var sides = [
-        { "name": "A", "led": 0, "color": "f00000", "brightness": 100 },
-        { "name": "A", "led": 1, "color": "ff0000", "brightness": 100 },
-        { "name": "A", "led": 2, "color": "fff000", "brightness": 100 },
-        { "name": "A", "led": 3, "color": "ffff00", "brightness": 100 },
-        { "name": "A", "led": 4, "color": "fffff0", "brightness": 100 },
-        { "name": "A", "led": 5, "color": "ffffff", "brightness": 100 }
-      ];
-      writeLightingSide(address, sides, 0, writeLightingSide);
+
+      writeLightingSide(address, req.body.sideJson.sides, 0, writeLightingSide, req, res, next);
   }
 
 };
 
 var writeLightingSide = function(address, sides, index, callback, req, res, next) {
-
+console.log(index);
   wire.setAddress(address);
   var bytes = [];
   var message = api.getLightMessage(sides[index].name, '+', sides[index].led, sides[index].color, sides[index].brightness)
@@ -140,8 +133,8 @@ var writeLightingSide = function(address, sides, index, callback, req, res, next
 
   wire.writeBytes(0, bytes, function(err) {
 
-    if (index < sides.length) {
-      callback(address, sides, index + 1, writeLightingSide);
+    if (index < sides.length - 1) {
+      callback(address, sides, index + 1, writeLightingSide, req, res, next);
     } else {
       console.log('I2C Lighting All >> COMPLETE');
       req.success = true;

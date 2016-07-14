@@ -159,17 +159,37 @@ var sendFullBarUpdateI2CRequest = function (req, res, next) {
 
   console.log('>> Quick I2C: '+req.body);
 
-  //req.body.forEach(function(item, index, array) {
-  //  if (!req.params.brightness) {
-  //    item.brightness = 100;
-  //  } else {
-  //    item.brightness = req.prams.brightness;
-  //  }    
-  //});
+  req.source = req.body.sideJson;
+  req.sidePointer = 0;
 
-  //console.log('>> Quick I2C: '+req.body);
-res.json(req.body);
-  i2c.lightAll(req, res, next);
+  //i2c.lightAll(req, res, next);
+  next();
+};
+
+var updateBarSide = function (req, res, next) {
+
+  var _body = {};
+
+console.log("Side Pointer: "+req.sidePointer);
+    req.sideId = req.source.sideIds[req.sidePointer];
+
+    for (var i = 0; i < 11; i++) {
+      console.log(req.source.sides[i + (req.sidePointer * 11)]);
+    }
+    // Modifiy PUT body
+    // switch (req.sidePointer) {
+    //     case 0: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorA); break;
+    //     case 1: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorB); break;
+    //     case 2: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorC); break;
+    //     case 3: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorD); break;
+    //
+    //     default:
+    //       return; // > 3 abort
+    //   }
+
+    req.sidePointer++;
+    next();
+  //db.updateSideByBar(req, res, next);
 };
 
 var updateBarSides = function (req, res, next) {
@@ -227,13 +247,13 @@ app.get('/:label/sides/:side', [requestBar, requestSide], function(req, res) {
 /*
  * Fast I2C Request
  */
-app.put('/:label/sides', [sendFullBarUpdateI2CRequest, updateBarSides], function(req, res) {
+app.put('/:label/sides', [sendFullBarUpdateI2CRequest, updateBarSide, updateBarSide, updateBarSide, updateBarSide], function(req, res) {
   res.json(req.response);
 });
-app.put('/:label/sides/:side', [sendFullBarUpdateI2CRequest, updateBarSides], function(req, res) {
+app.put('/:label/sides/:side', [sendFullBarUpdateI2CRequest, updateBarSide, updateBarSide, updateBarSide, updateBarSide], function(req, res) {
  res.json(req.response);
 });
-app.put('/:label/sides/:side/:brightness', [sendFullBarUpdateI2CRequest, updateBarSides], function(req, res) {
+app.put('/:label/sides/:side/:brightness', [sendFullBarUpdateI2CRequest, updateBarSide, updateBarSide, updateBarSide, updateBarSide], function(req, res) {
  res.json(req.response);
 });
 

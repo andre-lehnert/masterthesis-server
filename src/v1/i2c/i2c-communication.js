@@ -114,7 +114,7 @@ console.log('I2C:send: >> Update Animation: '+req.animation);
 
       console.log("SEND COMMAND ["+address+"]: "+message);
       req.done = true;
-    
+
       writeLightingSide(address, req.body.sideJson.sides, 0, writeLightingSide, req, res, next);
   }
 
