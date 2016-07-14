@@ -116,7 +116,18 @@ var sendSideI2CRequest = function (req, res, next) {
 
 
       console.log('>> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+color+', '+brightness);
-      i2c.light(receiver, side, operation, lednumber, color, brightness);
+      
+      req.receiver = receiver;
+        req.operation = operation;
+        req.lednumber = lednumber;
+        req.color =  color;
+        req.brightness = brightness;
+        req.side = side;
+        req.leds = leds;
+        i2c.light(req, res, next);
+        
+      
+      //i2c.light(receiver, side, operation, lednumber, color, brightness);
       req.body =
         {
           "led_0__c": leds[0],
@@ -141,7 +152,7 @@ var sendSideI2CRequest = function (req, res, next) {
   } else {
     res.send('ERROR: sendI2CRequest(): No Side Found');
   }
-  next();
+  
 };
 
 var sendSideI2CRequests = function (req, res, next) {
@@ -175,9 +186,20 @@ var sendSideI2CRequests = function (req, res, next) {
 
       for (var key in req.body) {
 
-        console.log('Key: 'key+ ' >> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+req.body[key]+', '+brightness);
-        i2c.light(receiver, side, operation, lednumber, req.body[key], brightness);
-        leds.push(req.body[key]);
+        console.log('Key: '+key+ ' >> SEND I2C REQUEST: '+receiver+', '+operation+', '+lednumber+', '+req.body[key]+', '+brightness);
+        
+        req.receiver = receiver;
+        req.operation = operation;
+        req.lednumber = lednumber;
+        req.color =  req.body[key];
+	req.brightness = brightness;
+	req.side = side; 
+        req.leds = leds;
+	i2c.light(req, res, next);
+        
+
+//        leds.push(req.body[key]);
+
         lednumber++;
       }
 
@@ -205,7 +227,7 @@ var sendSideI2CRequests = function (req, res, next) {
   } else {
     res.send('ERROR: sendI2CRequest(): No Side Found');
   }
-  next();
+ 
 };
 
 var updateBarSides = function (req, res, next) {
