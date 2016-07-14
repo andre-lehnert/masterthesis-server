@@ -596,13 +596,7 @@ $scope.sendMove = function () {
     $scope.lightingBrightness = 100;
 
     $scope.isLightingRequestSend = false;
-    $scope.isLightingResponseReceived = false;
-
-    $scope.lightingRequest = {};
-    $scope.lightingRequest.text = '';
-
-    $scope.lightingResponse = {};
-    $scope.lightingResponse.json = {};
+    $scope.isLightingResponseReceived = true;
 
     $scope.sendLighting = function () {
 
@@ -610,12 +604,6 @@ $scope.sendMove = function () {
 
         $scope.isLightingRequestSend = false;
         $scope.isLightingResponseReceived = false;
-
-        $scope.lightingRequest = {};
-        $scope.lightingRequest.text = '';
-
-        $scope.lightingResponse = {};
-        $scope.lightingResponse.json = {};
 
         var sideA = $scope.selectedBar.object.side_a__c;
         var sideB = $scope.selectedBar.object.side_b__c;
@@ -629,13 +617,9 @@ $scope.sendMove = function () {
         // PUT/ UPDATE side A
         $scope.lightingRequest.text = baseUri;
 
-        //addLighting(baseUri, 'A', 0, addLighting);
-
-        //addSideLighting(baseUri, 0, addSideLighting);
-
         var sides = [ 'A', 'B', 'C', 'D' ];
         var sideJson = {
-	 "receiver": $scope.selectedBar.object.led__c,
+	       "receiver": $scope.selectedBar.object.led__c,
          "sideIds": [ sideA, sideB, sideC, sideD ],
          "sides": [
          // { "name": "A", "led": 1, "color": "ff0000" },
@@ -661,75 +645,13 @@ $scope.sendMove = function () {
             success(function(data) {
 
               $log.debug(data);
-
+              $scope.isLightingResponseReceived = true;
             }).
             error(function(data, status) {
               console.log(data || "Request failed");
           });
 
-        //   // /bars/:id/sides/:side/add/:led/:color/:brightness
-        //   var uri = baseUri
-        //       + 'A'                                 // :side
-        //       + '/add/'
-        //       + ($scope.barSides[i].led - 1)        // :led
-        //       + rgb2hex($scope.barSides[i].colorA)  // :color
-        //       + $scope.lightingBrightness;          // :brightness
-        //
-        //   $http({method: 'GET' , url: uri}).
-        //       success(function(data) {
-        //
-        //         $log.debug(data);
-        //
-        //       }).
-        //       error(function(data, status) {
-        //         console.log(data || "Request failed");
-        //     });
-        //}
-
-
-
-
-
         $scope.isLightingRequestSend = true;
-    };
-
-    var addSideLighting = function(baseUri, side, next) {
-
-      var sides = [ 'A', 'B', 'C', 'D' ];
-
-      var uri = baseUri
-          + sides[side] ;//+ '/'                                // :side
-          //+ $scope.lightingBrightness;                // :brightness
-
-      // var sideJson = {};
-      // for (var i = 10; i >= 0; i--) {
-      //   switch (side) {
-      //     case 0: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorA); break;
-      //     case 1: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorB); break;
-      //     case 2: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorC); break;
-      //     case 3: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorD); break;
-      //
-      //     default:
-      //       return; // > 3 abort
-      //   }
-      // }
-      //
-      // console.log('PUT: '+uri);
-      // console.log(sideJson);
-      //
-      // $http({method: 'PUT' , url: uri, data: sideJson}).
-      //     success(function(data) {
-      //
-      //       $log.debug(data);
-      //
-      //       next(baseUri, side + 1, addSideLighting);
-      //
-      //     }).
-      //     error(function(data, status) {
-      //       console.log(data || "Request failed");
-      //   });
-
-
     };
 
     var addLighting = function(baseUri, side, i, next) {
