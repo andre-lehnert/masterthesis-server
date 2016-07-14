@@ -311,17 +311,22 @@
 
             <!-- Update bar side lighting -->
             <md-button class="md-raised md-subhead" aria-label="Reset A" ng-click="sendResetLighting('A')">
-                <span ng-show="sendResetLightingDone">Reset Side A</span><md-progress-circular ng-hide="sendResetLightingDone" class="md-hue-2" md-diameter="18px"></md-progress-circular>
+                Reset Side A
             </md-button>
             <md-button class="md-raised md-subhead" aria-label="Reset B" ng-click="sendResetLighting('B')">
-                <span ng-show="sendResetLightingDone">Reset Side B</span><md-progress-circular ng-hide="sendResetLightingDone" class="md-hue-2" md-diameter="18px"></md-progress-circular>
+                Reset Side B
             </md-button>
             <md-button class="md-raised md-subhead" aria-label="Reset C" ng-click="sendResetLighting('C')">
-                <span ng-show="sendResetLightingDone">Reset Side C</span><md-progress-circular ng-hide="sendResetLightingDone" class="md-hue-2" md-diameter="18px"></md-progress-circular>
+                Reset Side C
             </md-button>
             <md-button class="md-raised md-subhead" aria-label="Reset D" ng-click="sendResetLighting('D')">
-                <span ng-show="sendResetLightingDone">Reset Side D</span><md-progress-circular ng-hide="sendResetLightingDone" class="md-hue-2" md-diameter="18px"></md-progress-circular>
+                Reset Side D
             </md-button>
+
+            <div ng-hide="sendResetLightingDone">
+              <!-- spacer --> <div style="height: 25px"></div>
+              <md-progress-linear md-mode='query' style="width: 100%;"></md-progress-linear>
+            </div>
 
             <!-- spacer --> <div style="height: 25px"></div>
 
@@ -346,7 +351,7 @@
 </div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- Card: Request & Response
+<!-- Card: Request & Response -->
 <div  layout="row" ng-show="isLightingRequestSend" class="animate-show">
       <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
         <md-card>
@@ -360,7 +365,7 @@
 
             <md-input-container class="md-block">
               <label></label>
-              <textarea ng-model="request.text" rows="2" md-select-on-focus style="height:30px"></textarea>
+              <textarea ng-model="lightingRequest.text" rows="2" md-select-on-focus style="height:30px"></textarea>
             </md-input-container>
 
 
@@ -376,4 +381,3 @@
         </md-card>
     </div>
 </div>
--->
