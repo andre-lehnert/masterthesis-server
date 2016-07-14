@@ -326,6 +326,37 @@ $scope.isSideReceived = false;
                       }
                     }
 
+                    $scope._barSides = $scope.barSides; // copy
+                    $scope.barSidesInitialized = true;
+
+                    $scope.$watch('barSides', function() {
+
+                      if ($scope.barSidesInitialized) $scope.barSidesInitialized = false;
+                      else {
+
+                        var i = 0;
+                        $scope.barSides.forEach(function(item, index, array) {
+                          // side A changed?
+                          if ($scope.barSides[index].colorA != $scope._barSides[index].colorA) {
+                            console.log(index+': A changed from '+$scope._barSides[index].colorA+' to '+$scope.barSides[index].colorA);
+                          }
+                          if ($scope.barSides[index].colorB != $scope._barSides[index].colorB) {
+                            console.log(index+': B changed from '+$scope._barSides[index].colorB+' to '+$scope.barSides[index].colorB);
+                          }
+                          if ($scope.barSides[index].colorC != $scope._barSides[index].colorC) {
+                            console.log(index+': C changed from '+$scope._barSides[index].colorC+' to '+$scope.barSides[index].colorC);
+                          }
+                          if ($scope.barSides[index].colorD != $scope._barSides[index].colorD) {
+                            console.log(index+': D changed from '+$scope._barSides[index].colorD+' to '+$scope.barSides[index].colorD);
+                          }
+
+                          i++;
+                        });
+
+                      }
+
+                    }, true);
+
                     $scope.isSideReceived = true;
                     $scope.refreshSlider();
                   })
@@ -598,12 +629,10 @@ $scope.sendMove = function () {
         // PUT/ UPDATE side A
         $scope.lightingRequest.text = baseUri;
 
-        addLighting(baseUri, 'A', 0, addLighting);
+        //addLighting(baseUri, 'A', 0, addLighting);
 
-        // var sideJson = {};
-        // for (var i = 0; i < 11; i++) {
-        //   sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgb2hex($scope.barSides[i].colorA);
-        //
+        addSideLighting(baseUri, 0, addSideLighting);
+
         //   // /bars/:id/sides/:side/add/:led/:color/:brightness
         //   var uri = baseUri
         //       + 'A'                                 // :side
@@ -630,6 +659,42 @@ $scope.sendMove = function () {
         $scope.isLightingRequestSend = true;
     };
 
+    var addSideLighting = function(baseUri, side, next) {
+
+      var sides = [ 'A', 'B', 'C', 'D' ];
+
+      var uri = baseUri
+          + sides[side] ;//+ '/'                                // :side
+          //+ $scope.lightingBrightness;                // :brightness
+
+      var sideJson = {};
+      for (var i = 0; i < 11; i++) {
+        switch (side) {
+          case 0: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorA); break;
+          case 1: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorB); break;
+          case 2: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorC); break;
+          case 3: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorD); break;
+
+          default:
+            return; // > 3 abort
+        }
+      }
+
+      console.log('PUT: '+uri);
+
+      $http({method: 'PUT' , url: uri, data: sideJson}).
+          success(function(data) {
+
+            $log.debug(data);
+
+            next(baseUri, side + 1, addSideLighting);
+
+          }).
+          error(function(data, status) {
+            console.log(data || "Request failed");
+        });
+    };
+
     var addLighting = function(baseUri, side, i, next) {
 
       var uri = baseUri
@@ -652,6 +717,8 @@ $scope.sendMove = function () {
             console.log(data || "Request failed");
         });
     };
+
+
 
 });
 

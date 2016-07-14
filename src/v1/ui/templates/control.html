@@ -330,63 +330,34 @@
 </div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- Card #5: Request & Response -->
+<!-- Card: Request & Response
 <div  layout="row" ng-show="isLightingRequestSend" class="animate-show">
       <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
         <md-card>
           <md-card-title>
             <md-card-title-text>
-              <span class="md-headline">5. Request</span>
+              <span class="md-headline">Request</span>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
 
-            <!-- REST Request -->
+
             <md-input-container class="md-block">
-              <label>REST-Request</label>
+              <label></label>
               <textarea ng-model="request.text" rows="2" md-select-on-focus style="height:30px"></textarea>
             </md-input-container>
 
-            <!-- I2C Request -->
-            <md-input-container class="md-block">
-              <label>I²C-Request</label>
-              <textarea ng-model="request.i2c" rows="2" md-select-on-focus style="height:30px"></textarea>
+      
+            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isLightingResponseReceived"></md-progress-linear>
+
+
+            <md-input-container class="md-block" ng-show="isLightingResponseReceived">
+              <label></label>
+              <json-formatter json="lightingResponse.json" open="3"></json-formatter>
             </md-input-container>
 
           </md-card-content>
         </md-card>
     </div>
 </div>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- Card #6: Response -->
-<div  layout="row" ng-show="isRequestSend" class="animate-show">
-      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-        <md-card>
-          <md-card-title>
-            <md-card-title-text>
-              <span class="md-headline">6. Response</span>
-            </md-card-title-text>
-          </md-card-title>
-          <md-card-content>
-
-            <!-- Response -->
-            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isResponseReceived"></md-progress-linear>
-
-            <md-input-container class="md-block" ng-show="isResponseReceived">
-              <label>I²C-Response</label>
-              <textarea ng-model="response.i2c" rows="2" md-select-on-focus style="height:30px"></textarea>
-            </md-input-container>
-
-            <md-input-container class="md-block" ng-show="isResponseReceived">
-              <label>REST-Response</label>
-              <textarea ng-model="response.json" rows="2" md-select-on-focus style="height:30px"></textarea>
-              <json-formatter json="response.json" open="3" style="margin-top: 40px"></json-formatter>
-            </md-input-container>
-
-
-
-          </md-card-content>
-        </md-card>
-    </div>
-</div>
+-->
