@@ -150,3 +150,13 @@ th, td {
     #dddddd
   );
 }
+
+@media only all and (max-width: 450px) {
+  .card {
+    margin-top: 5em;
+  }
+
+  .card-2 {
+    margin-top: 25em;
+  }
+}

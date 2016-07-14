@@ -73,7 +73,7 @@ $scope.barSides = [];
 
 $scope.getBars = function() {
 
-  $http({method: 'GET', url: './src/model/bars.json'})
+  $http({method: 'GET', url: './src/model/bars-3x3.json'})
   .success(function(data) {
 
      $scope.bars = data; // Get JSON
@@ -88,7 +88,7 @@ $scope.getBars = function() {
          data.objects.forEach(function(bar, i, a) {
            $scope.bars.rows.forEach(function(row, j, b) {
              row.cols.forEach(function(item, k, c) {
-               console.log(bar.label__c +' - '+ item.name +' = '+ (bar.label__c == item.name));
+               //console.log(bar.label__c +' - '+ item.name +' = '+ (bar.label__c == item.name));
                if (bar.label__c == item.name) {
                  $scope.bars.rows[j].cols[k].object = bar; // full object
                  $scope.bars.rows[j].cols[k].position = bar.position__c;
@@ -104,7 +104,7 @@ $scope.getBars = function() {
 
                  $scope.bars.rows[j].cols[k].active = true;
 
-                 console.log($scope.bars.rows[j].cols[k]);
+                 //console.log($scope.bars.rows[j].cols[k]);
                }
              });
            });
@@ -141,14 +141,14 @@ $scope.getBars();
   console.log('GET '+ url);
   $http({method: 'GET' , url: url}).
       success(function(data, status) {
-        console.log(data);
+        //console.log(data);
 
         $scope._animations = data.objects;
         var anis = [];
         data.objects.forEach(function(animation, i, a) {
           anis.push(animation.name__c);
         });
-        console.log(anis);
+        //console.log(anis);
         $scope.animations = anis;
       }).
       error(function(data, status) {
@@ -174,6 +174,7 @@ $scope.stepperModes = [
 
 $scope.isBarReceived = false;
 $scope.isAnimationReceived = false;
+$scope.isSideReceived = false;
 
     // 1. Select bar
   $scope.selectBar = function (bar) {
@@ -204,6 +205,8 @@ $scope.isAnimationReceived = false;
     $scope.isTokenValid = false;
     $scope.token = {};
 
+    $scope.isSideReceived = false;
+
 
     $log.debug("Selected Bar: "+ bar.name);
     $scope.selectedBar = bar;
@@ -215,7 +218,7 @@ $scope.isAnimationReceived = false;
     console.log('GET '+ url);
     $http({method: 'GET' , url: url}).
         success(function(data, status) {
-          console.log(data);
+          //console.log(data);
 
           $scope.isAnimationReceived = true;
 
@@ -238,7 +241,7 @@ $scope.isAnimationReceived = false;
     console.log('GET '+ url);
     $http({method: 'GET' , url: url}).
         success(function(data, status) {
-          console.log(data);
+          //console.log(data);
 
           $scope.isTokenReceived = true;
 
@@ -257,12 +260,12 @@ $scope.isAnimationReceived = false;
    $http({method: 'GET' , url: url})
       .success(function(dataA) {
 
-        console.log(dataA);
+        //console.log(dataA);
 
         var i = 0;
         for (var key in dataA.object) {
-          if (key.indexOf("led_") > -1 ) {
-              console.log(i+': '+dataA.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+dataA.object[key]));
+          if (key.indexOf("led_") > -1 && dataA.object[key] != null && typeof dataA.object[key] != 'undefined') {
+              //console.log(i+': '+dataA.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+dataA.object[key]));
               var hex = hex2rgb('#'+dataA.object[key]);
               $scope.barSides[10 - i].colorA = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
               i++;
@@ -275,12 +278,12 @@ $scope.isAnimationReceived = false;
        $http({method: 'GET' , url: url})
           .success(function(data, status) {
 
-            console.log(data);
+            //console.log(data);
 
             var i = 0;
             for (var key in data.object) {
-              if (key.indexOf("led_") > -1 ) {
-                  console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
+              if (key.indexOf("led_") > -1 && dataA.object[key] != null && typeof dataA.object[key] != 'undefined') {
+                  //console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
                   var hex = hex2rgb('#'+data.object[key]);
                   $scope.barSides[10 - i].colorB = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
                   i++;
@@ -293,12 +296,12 @@ $scope.isAnimationReceived = false;
            $http({method: 'GET' , url: url})
               .success(function(data, status) {
 
-                console.log(data);
+                //console.log(data);
 
                 var i = 0;
                 for (var key in data.object) {
-                  if (key.indexOf("led_") > -1 ) {
-                      console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
+                  if (key.indexOf("led_") > -1 && dataA.object[key] != null && typeof dataA.object[key] != 'undefined') {
+                      //console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
                       var hex = hex2rgb('#'+data.object[key]);
                       $scope.barSides[10 - i].colorC = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
                       i++;
@@ -311,17 +314,20 @@ $scope.isAnimationReceived = false;
                $http({method: 'GET' , url: url})
                   .success(function(data, status) {
 
-                    console.log(data);
+                    //console.log(data);
 
                     var i = 0;
                     for (var key in data.object) {
-                      if (key.indexOf("led_") > -1 ) {
-                          console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
+                      if (key.indexOf("led_") > -1 && dataA.object[key] != null && typeof dataA.object[key] != 'undefined') {
+                          //console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
                           var hex = hex2rgb('#'+data.object[key]);
                           $scope.barSides[10 - i].colorD = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
                           i++;
                       }
                     }
+
+                    $scope.isSideReceived = true;
+                    $scope.refreshSlider();
                   })
                   .error(function(data, status) {
                     console.log(data || "Request failed");
@@ -481,6 +487,7 @@ $scope.sendMove = function () {
 
     // 4. Send Request
     $scope.sendAnimation = function () {
+
       $scope.isAnimationRequestSend = false;
       $scope.isAnimationResponseReceived = false;
 
@@ -492,7 +499,7 @@ $scope.sendMove = function () {
 
 
 
-         var color = rgb2hex($scope.barColor);
+         var color = rgba2hex($scope.barColor);
          $log.debug(color);
          var brightness = rgba2brigthness($scope.barColor);
          $log.debug(brightness + "%");
@@ -553,6 +560,98 @@ $scope.sendMove = function () {
     // -----------------------------------------------------------------------------
 
 
+    // --- SEND LIGHTING -------------------------------------------------------
+
+    $scope.lightingBrightness = 75;
+
+    $scope.isLightingRequestSend = false;
+    $scope.isLightingResponseReceived = false;
+
+    $scope.lightingRequest = {};
+    $scope.lightingRequest.text = '';
+
+    $scope.lightingResponse = {};
+    $scope.lightingResponse.json = {};
+
+    $scope.sendLighting = function () {
+
+        console.log(">> Lighting");
+
+        $scope.isLightingRequestSend = false;
+        $scope.isLightingResponseReceived = false;
+
+        $scope.lightingRequest = {};
+        $scope.lightingRequest.text = '';
+
+        $scope.lightingResponse = {};
+        $scope.lightingResponse.json = {};
+
+        // var sideA = $scope.selectedBar.object.side_a__c;
+        // var sideB = $scope.selectedBar.object.side_b__c;
+        // var sideC = $scope.selectedBar.object.side_c__c;
+        // var sideD = $scope.selectedBar.object.side_d__c;
+
+        var baseUri = $scope.uriPraefix + '/bars/'
+           + $scope.selectedBar.name.toLowerCase() + '/'
+           + 'sides' + '/'; // side id
+
+        // PUT/ UPDATE side A
+        $scope.lightingRequest.text = baseUri;
+
+        addLighting(baseUri, 'A', 0, addLighting);
+
+        // var sideJson = {};
+        // for (var i = 0; i < 11; i++) {
+        //   sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgb2hex($scope.barSides[i].colorA);
+        //
+        //   // /bars/:id/sides/:side/add/:led/:color/:brightness
+        //   var uri = baseUri
+        //       + 'A'                                 // :side
+        //       + '/add/'
+        //       + ($scope.barSides[i].led - 1)        // :led
+        //       + rgb2hex($scope.barSides[i].colorA)  // :color
+        //       + $scope.lightingBrightness;          // :brightness
+        //
+        //   $http({method: 'GET' , url: uri}).
+        //       success(function(data) {
+        //
+        //         $log.debug(data);
+        //
+        //       }).
+        //       error(function(data, status) {
+        //         console.log(data || "Request failed");
+        //     });
+        //}
+
+
+
+
+
+        $scope.isLightingRequestSend = true;
+    };
+
+    var addLighting = function(baseUri, side, i, next) {
+
+      var uri = baseUri
+          + side                                      // :side
+          + '/add/'
+          + ($scope.barSides[i].led - 1) + '/'        // :led
+          + rgba2hex($scope.barSides[i].colorA) + '/'  // :color
+          + $scope.lightingBrightness;                // :brightness
+
+      console.log('GET: '+uri);
+
+      $http({method: 'GET' , url: uri}).
+          success(function(data) {
+
+            $log.debug(data);
+
+            if (i < 10) next(baseUri, side, i + 1, addLighting); // add: 0,1,2,3,4,5,6,7,8,9,10
+          }).
+          error(function(data, status) {
+            console.log(data || "Request failed");
+        });
+    };
 
 });
 
@@ -581,7 +680,7 @@ function hex2rgb(hex) {
     } : null;
 }
 
-function rgb2hex(rgb){
+function rgba2hex(rgb){
  rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+(\.\d{1,2})?)[\s+]?/i);
 
  if (rgb[5] == null) { rgb[5] = 0; }
@@ -596,6 +695,23 @@ function rgb2hex(rgb){
    ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
    ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
 }
+
+function rgb2hex(rgb){
+ rgb = rgb.match(/^rgb?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?\)[\s+]?/i);
+
+ if (rgb[4] == null) { rgb[4] = 0; }
+
+ return (rgb && rgb.length === 4) ? "" +
+  ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) :
+
+   (rgb && rgb.length === 5) ? "" +
+   ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+   ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+   ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+}
+
 
 function rgba2brigthness(rgba){
  rgba = rgba.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+(\.\d{1,2})?)[\s+]?/i);

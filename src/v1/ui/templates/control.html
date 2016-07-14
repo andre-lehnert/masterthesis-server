@@ -244,9 +244,12 @@
           </md-card-title>
           <md-card-content>
 
-            {{$scope.barSides}}
+            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isSideReceived"></md-progress-linear>
 
-            <table  style="height: 150px">
+
+            <div ng-show="isSideReceived">
+
+            <table>
               <tr style="height:70px">
                 <td style="width: 120px" class="deg-30 text-center">D</td>
                 <td style="width: 120px" class="deg30 text-center">C</td>
@@ -268,12 +271,12 @@
 
               <tr ng-repeat="side in barSides">
                 <td class="bar-side">
-                  <md-button class="md-fab md-raised" style="background-color: {{side.colorA}};" colorpicker="rgb" ng-model="side.colorA">
+                  <md-button class="md-fab md-raised" style="background-color: {{side.colorA}};" colorpicker="rgba" ng-model="side.colorA">
                     <span class="md-title">{{side.led}}</span>
                   </md-button>
                 </td>
                 <td class="bar-side">
-                  <md-button class="md-fab" style="background-color: {{side.colorB}};" colorpicker="rgb" ng-model="side.colorB" >
+                  <md-button class="md-fab" style="background-color: {{side.colorB}};" colorpicker="rgba" ng-model="side.colorB" >
                     <span class="md-title">{{side.led}}</span>
                   </md-button>
                 </td>
@@ -281,12 +284,12 @@
                 <td></td>
 
                 <td class="bar-side">
-                  <md-button class="md-fab md-raised" style="background-color: {{side.colorC}};" colorpicker="rgb" ng-model="side.colorC">
+                  <md-button class="md-fab md-raised" style="background-color: {{side.colorC}};" colorpicker="rgba" ng-model="side.colorC">
                     <span class="md-title">{{side.led}}</span>
                   </md-button>
                 </td>
                 <td class="bar-side">
-                  <md-button class="md-fab" style="background-color: {{side.colorD}};" colorpicker="rgb" ng-model="side.colorD" >
+                  <md-button class="md-fab" style="background-color: {{side.colorD}};" colorpicker="rgba" ng-model="side.colorD" >
                     <span class="md-title">{{side.led}}</span>
                   </md-button>
                 </td>
@@ -319,6 +322,8 @@
                 Update Lighting
             </md-button>
 
+          </div>
+
           </md-card-content>
         </md-card>
     </div>
@@ -326,7 +331,7 @@
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- Card #5: Request & Response -->
-<div  layout="row" ng-show="isRequestSend" class="animate-show">
+<div  layout="row" ng-show="isLightingRequestSend" class="animate-show">
       <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
         <md-card>
           <md-card-title>
