@@ -617,10 +617,10 @@ $scope.sendMove = function () {
         $scope.lightingResponse = {};
         $scope.lightingResponse.json = {};
 
-        // var sideA = $scope.selectedBar.object.side_a__c;
-        // var sideB = $scope.selectedBar.object.side_b__c;
-        // var sideC = $scope.selectedBar.object.side_c__c;
-        // var sideD = $scope.selectedBar.object.side_d__c;
+        var sideA = $scope.selectedBar.object.side_a__c;
+        var sideB = $scope.selectedBar.object.side_b__c;
+        var sideC = $scope.selectedBar.object.side_c__c;
+        var sideD = $scope.selectedBar.object.side_d__c;
 
         var baseUri = $scope.uriPraefix + '/bars/'
            + $scope.selectedBar.name.toLowerCase() + '/'
@@ -636,6 +636,7 @@ $scope.sendMove = function () {
         var sides = [ 'A', 'B', 'C', 'D' ];
         var sideJson = {
 	 "receiver": $scope.selectedBar.object.led__c,
+         "sideIds": [ sideA, sideB, sideC, sideD ],
          "sides": [
          // { "name": "A", "led": 1, "color": "ff0000" },
         ]};

@@ -162,20 +162,41 @@ var sendFullBarUpdateI2CRequest = function (req, res, next) {
   req.source = req.body.sideJson;
   req.sidePointer = 0;
 
-  //i2c.lightAll(req, res, next);
-  next();
+  i2c.lightAll(req, res, next);
+  
 };
 
 var updateBarSide = function (req, res, next) {
 
   var _body = {};
 
-console.log("Side Pointer: "+req.sidePointer);
+    console.log("Side Pointer: "+req.sidePointer+" --> side ID: "+req.source.sideIds[req.sidePointer]);
+    
     req.sideId = req.source.sideIds[req.sidePointer];
-
+    
+    var leds = [];
     for (var i = 0; i < 11; i++) {
       console.log(req.source.sides[i + (req.sidePointer * 11)]);
+
+      leds.push(req.source.sides[i + (req.sidePointer * 11)].color);
     }
+
+    req.body =
+        {
+          "led_0__c": leds[10],
+          "led_1__c": leds[9],
+          "led_2__c": leds[8],
+          "led_3__c": leds[7],
+          "led_4__c": leds[6],
+          "led_5__c": leds[5],
+          "led_6__c": leds[4],
+          "led_7__c": leds[3],
+          "led_8__c": leds[2],
+          "led_9__c": leds[1],
+          "led_10__c": leds[0]
+        };
+
+
     // Modifiy PUT body
     // switch (req.sidePointer) {
     //     case 0: sideJson["led_"+($scope.barSides[i].led - 1)+"__c"] = rgba2hex($scope.barSides[i].colorA); break;
@@ -187,9 +208,9 @@ console.log("Side Pointer: "+req.sidePointer);
     //       return; // > 3 abort
     //   }
 
-    req.sidePointer++;
-    next();
-  //db.updateSideByBar(req, res, next);
+   req.sidePointer++;
+   
+  db.updateSideByBar(req, res, next);
 };
 
 var updateBarSides = function (req, res, next) {
