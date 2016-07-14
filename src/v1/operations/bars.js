@@ -163,7 +163,7 @@ var sendFullBarUpdateI2CRequest = function (req, res, next) {
   req.sidePointer = 0;
 
   i2c.lightAll(req, res, next);
-  
+
 };
 
 var updateBarSide = function (req, res, next) {
@@ -171,9 +171,9 @@ var updateBarSide = function (req, res, next) {
   var _body = {};
 
     console.log("Side Pointer: "+req.sidePointer+" --> side ID: "+req.source.sideIds[req.sidePointer]);
-    
+
     req.sideId = req.source.sideIds[req.sidePointer];
-    
+
     var leds = [];
     for (var i = 0; i < 11; i++) {
       console.log(req.source.sides[i + (req.sidePointer * 11)]);
@@ -209,7 +209,7 @@ var updateBarSide = function (req, res, next) {
     //   }
 
    req.sidePointer++;
-   
+
   db.updateSideByBar(req, res, next);
 };
 
@@ -231,12 +231,18 @@ var deleteBar = function (req, res, next) {
 
 
 
+var getAvailableBars = function(req, res, next) {
+  if (!req.query.active) {
+    i2c.getBars(req, res, next);
+  }
+}
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
  * ## List all receivers
  */
-app.get('/', [requestBars], function(req, res) {
+app.get('/', [requestBars, getAvailableBars], function(req, res) {
  res.json(req.response);
 });
 

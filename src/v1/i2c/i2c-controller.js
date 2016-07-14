@@ -164,6 +164,45 @@ var updateTokenId = function(req, res, next) {
   }
 };
 
+var getAvailableBars = function(receivers, target, command, req, res, next) {
+
+//console.log('I2C:handleStatus: ['+receivers+'], '+target+', '+command);
+
+    if (receivers.length === 0) {
+
+      console.log('NO I2C RECEIVER FOUND');
+
+    } else {
+      var bars = [];
+
+      for (var i = 0; i < receivers.length; i = i + 2) {
+        console.log(receivers[i]+" - "+receivers[i+1]);
+        if (receivers[i] % 2 == 0 && receivers[i+1] % 2 != 0) {
+          bars.push({ "motor": receivers[i], "led": receivers[i+1] });
+        }
+      }
+      console.log('>> Available Bars: '+bars);
+      req.availableBars = bars;
+
+      var objs = [];
+      for (var i = 0; i < req.response.objects.length; i++) {
+        for (var j = 0; j < bars.length; j++) {
+
+          if (req.response.objects[i].motor__c == bars[j].motor &&
+            req.response.objects[i].led__c == bars[j].led) {
+            objs.push(req.response.objects[i]);
+          }
+
+        }
+      }
+      console.log(objs);
+      req.response.objects = objs;
+      req.response._count = objs.length;
+
+      next();
+    }
+};
+
 module.exports = {
 
   /*
@@ -426,6 +465,10 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
      // 2) Scan, check available receivers, execute light
      i2c.scan(receiver, '', handleLightAll, req, res, next);
 
+   },
+
+   getBars : function(req, res, next) {
+     i2c.scan(receiver, '', getAvailableBars, req, res, next);
    }
 
 };
