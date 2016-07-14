@@ -633,7 +633,7 @@ $scope.sendMove = function () {
 
         //addSideLighting(baseUri, 0, addSideLighting);
 
-        $http({method: 'PUT' , url: uri, data: { receiver: 33 }}).
+        $http({method: 'PUT' , url: baseUri, data: { receiver: 33 }}).
             success(function(data) {
 
               $log.debug(data);

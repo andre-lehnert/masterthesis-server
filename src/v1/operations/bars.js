@@ -217,6 +217,9 @@ app.get('/:label/sides/:side', [requestBar, requestSide], function(req, res) {
 /*
  * Fast I2C Request
  */
+app.put('/:label/sides', [sendFullBarUpdateI2CRequest, updateBarSides], function(req, res) {
+  res.json(req.response);
+});
 app.put('/:label/sides/:side', [sendFullBarUpdateI2CRequest, updateBarSides], function(req, res) {
  res.json(req.response);
 });
