@@ -339,43 +339,14 @@
             <!-- spacer --> <div style="height: 25px"></div>
 
             <!-- Update bar side lighting -->
-            <md-button class="md-raised md-subhead" aria-label="Lighting" ng-click="sendLighting()">
-                Update Lighting
-            </md-button>
-
-          </div>
-
-          </md-card-content>
-        </md-card>
-    </div>
-</div>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- Card: Request & Response -->
-<div  layout="row" ng-show="isLightingRequestSend" class="animate-show">
-      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-        <md-card>
-          <md-card-title>
-            <md-card-title-text>
-              <span class="md-headline">Request</span>
-            </md-card-title-text>
-          </md-card-title>
-          <md-card-content>
-
-
-            <md-input-container class="md-block">
-              <label></label>
-              <textarea ng-model="lightingRequest.text" rows="2" md-select-on-focus style="height:30px"></textarea>
-            </md-input-container>
-
-
+            <div>
+              <md-button class="md-raised md-subhead" aria-label="Lighting" ng-click="sendLighting()">
+                  Update Lighting
+              </md-button>
+            </div>
             <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isLightingResponseReceived"></md-progress-linear>
 
-
-            <md-input-container class="md-block" ng-show="isLightingResponseReceived">
-              <label></label>
-              <json-formatter json="lightingResponse.json" open="3"></json-formatter>
-            </md-input-container>
+          </div>
 
           </md-card-content>
         </md-card>
