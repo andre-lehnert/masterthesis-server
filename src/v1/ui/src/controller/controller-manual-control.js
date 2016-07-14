@@ -633,6 +633,27 @@ $scope.sendMove = function () {
 
         //addSideLighting(baseUri, 0, addSideLighting);
 
+        var sides = [ 'A', 'B', 'C', 'D' ];
+        var sideJson = [
+          { "name": "A", "led": 1, "color": "ff0000" },
+        ];
+
+        for (var s = 0; s < 4; s++) {
+          for (var i = 1; i <= 11; i++) {
+
+            switch (s) {
+              case 0: sides.push( { "name": sides[s], "led": i, "color": rgba2hex($scope.barSides[i].colorA) } ); break;
+              case 1: sides.push( { "name": sides[s], "led": i, "color": rgba2hex($scope.barSides[i].colorB) } ); break;
+              case 2: sides.push( { "name": sides[s], "led": i, "color": rgba2hex($scope.barSides[i].colorC) } ); break;
+              case 3: sides.push( { "name": sides[s], "led": i, "color": rgba2hex($scope.barSides[i].colorD) } ); break;
+
+              default: break;
+            }
+
+          }
+        }
+        console.log(sides);
+
         $http({method: 'PUT' , url: baseUri, data: { receiver: 33 }}).
             success(function(data) {
 

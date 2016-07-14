@@ -114,22 +114,8 @@ console.log('I2C:send: >> Update Animation: '+req.animation);
 
       console.log("SEND COMMAND ["+address+"]: "+message);
       req.done = true;
-      var sides = [
-        { "name": "A", "led": 1, "color": "ff0000", "brightness": 100 },
-        { "name": "A", "led": 2, "color": "fff000", "brightness": 100 },
-        { "name": "A", "led": 3, "color": "ffff00", "brightness": 100 },
-        { "name": "A", "led": 4, "color": "fffff0", "brightness": 100 },
-        { "name": "A", "led": 5, "color": "ffffff", "brightness": 100 },
-        { "name": "A", "led": 6, "color": "f00000", "brightness": 100 },
-        { "name": "A", "led": 7, "color": "ff0000", "brightness": 100 },
-        { "name": "A", "led": 8, "color": "fff000", "brightness": 100 },
-        { "name": "A", "led": 9, "color": "ffff00", "brightness": 100 },
-        { "name": "A", "led": 10, "color": "fffff0", "brightness": 100 },
-        { "name": "A", "led": 11, "color": "ffffff", "brightness": 100 },
-
-      ];
-      console.log(sides);
-      writeLightingSide(address, sides, 0, writeLightingSide, req, res, next);
+    
+      writeLightingSide(address, req.sideColors, 0, writeLightingSide, req, res, next);
   }
 
 };
