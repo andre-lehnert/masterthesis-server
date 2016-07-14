@@ -232,9 +232,10 @@ var deleteBar = function (req, res, next) {
 
 
 var getAvailableBars = function(req, res, next) {
-  if (!req.query.active) {
+  if (req.query.state == 'active') {
     i2c.getBars(req, res, next);
-  }
+  } else 
+   next();
 }
 
 // ---------------- Routing ----------------------------------------------------
