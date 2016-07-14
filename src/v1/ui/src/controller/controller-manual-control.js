@@ -615,8 +615,6 @@ $scope.sendMove = function () {
            + 'sides';
 
         // PUT/ UPDATE side A
-        $scope.lightingRequest.text = baseUri;
-
         var sides = [ 'A', 'B', 'C', 'D' ];
         var sideJson = {
 	       "receiver": $scope.selectedBar.object.led__c,
