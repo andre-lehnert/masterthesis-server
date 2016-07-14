@@ -755,7 +755,11 @@ $scope.sendMove = function () {
         });
     };
 
+    $scope.sendResetLightingDone = true;
+
     $scope.sendResetLighting = function(side) {
+
+      $scope.sendResetLightingDone = false;
 
       var uri = $scope.uriPraefix + '/bars/'
          + $scope.selectedBar.name.toLowerCase() + '/'
@@ -767,6 +771,7 @@ $scope.sendMove = function () {
             $log.debug("SUCCESS: Reset Side "+side);
 
             updateSide(side);
+            $scope.sendResetLightingDone = true;
           }).
           error(function(data, status) {
             console.log(data || "Request failed");
