@@ -634,27 +634,29 @@ $scope.sendMove = function () {
         //addSideLighting(baseUri, 0, addSideLighting);
 
         var sides = [ 'A', 'B', 'C', 'D' ];
-        var sideJson = [
-          { "name": "A", "led": 1, "color": "ff0000" },
-        ];
+        var sideJson = {
+	 "receiver": $scope.selectedBar.object.led__c,
+         "sides": [
+         // { "name": "A", "led": 1, "color": "ff0000" },
+        ]};
 
         for (var s = 0; s < 4; s++) {
-          for (var i = 1; i <= 11; i++) {
+          for (var i = 10; i >= 0; i--) {
 
             switch (s) {
-              case 0: sides.push( { "name": sides[s], "led": i, "color": rgba2hex($scope.barSides[i].colorA) } ); break;
-              case 1: sides.push( { "name": sides[s], "led": i, "color": rgba2hex($scope.barSides[i].colorB) } ); break;
-              case 2: sides.push( { "name": sides[s], "led": i, "color": rgba2hex($scope.barSides[i].colorC) } ); break;
-              case 3: sides.push( { "name": sides[s], "led": i, "color": rgba2hex($scope.barSides[i].colorD) } ); break;
+              case 0: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": rgba2hex($scope.barSides[10-i].colorA), "brightness": $scope.lightingBrightness } ); break;
+              case 1: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": rgba2hex($scope.barSides[10-i].colorB), "brightness": $scope.lightingBrightness } ); break;
+              case 2: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": rgba2hex($scope.barSides[10-i].colorC), "brightness": $scope.lightingBrightness } ); break;
+              case 3: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": rgba2hex($scope.barSides[10-i].colorD), "brightness": $scope.lightingBrightness } ); break;
 
               default: break;
             }
 
           }
         }
-        console.log(sides);
+        console.log(sideJson);
 
-        $http({method: 'PUT' , url: baseUri, data: { receiver: 33 }}).
+        $http({method: 'PUT' , url: baseUri, data: { sideJson }}).
             success(function(data) {
 
               $log.debug(data);

@@ -402,7 +402,7 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
 
    lightAll : function(req, res, next) {
 
-     var receiver = req.body.receiver;
+     var receiver = req.body.sideJson.receiver;
         //  sideA = req.body.sideA,
         //  sideB = req.body.sideB,
         //  sideC = req.body.sideC,

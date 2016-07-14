@@ -159,16 +159,16 @@ var sendFullBarUpdateI2CRequest = function (req, res, next) {
 
   console.log('>> Quick I2C: '+req.body);
 
-  req.body.forEach(function(item, index, array) {
-    if (!req.params.brightness) {
-      item.brightness = 100;
-    } else {
-      item.brightness = req.prams.brightness;
-    }    
-  });
+  //req.body.forEach(function(item, index, array) {
+  //  if (!req.params.brightness) {
+  //    item.brightness = 100;
+  //  } else {
+  //    item.brightness = req.prams.brightness;
+  //  }    
+  //});
 
-  console.log('>> Quick I2C: '+req.body);
-
+  //console.log('>> Quick I2C: '+req.body);
+res.json(req.body);
   i2c.lightAll(req, res, next);
 };
 
