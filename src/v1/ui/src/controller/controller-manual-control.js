@@ -791,7 +791,7 @@ $scope.sendMove = function () {
               for (var key in data.object) {
                 if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
                     var hex = hex2rgb('#'+data.object[key]);
-                    $scope.barSides[10 - i].colorA = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                    $scope.barSides[10 - i].colorA = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
                     i++;
                 }
               }
@@ -809,7 +809,7 @@ $scope.sendMove = function () {
               for (var key in data.object) {
                 if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
                     var hex = hex2rgb('#'+data.object[key]);
-                    $scope.barSides[10 - i].colorB = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                    $scope.barSides[10 - i].colorB = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
                     i++;
                 }
               }
@@ -827,7 +827,7 @@ $scope.sendMove = function () {
               for (var key in data.object) {
                 if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
                     var hex = hex2rgb('#'+data.object[key]);
-                    $scope.barSides[10 - i].colorC = 'rgba('+hex.r+','+hex.g+','+hex.b+', 1)';
+                    $scope.barSides[10 - i].colorC = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
                     i++;
                 }
               }
@@ -845,7 +845,7 @@ $scope.sendMove = function () {
               for (var key in data.object) {
                 if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
                     var hex = hex2rgb('#'+data.object[key]);
-                    $scope.barSides[10 - i].colorD = 'rgba('+hex.r+','+hex.g+','+hex.b+', 1)';
+                    $scope.barSides[10 - i].colorD = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
                     i++;
                 }
               }
