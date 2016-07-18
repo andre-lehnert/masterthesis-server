@@ -248,8 +248,8 @@ var calibrateBar = function (req, res, next) {
   i2c.calibrateBar(req, res, next);
 };
 
-var moveToOldPosition = function (req, res, next) {
 
+<<<<<<< HEAD
   console.log(req.response);
   
   var id, receiver, targetPosition, speed;
@@ -281,6 +281,8 @@ var moveToOldPosition = function (req, res, next) {
     next();
   }
 };
+=======
+>>>>>>> 28487e80f86884a291c53c41aa27c5131461bf0e
 
 
 // ---------------- Routing ----------------------------------------------------
@@ -305,7 +307,7 @@ app.get('/:label', [requestBar], function(req, res) {
  res.json(req.response);
 });
 
-app.get('/:label/calibrate', [requestBar, calibrateBar, moveToOldPosition, updateBar], function(req, res) {
+app.get('/:label/calibrate', [requestBar, calibrateBar, updateBar], function(req, res) {
  res.json(req.response);
 });
 

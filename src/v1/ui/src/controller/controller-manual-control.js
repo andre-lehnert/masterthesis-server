@@ -209,13 +209,14 @@ $scope.isSideReceived = false;
 
     $scope.isSideReceived = false;
 
-    $scope.isPositionReceived = false;
+    $scope.isPositionReceived = true;
 
     $log.debug("Selected Bar: "+ bar.name);
     $scope.selectedBar = bar;
     $log.debug("Selected Bar Position: "+ bar.position);
     $scope.barPosition = bar.position; // Set Slider Value
 
+<<<<<<< HEAD
     // Calibration
     var url = $scope.uriPraefix + '/bars/'+bar.name + "/calibrate";
     console.log('GET '+ url);
@@ -227,6 +228,8 @@ $scope.isSideReceived = false;
           console.log(data || "Request failed");
       });
 
+=======
+>>>>>>> 28487e80f86884a291c53c41aa27c5131461bf0e
     // GET animation
     var url = $scope.uriPraefix + '/animations/'+$scope.selectedBar.animation.id;
     console.log('GET '+ url);
@@ -433,6 +436,25 @@ $scope.isSideReceived = false;
 
 
 // --- SEND MOVE ---------------------------------------------------------------
+
+$scope.sendCalibration = function() {
+
+  $scope.isPositionReceived = false;
+  $scope.barPosition = 0; // Set Slider Value
+  // Calibration
+  var url = $scope.uriPraefix + '/bars/'+$scope.selectedBar.label__c + "/calibrate";
+  console.log('GET '+ url);
+  $http({method: 'GET' , url: url}).
+      success(function(data, status) {
+        $scope.isPositionReceived = true;
+      }).
+      error(function(data, status) {
+        console.log(data || "Request failed");
+    });
+
+};
+
+
 
 $scope.isMoveRequestSend = false;
 $scope.isMoveResponseReceived = false;
