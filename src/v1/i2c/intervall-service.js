@@ -18,7 +18,7 @@ var checkToken = function(_bars, pointer) {
   tick >= 32000 ? tick = 0 : tick++;
 
 //  console.log('STATUS CHECK: ' + _bars[pointer].motor__c);
-  
+
   i2c.status(_bars[pointer]);
 };
 
@@ -38,13 +38,12 @@ module.exports = {
 
     console.log('I2C Request Handler started');
     console.log('Interval: '+ interval);
-
+    var req = {}, res = {}, next = function() {};
     _handler = setInterval(
         function() {
           // Handle functions
             getAvailableBars(device, function(_bars) {
-
-            checkToken(_bars, (tick % _bars.length) );
+              checkToken(_bars, (tick % _bars.length) );
            });
         },
         interval);

@@ -112,6 +112,8 @@ var handleStatus = function(receivers, target, command, req, res, next) {
 
     } else {
 
+      req._done = false;
+
       receivers.forEach(function(val, index, array) {
 
         if (parseInt(target) === val) {
@@ -119,10 +121,12 @@ var handleStatus = function(receivers, target, command, req, res, next) {
 //console.log('I2C:handleStatus: receiver ['+target+'] available');
 
             req.update = 'status';
-
+            
             i2c.request(parseInt(target), req, res, getTokenId);
         }
       });
+
+      if (req._done) next();
     }
 };
 

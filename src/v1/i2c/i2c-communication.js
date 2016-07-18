@@ -105,6 +105,7 @@ console.log('I2C:send: >> Update Animation: '+req.animation);
           console.log("RECEIVE ["+address+"]: "+result);
           req.success = true;
           req.token = result;
+          req._done = true;
           next(req, res, next);
         }
       });
