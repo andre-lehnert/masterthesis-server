@@ -83,6 +83,14 @@ console.log('I2C:send: >> Update Animation: '+req.animation);
               "brightness__c": req.brightness,
               "animation_speed__c": req.speed
               };
+          } else if (req.update === 'animation') {
+
+console.log('I2C:send: >> Update Calibration');
+
+            req.body =
+              {
+              "calibrated__c": true
+              };
           }
 
           req.success = true;

@@ -121,7 +121,7 @@ var handleStatus = function(receivers, target, command, req, res, next) {
 //console.log('I2C:handleStatus: receiver ['+target+'] available');
 
             req.update = 'status';
-            
+
             i2c.request(parseInt(target), req, res, getTokenId);
         }
       });
@@ -187,8 +187,8 @@ var getAvailableBars = function(receivers, target, command, req, res, next) {
       }
       console.log('>> Available Bars: '+bars.length);
       req.availableBars = bars;
-      
-    
+
+
 //console.log('Length: '+req.response.objects.length);
 
       var objs = [];
@@ -209,11 +209,35 @@ console.log(req.response.objects[i]);
 
       req.response.objects = objs;
       req.response._count = objs.length;
-      
+
 //      console.log('Objects: '+ req.response.objects+' _count = '+req.response._count);
-      
+
 
       next();
+    }
+};
+
+var handleCalibration = function(receivers, target, command, req, res, next) {
+
+console.log('I2C:handleCalibration: ['+receivers+'], '+target+', '+command);
+
+    if (receivers.length === 0) {
+
+      console.log('NO I2C RECEIVER FOUND');
+
+    } else {
+
+      receivers.forEach(function(val, index, array) {
+
+        if (parseInt(target) === val) {
+
+          console.log('I2C:handleCalibration: receiver ['+target+'] available');
+
+            req.update = 'calibration';
+
+            i2c.send(parseInt(target), command, req, res, next);
+        }
+      });
     }
 };
 
@@ -421,7 +445,7 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
     * @return {Number}
     */
    status : function(bar) {
-     
+
      if (typeof bar == 'undefined') return;
 
      var receiver = bar.motor__c,
@@ -485,7 +509,25 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
 
    getBars : function(req, res, next) {
      i2c.scan(16, '', getAvailableBars, req, res, next);
-   }
+   },
+
+   calibrateBar : function(req, res, next) {
+
+     var receiver = req.receiver;
+
+     if (
+       typeof receiver === 'undefined' ||
+       receiver < 0 ||
+       receiver < 0x10 ||
+       receiver > 0x6e ||
+       receiver === 0x0f ||
+       receiver % 2 != 0
+     ) {
+       return false;
+     }
+
+     i2c.scan(receiver, api.getCalibrateMessage(), handleCalibration, req, res, next);
+   },
 
 };
 

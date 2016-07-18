@@ -16,6 +16,10 @@ var bodyParser = require('body-parser'),
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 
 
+// ---------------- Start ------------------------------------------------------
+
+
+
 // ---------------- API --------------------------------------------------------
 
 var OPERATION = '/bars';
@@ -234,9 +238,48 @@ var deleteBar = function (req, res, next) {
 var getAvailableBars = function(req, res, next) {
   if (req.query.state == 'active') {
     i2c.getBars(req, res, next);
-  } else 
+  } else
    next();
 }
+
+
+var calibrateBars = function (req, res, next) {
+  req.receiver = req.motorControl;
+  i2c.calibrateBar(req, res, next);
+};
+
+var moveToOldPosition = function (req, res, next) {
+
+  console.log(req.response);
+
+  var id, receiver, targetPosition, speed;
+
+  if (req.response._success) {
+
+    receiver = req.motorControl;
+    id = req.response.object._fields.id;
+    targetPosition = parseInt(req.params.position);
+
+    if (!req.params.speed)
+      speed = 'half';
+    else
+      speed = req.params.speed;
+
+    // Send I2C Command
+    console.log('>> SEND I2C REQUEST: '+receiver+', '+targetPosition+', '+speed);
+
+    req.receiver = receiver;
+    req.position = targetPosition;
+    req.speed = speed;
+
+    i2c.move(req, res, next);
+
+  } else {
+    res.send('ERROR: sendI2CRequest(): No Bar Found');
+    next();
+  }
+};
+
 
 // ---------------- Routing ----------------------------------------------------
 
@@ -259,6 +302,11 @@ app.post('/', [insertBar], function(req, res) {
 app.get('/:label', [requestBar], function(req, res) {
  res.json(req.response);
 });
+
+app.get('/:label/calibrate', [requestBar, calibrateBar, moveToOldPosition], function(req, res) {
+ res.json(req.response);
+});
+
 /*
  * ## Get bar by label
  */
