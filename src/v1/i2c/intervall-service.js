@@ -13,6 +13,8 @@ var _handler;
 
 var checkToken = function(_bars, pointer) {
 
+if (typeof _bars != 'undefined' && typeof pointer == 'number') {
+
   // Round-Robin Check
   console.log('TICK >>> '+tick+' >>> POINTER >>> '+pointer);
   tick >= 32000 ? tick = 0 : tick++;
@@ -20,6 +22,8 @@ var checkToken = function(_bars, pointer) {
 //  console.log('STATUS CHECK: ' + _bars[pointer].motor__c);
 
   i2c.status(_bars[pointer]);
+}
+
 };
 
 /*
@@ -38,38 +42,40 @@ module.exports = {
 
     console.log('I2C Request Handler started');
     console.log('Interval: '+ interval);
-    var req = {}, res = {}, next = function() {};
-    _handler = setInterval(
-        function() {
+  _handler = setInterval(      
+      function() {
           // Handle functions
             getAvailableBars(device, function(_bars) { // database entries
 
-              var req = {}, res = {};
+              var req = {}, res = {}, next = function() {};
               req.response = {};
-              req.response.objects._fields = _bars;
+              req.response.objects = [];
+              //req.response.objects[0]._fields = {};
 
-              i2c.getBars(req, res, function(req,res, next) { // physically connected
+              i2c.getBars(req, res, function() { // physically connected
 
-                // var availableBars = [];
+                 var availableBars = [];
+                 //console.log('req.availableBars: '+req.availableBars.length);
 
-                // req.availableBars.forEach(function(bar, index, array) {
-                //   _bars.forEach(function(_bar, _index, _array) {
-                //     if (_bar.motor__c == bar.motor) {
-                //       availableBars.push(_bar);
-                //     }
-                //   });
-                // });
+                 req.availableBars.forEach(function(bar, index, array) {
+                   _bars.forEach(function(_bar, _index, _array) {
+                    if (_bar.motor__c == bar.motor) {
+                       //console.log('Add: '+_bar);
+                       availableBars.push(_bar);
+                     }
+                   });
+                 });
 
-                checkToken(req.response.objects, (tick % req.response.objects.length) );
+                  checkToken(availableBars, (tick % availableBars.length) );
+                
               });
 
            });
         },
         interval);
+   },
 
-  },
-
-  stop : function() {
+   stop : function() {
     setTimeout(
       function() {
         clearInterval(_handler);

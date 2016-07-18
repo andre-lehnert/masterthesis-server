@@ -185,12 +185,15 @@ var getAvailableBars = function(receivers, target, command, req, res, next) {
           bars.push({ "motor": receivers[i], "led": receivers[i+1] });
         }
       }
-      console.log('>> Available Bars: '+bars);
+      console.log('>> Available Bars: '+bars.length);
       req.availableBars = bars;
-
-console.log('Length: '+req.response.objects.length);
+      
+    
+//console.log('Length: '+req.response.objects.length);
 
       var objs = [];
+
+      if (req.response.objects.length > 0)
       for (var i = 0; i < req.response.objects.length; i++) {
 console.log(req.response.objects[i]);
         for (var j = 0; j < bars.length; j++) {
@@ -202,9 +205,13 @@ console.log(req.response.objects[i]);
 
         }
       }
-      console.log(objs);
+
+
       req.response.objects = objs;
       req.response._count = objs.length;
+      
+//      console.log('Objects: '+ req.response.objects+' _count = '+req.response._count);
+      
 
       next();
     }
@@ -414,6 +421,8 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
     * @return {Number}
     */
    status : function(bar) {
+     
+     if (typeof bar == 'undefined') return;
 
      var receiver = bar.motor__c,
          barlabel = bar.label__c,
