@@ -44,7 +44,10 @@ module.exports = {
           // Handle functions
             getAvailableBars(device, function(_bars) { // database entries
 
-              i2c.getBars( function(req,res, next) { // physically connected
+              var req = {}, res = {};
+              req.response = {};
+
+              i2c.getBars(req, res, function(req,res, next) { // physically connected
 
                 var availableBars = [];
 
