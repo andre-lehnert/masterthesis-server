@@ -156,6 +156,7 @@ module.exports = {
           req.sideC = response.object._fields.side_c__c;
           req.sideD = response.object._fields.side_d__c;
           req.token = response.object._fields.token__c;
+          req.targetPosition = response.object._fields.position__c;
           req.response = response;
           next();
 

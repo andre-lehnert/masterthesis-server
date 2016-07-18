@@ -243,7 +243,7 @@ var getAvailableBars = function(req, res, next) {
 }
 
 
-var calibrateBars = function (req, res, next) {
+var calibrateBar = function (req, res, next) {
   req.receiver = req.motorControl;
   i2c.calibrateBar(req, res, next);
 };
@@ -258,7 +258,7 @@ var moveToOldPosition = function (req, res, next) {
 
     receiver = req.motorControl;
     id = req.response.object._fields.id;
-    targetPosition = parseInt(req.params.position);
+    targetPosition = parseInt(req.targetPosition);
 
     if (!req.params.speed)
       speed = 'half';
