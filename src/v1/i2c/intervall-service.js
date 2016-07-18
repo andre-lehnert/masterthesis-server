@@ -46,7 +46,7 @@ module.exports = {
 
               var req = {}, res = {};
               req.response = {};
-              req.response.objects = _bars;
+              req.response.objects._fields = _bars;
 
               i2c.getBars(req, res, function(req,res, next) { // physically connected
 
