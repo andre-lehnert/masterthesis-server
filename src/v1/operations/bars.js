@@ -303,7 +303,7 @@ app.get('/:label', [requestBar], function(req, res) {
  res.json(req.response);
 });
 
-app.get('/:label/calibrate', [requestBar, calibrateBar, moveToOldPosition], function(req, res) {
+app.get('/:label/calibrate', [requestBar, calibrateBar, moveToOldPosition, updateBar], function(req, res) {
  res.json(req.response);
 });
 

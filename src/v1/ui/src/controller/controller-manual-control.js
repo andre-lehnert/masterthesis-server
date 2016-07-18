@@ -173,6 +173,7 @@ $scope.stepperModes = [
   $scope.barColor = ''; // Color of selectedBar
 
 $scope.isBarReceived = false;
+$scope.isPositionReceived = false;
 $scope.isAnimationReceived = false;
 $scope.isSideReceived = false;
 
@@ -207,11 +208,23 @@ $scope.isSideReceived = false;
 
     $scope.isSideReceived = false;
 
+    $scope.isPositionReceived = false;
 
     $log.debug("Selected Bar: "+ bar.name);
     $scope.selectedBar = bar;
     $log.debug("Selected Bar Position: "+ bar.position);
     $scope.barPosition = bar.position; // Set Slider Value
+
+    // Calibration
+    var url = $scope.uriPraefix + '/bars/'+$scope.selectedBar.label__c + "/calibrate";
+    console.log('GET '+ url);
+    $http({method: 'GET' , url: url}).
+        success(function(data, status) {
+          $scope.isPositionReceived = true;
+        }).
+        error(function(data, status) {
+          console.log(data || "Request failed");
+      });
 
     // GET animation
     var url = $scope.uriPraefix + '/animations/'+$scope.selectedBar.animation.id;

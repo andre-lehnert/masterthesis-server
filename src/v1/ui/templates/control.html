@@ -77,16 +77,16 @@
           <md-card-content>
 
             <!-- Wait for response -->
-            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isBarReceived"></md-progress-linear>
+            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isPositionReceived"></md-progress-linear>
 
             <!-- Target Position -->
-            <div style="margin: 1% 0 1% 0" ng-show="isBarReceived">
+            <div style="margin: 1% 0 1% 0" ng-show="isPositionReceived">
               <div class="vertical-slider">
                <rzslider rz-slider-model="barPosition" rz-slider-options="movementSpeedSlider.options"  class="md-title"></rzslider>
              </div>
            </div>
 
-           <div ng-show="isBarReceived">
+           <div ng-show="isPositionReceived">
              <!-- Stepper Mode -->
              <!-- spacer --> <div style="height: 25px"></div>
              <span class="md-headline">Movement Speed</span>
