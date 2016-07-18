@@ -1,4 +1,5 @@
 'use strict';
+
 angular
 .module( 'app.controller.manualcontrol', [
                                       'ngMaterial',
@@ -216,7 +217,7 @@ $scope.isSideReceived = false;
     $scope.barPosition = bar.position; // Set Slider Value
 
     // Calibration
-    var url = $scope.uriPraefix + '/bars/'+$scope.selectedBar.label__c + "/calibrate";
+    var url = $scope.uriPraefix + '/bars/'+bar.name + "/calibrate";
     console.log('GET '+ url);
     $http({method: 'GET' , url: url}).
         success(function(data, status) {

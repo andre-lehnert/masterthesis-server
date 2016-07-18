@@ -251,7 +251,7 @@ var calibrateBar = function (req, res, next) {
 var moveToOldPosition = function (req, res, next) {
 
   console.log(req.response);
-
+  
   var id, receiver, targetPosition, speed;
 
   if (req.response._success) {
@@ -272,7 +272,9 @@ var moveToOldPosition = function (req, res, next) {
     req.position = targetPosition;
     req.speed = speed;
 
-    i2c.move(req, res, next);
+    setTimeout(function() {
+       i2c.move(req, res, next);
+    }, 500);
 
   } else {
     res.send('ERROR: sendI2CRequest(): No Bar Found');
