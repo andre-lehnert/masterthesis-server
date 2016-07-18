@@ -46,20 +46,21 @@ module.exports = {
 
               var req = {}, res = {};
               req.response = {};
+              req.response.objects = _bars;
 
               i2c.getBars(req, res, function(req,res, next) { // physically connected
 
-                var availableBars = [];
+                // var availableBars = [];
 
-                req.availableBars.forEach(function(bar, index, array) {
-                  _bars.forEach(function(_bar, _index, _array) {
-                    if (_bar.motor__c == bar.motor) {
-                      availableBars.push(_bar);
-                    }
-                  });
-                });
+                // req.availableBars.forEach(function(bar, index, array) {
+                //   _bars.forEach(function(_bar, _index, _array) {
+                //     if (_bar.motor__c == bar.motor) {
+                //       availableBars.push(_bar);
+                //     }
+                //   });
+                // });
 
-                checkToken(availableBars, (tick % availableBars.length) );
+                checkToken(req.response.objects, (tick % req.response.objects.length) );
               });
 
            });
