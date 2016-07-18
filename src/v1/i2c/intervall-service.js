@@ -42,8 +42,23 @@ module.exports = {
     _handler = setInterval(
         function() {
           // Handle functions
-            getAvailableBars(device, function(_bars) {
-              checkToken(_bars, (tick % _bars.length) );
+            getAvailableBars(device, function(_bars) { // database entries
+
+              i2c.getBars( function(req,res, next) { // physically connected
+
+                var availableBars = [];
+
+                req.availableBars.forEach(function(bar, index, array) {
+                  _bars.forEach(function(_bar, _index, _array) {
+                    if (_bar.motor__c == bar.motor) {
+                      availableBars.push(_bar);
+                    }
+                  });
+                });
+
+                checkToken(availableBars, (tick % availableBars.length) );
+              });
+
            });
         },
         interval);
