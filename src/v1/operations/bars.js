@@ -237,7 +237,8 @@ var deleteBar = function (req, res, next) {
 
 var getAvailableBars = function(req, res, next) {
   if (req.query.state == 'active') {
-    i2c.getBars(req, res, next);
+   console.log('getAvailableBars()'); 
+   i2c.getBars(req, res, next);
   } else
    next();
 }
@@ -248,41 +249,6 @@ var calibrateBar = function (req, res, next) {
   i2c.calibrateBar(req, res, next);
 };
 
-
-<<<<<<< HEAD
-  console.log(req.response);
-  
-  var id, receiver, targetPosition, speed;
-
-  if (req.response._success) {
-
-    receiver = req.motorControl;
-    id = req.response.object._fields.id;
-    targetPosition = parseInt(req.targetPosition);
-
-    if (!req.params.speed)
-      speed = 'half';
-    else
-      speed = req.params.speed;
-
-    // Send I2C Command
-    console.log('>> SEND I2C REQUEST: '+receiver+', '+targetPosition+', '+speed);
-
-    req.receiver = receiver;
-    req.position = targetPosition;
-    req.speed = speed;
-
-    setTimeout(function() {
-       i2c.move(req, res, next);
-    }, 500);
-
-  } else {
-    res.send('ERROR: sendI2CRequest(): No Bar Found');
-    next();
-  }
-};
-=======
->>>>>>> 28487e80f86884a291c53c41aa27c5131461bf0e
 
 
 // ---------------- Routing ----------------------------------------------------
