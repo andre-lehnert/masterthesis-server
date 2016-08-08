@@ -1,0 +1,1053 @@
+<!-- ### ### Pages ### ### -->
+
+<!-- ### Overview ### -->
+<div layout="column" ng-show="isOverview && !isAddPage">
+
+
+
+    <div  layout="row" flex-offset="5" ng-repeat="sequence in sequences">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85"  >
+
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">Sequence: {{sequence.title__c}}</span>
+              <span class="md-subhead">ID: {{sequence.id}}</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-content>
+
+          </md-content>
+          <md-card-actions layout="row" layout-align="end center">
+            <md-button ng-click="selectSequence(sequence)">LOAD</md-button>
+            <md-button ng-click="deleteSequence(sequence)">DELETE</md-button>
+          </md-card-actions>
+        </md-card>
+
+
+      </div>
+    </div>
+
+    <div  layout="row" layout-align="center" ng-show="isLoading" >
+      <div>
+
+        <div layout="row" layout-sm="column" layout-align="space-around" style="margin-top: 20px">
+              <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+
+      </div>
+    </div>
+
+  <md-button class="md-fab fab-add" ng-click="addSequence()" ng-show="isOverview">
+        <i class="material-icons">add</i>
+  </md-button>
+
+</div>
+<!-- ### END: Overview ### -->
+
+
+<!-- ### Detail ### -->
+<div ng-hide="isOverview || isAddPage">
+  <md-toolbar class="md-hue-1">
+     <div class="md-toolbar-tools">
+       <md-button aria-label="Go Back" ng-click="goBack()">
+         <i class="material-icons">arrow_back</i>
+       </md-button>
+       <h2>
+         <span hide-xs>Sequence: {{sequence.title__c}}</span>
+       </h2>
+
+       <span flex></span>
+       <md-button class="md-fab md-mini" ng-disabled="isRunning" aria-label="run" ng-click="run()" style="min-width: 40px">
+         <md-tooltip>
+          Run Sequence
+         </md-tooltip>
+         <i class="material-icons">forward</i>
+       </md-button>
+       <md-button class="md-fab md-mini" ng-disabled="isSaving" aria-label="save" ng-click="save()" style="min-width: 40px">
+         <md-tooltip>
+         Save
+         </md-tooltip>
+         <i class="material-icons">check</i>
+       </md-button>
+     </div>
+  </md-toolbar>
+
+  <div style="min-height:15px"></div>
+
+  <ul layout="column" style="padding-left: 0">
+
+      <li flex-offset="5" class="dragable-list-item">
+        <div layout="row" flex-offset="1">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+            <!-- Item Type -->
+            <md-card >
+              <md-content layout-padding>
+                <form name="titleForm">
+                  <md-input-container class="md-block">
+                    <label>Sequence Title</label>
+                    <input required md-no-asterisk name="title" ng-model="sequence.title__c">
+                    <div ng-messages="sequence.title__c.$error">
+                      <div ng-message="required">This is required.</div>
+                    </div>
+                  </md-input-container>
+                </form>
+              </md-content>
+            </md-card>
+          </div>
+        </div>
+
+        <div style="min-height:15px"></div>
+      </li>
+
+      <li flex-offset="5" class="dragable-list-item" ng-repeat="item in sequence.operations__c" data-drop="true" ng-model='sequence.operations__c' jqyoui-droppable="{index: {{$index}}}">
+
+          <!-- >> List Content -->
+          <div layout="row"
+                flex-offset="1"
+                data-drag="{{item.drag}}"
+                data-jqyoui-options="{revert: 'invalid'}"
+                ng-model="sequence.operations__c"
+                jqyoui-draggable="{index: {{$index}},animate:false}">
+
+            <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+              <!-- manual positioning
+              <md-button class="md-fab md-mini manual-upward">
+                <i class="material-icons">arrow_upward</i>
+              </md-button>
+              <md-button class="md-fab md-mini manual-downward">
+                <i class="material-icons">arrow_downward</i>
+              </md-button>
+            -->
+              <!-- Item Type -->
+              <md-card ng-if="item.type == 'operation'" class="dragable-list-card">
+
+
+
+                <md-card-title>
+                  <md-card-title-text layout="row" layout-xs="column"  layout-align="left center">
+                    <md-button class="md-fab md-primary md-hue-2" aria-label="receiver" style="min-width:56px" ng-click="edit(item)"><span class="md-title">{{item.bar}}</span></md-button>
+                    <md-button class="md-raised md-primary md-hue-1" ng-click="edit(item)"><span class="md-title">{{item.function}}</span></md-button>
+                  </md-card-title-text>
+                </md-card-title>
+
+                <md-content layout="row" layout-xs="column" layout-sm="column" layout-align="left top">
+
+                  <!-- FUNCTION: MOVE -->
+                  <div ng-if="item.function == 'move'" flex-offset="5">
+                  <span class="md-subhead">POSITION:</span> <md-button class="md-raised" ng-click="edit(item)"><span class="md-title">{{item.position}} %</span></md-button>
+                  </div>
+                  <div ng-if="item.function == 'move'" flex-offset="5">
+                  <span class="md-subhead">SPEED:</span> <md-button class="md-raised"ng-click="edit(item)"><span class="md-title">{{item.speed}}</span></md-button>
+                  </div>
+
+                  <!-- FUNCTION: ANIMATE -->
+                  <div ng-if="item.function == 'animate'" flex-offset="5">
+                  <span class="md-subhead">ANIMATION:</span> <md-button ng-click="edit(item)" class="md-raised"><span class="md-title">{{item.animation}}</span></md-button>
+                  </div>
+                  <div ng-if="item.function == 'animate'" flex-offset="5">
+                  <span class="md-subhead">COLOR:</span> <md-button ng-click="edit(item)" class="md-raised" style="background-color: {{item.color}}"><span class="md-title">{{item.color}}</span></md-button>
+                  </div>
+                  <div ng-if="item.function == 'animate'" flex-offset="5">
+                  <span class="md-subhead">SPEED:</span> <md-button ng-click="edit(item)" class="md-raised"><span class="md-title">{{item.speed}} %</span></md-button>
+                  </div>
+                  <div ng-if="item.function == 'animate'" flex-offset="5">
+                  <span class="md-subhead">BRIGHTNESS:</span> <md-button ng-click="edit(item)" class="md-raised"><span class="md-title">{{item.brightness}} %</span></md-button>
+                  </div>
+
+                  <!-- FUNCTION: LIGHTING -->
+                  <div ng-if="item.function == 'lighting'" flex-offset="5">
+                  <span class="md-subhead">SIDE:</span> <md-button ng-click="edit(item)" class="md-raised" aria-label="lighting side"><span class="md-title">{{item.side}}</span></md-button>
+                  </div>
+                  <div ng-if="item.function == 'lighting'" flex-offset="5">
+                  <span class="md-subhead">OPERATION:</span> <md-button ng-click="edit(item)" class="md-raised" aria-label="lighting op"><span class="md-title">{{item.op}}</span></md-button>
+                  </div>
+                  <div ng-if="( (item.function == 'lighting') && (item.op != 'New') )" flex-offset="5">
+                  <span class="md-subhead">LEVEL:</span> <md-button ng-click="edit(item)" class="md-raised" aria-label="lighting led"><span class="md-title">{{item.led}}</span></md-button>
+                  </div>
+                  <div ng-if="item.function == 'lighting' && item.op == 'Add'" flex-offset="5">
+                  <span class="md-subhead">COLOR:</span> <md-button ng-click="edit(item)" class="md-raised" style="background-color: {{item.color}};color: {{readableColor(item.color)}}" aria-label="lighting color"><span class="md-title">{{item.color}}</span></md-button>
+                  </div>
+                  <!--<div ng-if="item.function == 'lighting'" flex-offset="5">
+                  <span class="md-subhead">BRIGHTNESS:</span> <md-button ng-click="edit(item)" class="md-raised"><span class="md-title" aria-label="lighting brightness">{{item.brightness}} %</span></md-button>
+                  </div>-->
+
+
+                  <!-- FUNCTION: LEVEL -->
+                  <div ng-if="item.function == 'level lighting'" flex-offset="5">
+                  <span class="md-subhead">OPERATION:</span> <md-button ng-click="edit(item)" class="md-raised" aria-label="lighting op"><span class="md-title">{{item.op}}</span></md-button>
+                  </div>
+                  <div ng-if="item.function == 'level lighting'" flex-offset="5">
+                  <span class="md-subhead">LEVEL:</span> <md-button ng-click="edit(item)" class="md-raised"><span class="md-title">{{item.led}}</span></md-button>
+                  </div>
+                  <div ng-if="item.function == 'level lighting' && item.op == 'Add'" flex-offset="5">
+                  <span class="md-subhead">COLOR:</span> <md-button ng-click="edit(item)" class="md-raised" style="background-color: {{item.color}}"><span class="md-title">{{item.color}}</span></md-button>
+                  </div>
+
+                </md-content>
+
+                <div ng-show="item.isProceeding">
+                  <div style="min-height:15px"></div>
+                  <!-- Wait for response -->
+                  <md-progress-linear md-mode='query' style="width: 100%;"></md-progress-linear>
+                </div>
+
+                <div style="min-height:15px"></div>
+
+              </md-card>
+
+
+              <div ng-if="item.type == 'delay'" layout="row"  layout-align="center center" class="dragable-list-card">
+
+                <div flex="33"  layout="row"  layout-align="center center">
+                  <md-button class="md-fab" aria-label="wait" style="min-width:56px" ng-click="edit(item)" >
+                  <md-icon aria-label="icon"
+                      class="material-icons"
+                      ng-class="md-48">
+                    schedule
+                  </md-icon>
+                  <md-progress-circular ng-show="item.isProceeding" class="md-warm" md-diameter="60px" style="position:absolute;top:-2px;left:-2px"></md-progress-circular>
+                </md-button>
+
+                <span hide-xs hide-sm class="md-headline">{{formatTime(item.wait)}} </span>
+
+
+              </div>
+            </div>
+
+
+          <!-- << List Content -->
+
+      </li>
+
+  </ul>
+
+  <!-- ADD Operation -->
+  <!-- md-fab-speed-dial class="md-fling" is buggy https://github.com/angular/material/issues/6111 -->
+  <md-fab-speed-dial id="my-speed-dial" class="md-scale" style="position: fixed; bottom: 20px; right: 20px;" md-direction="up" md-open="isOpen">
+    <md-fab-trigger>
+      <md-button class="md-fab ">
+            <i class="material-icons">add</i>
+      </md-button>
+    </md-fab-trigger>
+    <md-fab-actions>
+
+      <md-button aria-label="Delay" class="md-fab md-raised md-mini" ng-click="addDelay()">
+        <md-tooltip>
+         Delay
+        </md-tooltip>
+        <i class="material-icons">schedule</i>
+      </md-button>
+
+      <md-button aria-label="Level Lighting" class="md-fab md-raised md-mini" ng-click="addLevelLighting()">
+        <md-tooltip>
+         Level Lighting
+        </md-tooltip>
+        <i class="material-icons">wb_iridescent</i>
+      </md-button>
+      <md-button aria-label="lighting" class="md-fab md-raised md-mini" ng-click="addLighting()">
+        <md-tooltip>
+         Side Lighting
+        </md-tooltip>
+        <i class="material-icons">lightbulb_outline</i>
+      </md-button>
+      <md-button aria-label="Animation" class="md-fab md-raised md-mini" ng-click="addAnimation()">
+        <md-tooltip>
+         Animation
+        </md-tooltip>
+        <i class="material-icons">flash_on</i>
+      </md-button>
+      <md-button aria-label="Move" class="md-fab md-raised md-mini" ng-click="addMove()">
+        <md-tooltip>
+         Bar Movement
+        </md-tooltip>
+        <i class="material-icons">call_made</i> <!--<i class="material-icons">open_with</i>-->
+      </md-button>
+    </md-fab-actions>
+  </md-fab-speed-dial>
+
+
+  <div  layout="row" layout-align="center" ng-show="isLoading" >
+    <div>
+
+      <div layout="row" layout-sm="column" layout-align="space-around" style="margin-top: 20px">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</div>
+<!-- ### END: Detail ### -->
+
+
+
+
+
+
+
+
+<!-- ### Add Movement ### -->
+
+<div ng-show="isAddPage && pages.addMovement">
+  <md-toolbar class="md-hue-1">
+     <div class="md-toolbar-tools">
+       <md-button aria-label="Go Back" ng-click="goBackDetail()">
+         <i class="material-icons">arrow_back</i>
+       </md-button>
+       <h2>
+         <span hide-xs>MOVE</span>
+       </h2>
+
+       <span flex></span>
+       <md-button class="md-fab md-mini" aria-label="save" ng-click="saveMove()" style="min-width: 40px">
+         <md-tooltip>
+         Save
+         </md-tooltip>
+         <i class="material-icons">check</i>
+       </md-button>
+     </div>
+  </md-toolbar>
+
+  <div layout="column">
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+    <!-- Card #1: Choose bar -->
+    <div layout="row" flex-offset="5">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+          <md-card flex  style="min-width: 320px">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Bar Selection</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+              <!-- Bar Selection -->
+              <div style="margin: 5% 0 5% 0">
+              <table>
+                <tr class="table-center">
+                  <td></td>
+                  <td class="md-title" ng-repeat="c in bars.cols">{{c}}</td>
+                </tr>
+                <tr ng-repeat="row in bars.rows">
+                  <td class="md-title">{{row.number}}</td>
+                  <td ng-repeat="col in row.cols">
+                    <md-button ng-class="col.class" ng-disabled="! col.active" ng-click="selectBar(col)" aria-label="Bar">
+                      <span class="md-title">{{col.name}}</span>
+                    </md-button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            </md-card-content>
+          </md-card>
+
+        </div>
+    </div>
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+    <!-- Card: Choose target bar position -->
+    <div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
+          <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+            <md-card style="min-width: 320px">
+              <md-card-content layout="row" layout-align="top left">
+
+                <div flex="25" style="min-width: 150px">
+                  <span class="md-headline">Position of Bar</span>
+                    <!-- Target Position -->
+                   <div style="margin: 3% 0 1% 0">
+                      <div class="vertical-slider">
+                       <rzslider rz-slider-model="barPosition" rz-slider-options="movementSpeedSlider.options"  class="md-title"></rzslider>
+                     </div>
+                   </div>
+                </div>
+
+               <div flex>
+                 <!-- Stepper Mode -->
+                 <span class="md-headline">Movement Speed</span>
+
+                 <div style="margin: 3% 0 0 1%">
+                   <md-radio-group ng-model="barStepperMode">
+                     <md-radio-button value="{{mode.step}}"
+                       ng-repeat="mode in stepperModes" ng-checked="true"
+                       class="md-primary"
+                       aria-label="{{mode.step}}">{{mode.step}}</md-radio-button>
+                   </md-radio-group>
+                 </div>
+
+
+                </div>
+
+              </md-card-content>
+            </md-card>
+        </div>
+    </div>
+
+
+  </div>
+
+
+
+</div>
+
+<!-- ### END: Add Movement ### -->
+
+<!-- ### Add Animation ### -->
+
+<div ng-show="isAddPage && pages.addAnimation">
+  <md-toolbar class="md-hue-1">
+     <div class="md-toolbar-tools">
+       <md-button aria-label="Go Back" ng-click="goBackDetail()">
+         <i class="material-icons">arrow_back</i>
+       </md-button>
+       <h2>
+         <span hide-xs>ANIMATION</span>
+       </h2>
+
+       <span flex></span>
+       <md-button class="md-fab md-mini" aria-label="save" ng-click="saveAnimation()" style="min-width: 40px">
+         <md-tooltip>
+         Save
+         </md-tooltip>
+         <i class="material-icons">check</i>
+       </md-button>
+     </div>
+  </md-toolbar>
+
+  <div layout="column">
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+    <!-- Card #1: Choose bar -->
+    <div layout="row" flex-offset="5">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+          <md-card flex  style="min-width: 440px">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Bar Selection</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+              <!-- Bar Selection -->
+              <div style="margin: 5% 0 5% 0">
+              <table>
+                <tr class="table-center">
+                  <td></td>
+                  <td class="md-title" ng-repeat="c in bars.cols">{{c}}</td>
+                </tr>
+                <tr ng-repeat="row in bars.rows">
+                  <td class="md-title">{{row.number}}</td>
+                  <td ng-repeat="col in row.cols">
+                    <md-button ng-class="col.class" ng-disabled="! col.active" ng-click="selectBar(col)" aria-label="Bar">
+                      <span class="md-title">{{col.name}}</span>
+                    </md-button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            </md-card-content>
+          </md-card>
+
+        </div>
+    </div>
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+    <!-- Card #3: Choose Color, Animation & Duration -->
+    <div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+            <md-card flex style="min-width: 440px">
+              <md-card-content layout="row" layout-align="top left">
+
+                <div flex="25" style="min-width: 145px">
+                  <span class="md-headline">Color</span>
+
+                  <div style="margin: 3% 0 0 0%">
+                    <!-- Color Picker -->
+                    <md-button  class="md-raised md-subhead" aria-label="Color" colorpicker="hex"
+                        ng-model="barColor"
+                        style="background-color: {{barColor}};">
+                        Choose Color
+                    </md-button>
+                    <md-content layout-padding>
+                      <form name="colorForm">
+                        <md-input-container class="md-block" style="margin: 5px 0 0 -2px; width: 116px">
+                          <label>Color</label>
+                          <input required md-no-asterisk name="color" ng-model="barColor">
+                          <div ng-messages="barColor.$error">
+                            <div ng-message="required">This is required.</div>
+                          </div>
+                        </md-input-container>
+                      </form>
+                    </md-content>
+
+                  </div>
+
+                </div>
+
+                <div  flex="25" style="min-width: 145px">
+                  <span class="md-headline">Color</span>
+                    <!-- Animation -->
+                    <div style="margin: 6% 0 0 1%">
+                      <md-radio-group ng-model="barAnimation">
+                        <md-radio-button value="{{animation}}"
+                          ng-repeat="animation in animations" ng-checked="true"
+                          class="md-primary"
+                          ng-click="selectAnimation(animation)"
+                          aria-label="">{{animation}}</md-radio-button>
+                      </md-radio-group>
+                    </div>
+                </div>
+
+                <div flex>
+                    <!-- Speed -->
+                    <span class="md-headline">Animation speed:</span>
+                    <div style="margin: 3% 0 0 1%">
+                      <rzslider rz-slider-model="animationSpeed" rz-slider-options="animationSpeedSlider.options"  class="md-title"></rzslider>
+                    </div>
+
+                    <!-- Brightness -->
+                    <span class="md-headline">Brightness:</span>
+                    <div style="margin: 3% 0 0 1%">
+                      <rzslider rz-slider-model="animationBrightness" rz-slider-options="animationSpeedSlider.options"  class="md-title"></rzslider>
+                    </div>
+                </div>
+
+              </md-card-content>
+            </md-card>
+        </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+
+<!-- ### END: Add Animation ### -->
+
+<!-- ### Add Lighting ### -->
+
+<div ng-show="isAddPage && pages.addLighting">
+  <md-toolbar class="md-hue-1">
+     <div class="md-toolbar-tools">
+       <md-button aria-label="Go Back" ng-click="goBackDetail()">
+         <i class="material-icons">arrow_back</i>
+       </md-button>
+       <h2>
+         <span hide-xs>LIGHTING</span>
+       </h2>
+
+       <span flex></span>
+       <md-button class="md-fab md-mini" aria-label="save" ng-click="saveLighting()" style="min-width: 40px">
+         <md-tooltip>
+         Save
+         </md-tooltip>
+         <i class="material-icons">check</i>
+       </md-button>
+     </div>
+  </md-toolbar>
+
+  <div layout="column">
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+    <!-- Card #1: Choose bar -->
+    <div layout="row" flex-offset="5">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+          <md-card flex  style="min-width: 440px">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Bar Selection</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+              <!-- Bar Selection -->
+              <div style="margin: 5% 0 5% 0">
+              <table>
+                <tr class="table-center">
+                  <td></td>
+                  <td class="md-title" ng-repeat="c in bars.cols">{{c}}</td>
+                </tr>
+                <tr ng-repeat="row in bars.rows">
+                  <td class="md-title">{{row.number}}</td>
+                  <td ng-repeat="col in row.cols">
+                    <md-button ng-class="col.class" ng-disabled="! col.active" ng-click="selectBar(col)" aria-label="Bar">
+                      <span class="md-title">{{col.name}}</span>
+                    </md-button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            </md-card-content>
+          </md-card>
+
+        </div>
+    </div>
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+    <!-- Card: Bar Side LED Control -->
+    <div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+            <md-card flex style="min-width: 440px">
+              <md-card-content layout="column" layout-align="top left">
+
+                <div style="min-width: 260px">
+                  <span class="md-headline">Bar Side</span>
+                </div>
+
+
+                  <div style="margin: 2% 0 0 0" layout-xs="column" >
+
+                    <md-button ng-class="sideSelect.A.class" aria-label="Set A" ng-click="selectSide('A')">
+                        Side A
+                    </md-button>
+                    <md-button ng-class="sideSelect.B.class" aria-label="Set B" ng-click="selectSide('B')" >
+                        Side B
+                    </md-button>
+                    <md-button ng-class="sideSelect.C.class" aria-label="Set C" ng-click="selectSide('C')">
+                        Side C
+                    </md-button>
+                    <md-button ng-class="sideSelect.D.class" aria-label="Set D" ng-click="selectSide('D')">
+                        Side D
+                    </md-button>
+
+                  </div>
+
+
+              </md-card-content>
+            </md-card>
+          </div>
+    </div>
+
+    <div layout="row" ng-show="isBarSelected && isSideSelected" class="animate-show" flex-offset="5">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+            <md-card flex style="min-width: 440px">
+              <md-card-content layout="column" layout-align="top left">
+
+                <div style="min-width: 260px">
+                  <span class="md-headline">Lighting Pattern</span>
+                </div>
+
+                <div style="margin: 2% 0 0 0" layout-xs="column" >
+
+                  <md-button ng-class="patternOperation.New.class" aria-label="new" ng-click="selectPatternOperation('New')">
+                      New
+                  </md-button>
+                  <md-button ng-class="patternOperation.Add.class" aria-label="add" ng-click="selectPatternOperation('Add')" >
+                      Add
+                  </md-button>
+                  <md-button ng-class="patternOperation.Remove.class" aria-label="rem" ng-click="selectPatternOperation('Remove')">
+                      Remove
+                  </md-button>
+
+                </div>
+
+              </md-card-content>
+            </md-card>
+          </div>
+    </div>
+
+    <div layout="row" ng-show="isBarSelected && isSideSelected && isOperationSelected && !patternOperation.New.selected" class="animate-show" flex-offset="5">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+            <md-card flex style="min-width: 440px">
+              <md-card-content layout="column" layout-align="top left">
+
+                <div style="min-width: 260px">
+                  <span class="md-headline">LED</span>
+                </div>
+
+                <div style="margin: 2% 0 0 0">
+
+                  <md-button ng-class="led.class" ng-repeat="led in patternLeds" ng-click="selectPatternLed($index)">
+                    <span class="md-title">{{led.number}}</span>
+                  </md-button>
+
+                </div>
+
+              </md-card-content>
+            </md-card>
+          </div>
+    </div>
+
+
+    <div layout="row" ng-show="isBarSelected && isSideSelected && isOperationSelected && !(patternOperation.New.selected || patternOperation.Remove.selected) && isLedSelected" class="animate-show" flex-offset="5">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+            <md-card flex style="min-width: 440px">
+              <md-card-content layout="column" layout-align="top left">
+
+                <div style="min-width: 260px">
+                  <span class="md-headline">Color</span>
+                </div>
+
+                <div style="margin: 3% 0 0 0%">
+                  <!-- Color Picker -->
+                  <md-button  class="md-raised md-subhead" aria-label="Color" colorpicker="hex"
+                      ng-model="patternColor"
+                      style="background-color: {{patternColor}};color: {{readableColor(patternColor)}}">
+                      Choose Color
+                  </md-button>
+                  <md-content layout-padding>
+                    <form name="ledColorForm">
+                      <md-input-container class="md-block" style="margin: 5px 0 0 -2px; width: 116px">
+                        <label>Color</label>
+                        <input required name="patternColor" ng-model="patternColor">
+                        <div ng-messages="patternColor.$error">
+                          <div ng-message="required">This is required.</div>
+                        </div>
+                      </md-input-container>
+                    </form>
+                  </md-content>
+                </div>
+              </md-card-content>
+            </md-card>
+          </div>
+    </div>
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+    <!-- Card: Bar Side LED Control -->
+    <!--<div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+            <md-card flex style="min-width: 440px">
+              <md-card-content layout="row" layout-align="top left">
+                <div flex="33" style="min-width: 260px">
+                  <span class="md-headline">Bar Side LED Lighting</span>
+                  <table>
+                    <tr style="height:33px">
+                      <td style="width: 60px" class="deg-30 text-center">D</td>
+                      <td style="width: 60px" class="deg30 text-center">C</td>
+
+                      <td style="width: 5%"></td>
+
+                      <td style="width: 60px" class="deg-30 text-center">B</td>
+                      <td style="width: 60px" class="deg30 text-center">A</td>
+                    <tr>
+                    <tr style="height:33px">
+                      <td class="deg30-inverted md-headline text-center bar-side">A</td>
+                      <td class="deg-30-inverted md-headline text-center bar-side">B</td>
+
+                      <td></td>
+
+                      <td class="deg30-inverted md-headline text-center bar-side">C</td>
+                      <td class="deg-30-inverted md-headline text-center bar-side">D</td>
+                    <tr>
+
+                    <tr ng-repeat="side in barSides">
+                      <td class="bar-side">
+                        <md-button class="md-fab md-mini" style="background-color: {{side.sides[0]}};color: {{readableColor(side.sides[0])}}" colorpicker="hex" ng-model="side.sides[0]">
+                          <span class="md-title">{{side.led}}</span>
+                        </md-button>
+                      </td>
+                      <td class="bar-side">
+                        <md-button class="md-fab md-mini" style="background-color: {{side.sides[1]}};color: {{readableColor(side.sides[1])}}" colorpicker="hex" ng-model="side.sides[1]" >
+                          <span class="md-title">{{side.led}}</span>
+                        </md-button>
+                      </td>
+
+                      <td></td>
+
+                      <td class="bar-side">
+                        <md-button class="md-fab  md-mini" style="background-color: {{side.sides[2]}};color: {{readableColor(side.sides[2])}}" colorpicker="hex" ng-model="side.sides[2]">
+                          <span class="md-title">{{side.led}}</span>
+                        </md-button>
+                      </td>
+                      <td class="bar-side">
+                        <md-button class="md-fab md-mini" style="background-color: {{side.sides[3]}};color: {{readableColor(side.sides[3])}}" colorpicker="hex" ng-model="side.sides[3]" >
+                          <span class="md-title">{{side.led}}</span>
+                        </md-button>
+                      </td>
+                    <tr>
+
+                    <tr style="height:33px">
+                      <td class="deg30-blank"></td>
+                      <td class="deg-30-blank"></td>
+
+                      <td></td>
+
+                      <td class="deg30-blank"></td>
+                      <td class="deg-30-blank"></td>
+                    <tr>
+
+                  </table>
+                </div>
+
+                <div flex="50" flex-offset="5" layout="column">
+
+
+                  <span class="md-headline">Lighting brightness:</span>
+                  <div style="margin: 5% 0 5% 1%">
+                    <rzslider rz-slider-model="animationBrightness" rz-slider-options="lightingBrightnessSlider.options"  class="md-title"></rzslider>
+                  </div>
+
+
+                  <span class="md-headline">Reset Sides:</span>
+                  <div style="margin: 5% 0 0 1%">
+
+                    <fieldset>
+                       <div layout="row" layout-wrap flex>
+                       <div flex-xs flex="50">
+                         <md-checkbox aria-label="Select All"
+                                      ng-checked="isChecked()"
+                                      md-indeterminate="isIndeterminate()"
+                                      ng-click="toggleAll()">
+                           <span ng-if="isChecked()">Un-</span>Select All
+                         </md-checkbox>
+                       </div>
+                         <div flex="100" ng-repeat="item in sides">
+                           <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+                            Reset Side {{ item }}
+                           </md-checkbox>
+                         </div>
+                       </div>
+                    </fieldset>
+
+                  </div>
+
+
+                  <span class="md-headline">Set Side LED Color</span>
+                  <div style="margin: 5% 0 5% 1%">
+
+                    <md-button class="md-raised md-subhead" style="background-color: {{sideAColor}};color: {{readableColor(sideAColor)}}" aria-label="Set A" colorpicker="hex" ng-model="sideAColor">
+                        Side A
+                    </md-button>
+                    <md-button class="md-raised md-subhead" style="background-color: {{sideBColor}};color: {{readableColor(sideBColor)}}" aria-label="Set B" colorpicker="hex" ng-model="sideBColor">
+                        Side B
+                    </md-button>
+                    <md-button class="md-raised md-subhead" style="background-color: {{sideCColor}};color: {{readableColor(sideCColor)}}" aria-label="Set C" colorpicker="hex" ng-model="sideCColor">
+                        Side C
+                    </md-button>
+                    <md-button class="md-raised md-subhead" style="background-color: {{sideDColor}};color: {{readableColor(sideDColor)}}" aria-label="Set D" colorpicker="hex" ng-model="sideDColor">
+                        Side D
+                    </md-button>
+
+                  </div>
+
+                <div>
+
+
+              </md-card-content>
+            </md-card>
+        </div>
+    </div>-->
+
+
+  </div>
+
+</div>
+
+<!-- ### END: Add Lighting ### -->
+
+<!-- ### Add Level Lighting ### -->
+
+<div ng-show="isAddPage && pages.addLevelLighting">
+  <md-toolbar class="md-hue-1">
+     <div class="md-toolbar-tools">
+       <md-button aria-label="Go Back" ng-click="goBackDetail()">
+         <i class="material-icons">arrow_back</i>
+       </md-button>
+       <h2>
+         <span hide-xs>LEVEL LIGHTING</span>
+       </h2>
+
+       <span flex></span>
+       <md-button class="md-fab md-mini" aria-label="save" ng-click="saveLevelLighting()" style="min-width: 40px">
+         <md-tooltip>
+         Save
+         </md-tooltip>
+         <i class="material-icons">check</i>
+       </md-button>
+     </div>
+  </md-toolbar>
+
+  <div layout="column">
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+    <!-- Card #1: Choose bar -->
+    <div layout="row" flex-offset="5">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+          <md-card flex  style="min-width: 440px">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Bar Selection</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+              <!-- Bar Selection -->
+              <div style="margin: 2% 0 0 0">
+              <table>
+                <tr class="table-center">
+                  <td></td>
+                  <td class="md-title" ng-repeat="c in bars.cols">{{c}}</td>
+                </tr>
+                <tr ng-repeat="row in bars.rows">
+                  <td class="md-title">{{row.number}}</td>
+                  <td ng-repeat="col in row.cols">
+                    <md-button ng-class="col.class" ng-disabled="! col.active" ng-click="selectBar(col)" aria-label="Bar">
+                      <span class="md-title">{{col.name}}</span>
+                    </md-button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            </md-card-content>
+          </md-card>
+
+        </div>
+    </div>
+
+    <div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+            <md-card flex style="min-width: 440px">
+              <md-card-content layout="column" layout-align="top left">
+
+                <div style="min-width: 260px">
+                  <span class="md-headline">Level Lighting</span>
+                </div>
+
+                <div style="margin: 2% 0 0 0" layout-xs="column" >
+
+                  <md-button ng-class="patternOperation.Add.class" aria-label="add" ng-click="selectPatternOperation('Add')" >
+                      Add
+                  </md-button>
+                  <md-button ng-class="patternOperation.Remove.class" aria-label="rem" ng-click="selectPatternOperation('Remove')">
+                      Remove
+                  </md-button>
+
+                </div>
+
+              </md-card-content>
+            </md-card>
+          </div>
+    </div>
+
+    <div layout="row" ng-show="isBarSelected && isOperationSelected && !patternOperation.New.selected" class="animate-show" flex-offset="5">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+            <md-card flex style="min-width: 440px">
+              <md-card-content layout="column" layout-align="top left">
+
+                <div style="min-width: 260px">
+                  <span class="md-headline">Level</span>
+                </div>
+
+                <div style="margin: 2% 0 0 0">
+
+                  <md-button ng-class="led.class" ng-repeat="led in patternLeds" ng-click="selectPatternLed($index)">
+                    <span class="md-title">{{led.number}}</span>
+                  </md-button>
+
+                </div>
+
+              </md-card-content>
+            </md-card>
+          </div>
+    </div>
+
+
+    <div layout="row" ng-show="isBarSelected && isOperationSelected && !(patternOperation.Remove.selected) && isLedSelected" class="animate-show" flex-offset="5">
+          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+            <md-card flex style="min-width: 440px">
+              <md-card-content layout="column" layout-align="top left">
+
+                <div style="min-width: 260px">
+                  <span class="md-headline">Color</span>
+                </div>
+
+                <div style="margin: 3% 0 0 0%">
+                  <!-- Color Picker -->
+                  <md-button  class="md-raised md-subhead" aria-label="Color" colorpicker="hex"
+                      ng-model="patternColor"
+                      style="background-color: {{patternColor}};color: {{readableColor(patternColor)}}">
+                      Choose Color
+                  </md-button>
+                  <md-content layout-padding>
+                    <form name="ledColorForm">
+                      <md-input-container class="md-block" style="margin: 5px 0 0 -2px; width: 116px">
+                        <label>Color</label>
+                        <input required name="patternColor" ng-model="patternColor">
+                        <div ng-messages="patternColor.$error">
+                          <div ng-message="required">This is required.</div>
+                        </div>
+                      </md-input-container>
+                    </form>
+                  </md-content>
+                </div>
+              </md-card-content>
+            </md-card>
+          </div>
+    </div>
+  </div>
+</div>
+
+<!-- ### END: Add Level Lighting ### -->
+
+<!-- ### Add Delay ### -->
+
+<div ng-show="isAddPage && pages.addDelay">
+  <md-toolbar class="md-hue-1">
+     <div class="md-toolbar-tools">
+       <md-button aria-label="Go Back" ng-click="goBackDetail()">
+         <i class="material-icons">arrow_back</i>
+       </md-button>
+       <h2>
+         <span hide-xs>DELAY</span>
+       </h2>
+
+       <span flex></span>
+       <md-button class="md-fab md-mini" aria-label="save" ng-click="saveDelay()" style="min-width: 40px">
+         <md-tooltip>
+         Save
+         </md-tooltip>
+         <i class="material-icons">check</i>
+       </md-button>
+     </div>
+  </md-toolbar>
+
+  <div layout="column">
+
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+    <!-- Card #1: Choose bar -->
+    <div layout="row" flex-offset="5">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+          <md-card flex  style="min-width: 320px">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Delay</span>
+              </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+              <div style="margin: 2% 0 0 0">
+                  <!-- Delay -->
+                  <rzslider rz-slider-model="delay" rz-slider-options="timeSlider.options"  class="md-title"></rzslider>
+              </div>
+
+
+                <form name="delayForm" layout-padding >
+                  <md-input-container class="md-block">
+                    <label>Delay (seconds)</label>
+                    <input type="number" required min="1" max="600"  name="delayIn" ng-model="delay">
+                    <div ng-messages="delayForm.delayIn.$error" multiple md-auto-hide="false"  role="alert">
+                      <div ng-message-exp="['required', 'min', 'max']">
+                        No valid delay between 1 and 600 seconds!
+                      </div>
+                    </div>
+                  </md-input-container>
+                </form>
+
+
+            </md-card-content>
+          </md-card>
+
+        </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ### END: Add Delay ### -->
+
+
+
+
+<!--<pre>
+  {{modelAsJson}}
+</pre>-->

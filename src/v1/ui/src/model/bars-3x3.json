@@ -6,21 +6,21 @@
         { "name": "A1",
           "class": "md-fab md-primary md-hue-2",
           "position": 0,
-          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "speed": 0 },
+          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "brightness": 100, "speed": 100 },
           "object": {},
           "active": false
         },
         { "name": "B1",
           "class": "md-fab md-primary",
           "position": 0,
-          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "speed": 0 },
+          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "brightness": 100, "speed": 100 },
           "object": {},
           "active": false
         },
         { "name": "C1",
           "class": "md-fab md-primary md-hue-1",
           "position": 0,
-          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "speed": 0 },
+          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "brightness": 100, "speed": 100 },
           "object": {},
           "active": false
         }
@@ -31,21 +31,21 @@
         { "name": "A2",
           "class": "md-fab md-primary md-hue-2",
           "position": 0,
-          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "speed": 0 },
+          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "brightness": 100, "speed": 100 },
           "object": {},
           "active": false
         },
         { "name": "B2",
           "class": "md-fab md-primary",
           "position": 0,
-          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "speed": 0 },
+          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "brightness": 100, "speed": 100 },
           "object": {},
           "active": false
         },
         { "name": "C2",
           "class": "md-fab md-primary md-hue-1",
           "position": 0,
-          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "speed": 0 },
+          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "brightness": 100, "speed": 100 },
           "object": {},
           "active": false
         }
@@ -56,21 +56,21 @@
         { "name": "A3",
           "class": "md-fab md-primary md-hue-2",
           "position": 0,
-          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "speed": 0 },
+          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "brightness": 100, "speed": 100 },
           "object": {},
           "active": false
         },
         { "name": "B3",
           "class": "md-fab md-primary",
           "position": 0,
-          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "speed": 0 },
+          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "brightness": 100, "speed": 100 },
           "object": {},
           "active": false
         },
         { "name": "C3",
           "class": "md-fab md-primary md-hue-1",
           "position": 0,
-          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "speed": 0 },
+          "animation": { "id": "", "name": "switch-off", "color": "rgba(255,255,255,0.5)", "brightness": 100, "speed": 100 },
           "object": {},
           "active": false
         }

@@ -12,7 +12,7 @@ angular
                                     ] )
 
 // constants
-.constant('MODULE_VERSION', '0.0.2')
+.constant('MODULE_VERSION', '0.1.0')
 
 
 // // // // // // // // // // // // // // // // // // // // // // // // //
@@ -80,7 +80,7 @@ $scope.getBars = function() {
      $scope.bars = data; // Get JSON
      //console.log(data);
 
-     var url = $scope.uriPraefix + '/bars?state=active';
+     var url = $scope.uriPraefix + '/bars';//?state=active';
      console.log('GET '+ url);
      $http({method: 'GET', url: url}) // Get available bars (Salesforce.com)
        .success(function(data, status) {
@@ -99,8 +99,8 @@ $scope.getBars = function() {
                  var hex = hex2rgb('#'+bar.color__c);
                  var brightness = (parseInt(bar.brightness__c) / 100);
 
-                 $scope.bars.rows[j].cols[k].animation.color = 'rgba('+hex.r+','+hex.g+','+hex.b+','+brightness+')';
-
+                 $scope.bars.rows[j].cols[k].animation.color = '#'+bar.color__c; //'rgba('+hex.r+','+hex.g+','+hex.b+','+brightness+')';
+                 $scope.bars.rows[j].cols[k].animation.brightness = parseInt(bar.brightness__c);
                  $scope.bars.rows[j].cols[k].animation.speed = bar.animation_speed__c;
 
                  $scope.bars.rows[j].cols[k].active = true;
@@ -208,7 +208,8 @@ $scope.isSideReceived = false;
     $scope.token = {};
 
     $scope.isSideReceived = false;
-
+    $scope.animationBrightness = 100;
+    $scope.lightingBrightness = 100;
     $scope.isPositionReceived = true;
 
     $log.debug("Selected Bar: "+ bar.name);
@@ -231,7 +232,7 @@ $scope.isSideReceived = false;
             $scope.barAnimation = data.object.name__c; // LED Animation
           } else {
             $scope.barAnimation = "";
-            $scope.horizontalSlider.value = 0;
+            $scope.animationSpeedSlider.value = 0;
           }
 
           $scope.refreshSlider();
@@ -271,7 +272,7 @@ $scope.isSideReceived = false;
           if (key.indexOf("led_") > -1 && dataA.object[key] != null && typeof dataA.object[key] != 'undefined') {
               //console.log(i+': '+dataA.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+dataA.object[key]));
               var hex = hex2rgb('#'+dataA.object[key]);
-              $scope.barSides[10 - i].colorA = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+              $scope.barSides[10 - i].colorA = '#'+dataA.object[key]; //'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
               i++;
           }
         }
@@ -289,7 +290,7 @@ $scope.isSideReceived = false;
               if (key.indexOf("led_") > -1 && dataA.object[key] != null && typeof dataA.object[key] != 'undefined') {
                   //console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
                   var hex = hex2rgb('#'+data.object[key]);
-                  $scope.barSides[10 - i].colorB = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                  $scope.barSides[10 - i].colorB = '#'+data.object[key]; //'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
                   i++;
               }
             }
@@ -307,7 +308,7 @@ $scope.isSideReceived = false;
                   if (key.indexOf("led_") > -1 && dataA.object[key] != null && typeof dataA.object[key] != 'undefined') {
                       //console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
                       var hex = hex2rgb('#'+data.object[key]);
-                      $scope.barSides[10 - i].colorC = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                      $scope.barSides[10 - i].colorC = '#'+data.object[key]; //'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
                       i++;
                   }
                 }
@@ -325,7 +326,7 @@ $scope.isSideReceived = false;
                       if (key.indexOf("led_") > -1 && dataA.object[key] != null && typeof dataA.object[key] != 'undefined') {
                           //console.log(i+': '+data.object[key]+' -> '+$scope.barSides[10 - i].led+' = '+hex2rgb('#'+data.object[key]));
                           var hex = hex2rgb('#'+data.object[key]);
-                          $scope.barSides[10 - i].colorD = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
+                          $scope.barSides[10 - i].colorD = '#'+data.object[key]; //'rgba('+hex.r+','+hex.g+','+hex.b+', 0.5)';
                           i++;
                       }
                     }
@@ -420,6 +421,116 @@ $scope.isSideReceived = false;
    $scope.refreshSlider();
 
    $scope.barStepperMode = 'half';
+
+
+     // - - - - Side Controll -> REset
+     $scope.sides = [ 'A','B','C','D'];
+     $scope.selected = [];
+     $scope.toggle = function (item, sides) {
+       var idx = sides.indexOf(item);
+       if (idx > -1) {
+         sides.splice(idx, 1);
+       } else {
+         sides.push(item);
+         console.log('index: '+$scope.sides.indexOf(item));
+         for(var i = 0; i < 4; i++) {
+           if (item === $scope.sides[i]) {
+             $scope.barSides.forEach(function(item, array, pointer) {
+               switch (i) {
+                 case 0: item.colorA = '#000000'; $scope.sideAColor = '#000000'; break;
+                 case 1: item.colorB = '#000000'; $scope.sideBColor = '#000000'; break;
+                 case 2: item.colorC = '#000000'; $scope.sideCColor = '#000000'; break;
+                 case 3: item.colorD = '#000000'; $scope.sideDColor = '#000000'; break;
+                 default:  break;
+               }
+             });
+           }
+         }
+         console.log($scope.barSides);
+       }
+     };
+
+     $scope.exists = function (item, list) {
+
+       return list.indexOf(item) > -1;
+     };
+     $scope.isIndeterminate = function() {
+       return ($scope.selected.length !== 0 &&
+           $scope.selected.length !== $scope.sides.length);
+     };
+     $scope.isChecked = function() {
+       return $scope.selected.length === $scope.sides.length;
+     };
+     $scope.toggleAll = function() {
+       if ($scope.selected.length === $scope.sides.length) {
+         $scope.selected = [];
+       } else if ($scope.selected.length === 0 || $scope.selected.length > 0) {
+
+         $scope.selected = $scope.sides.slice(0);
+
+         for(var i = 0; i < 4; i++) {
+             $scope.barSides.forEach(function(item, array, pointer) {
+               switch (i) {
+                 case 0: item.colorA = '#000000'; break;
+                 case 1: item.colorB = '#000000'; break;
+                 case 2: item.colorC = '#000000'; break;
+                 case 3: item.colorD = '#000000'; break;
+                 default:  break;
+               }
+             });
+         }
+
+         $scope.sideAColor = '#000000';
+         $scope.sideBColor = '#000000';
+         $scope.sideCColor = '#000000';
+         $scope.sideDColor = '#000000';
+       }
+     };
+
+   $scope.readableColor = function(hexTripletColor) {
+     var color = hexTripletColor;
+     color = color.substring(1);           // remove #
+     color = parseInt(color, 16);          // convert to integer
+     if (color > 12000000) return "#000000";
+     else return "#ffffff";
+   };
+
+   $scope.sideAColor = '#000000';
+   $scope.sideBColor = '#000000';
+   $scope.sideCColor = '#000000';
+   $scope.sideDColor = '#000000';
+
+   // Observe COlors
+   $scope.$watch('sideAColor', function(sideAColor) {
+     $scope.barSides.forEach(function(item, array, pointer) {
+       item.colorA = sideAColor;
+     });
+     if ($scope.selected.indexOf('A') > -1)
+     $scope.toggle('A', $scope.selected)
+   }, true);
+   $scope.$watch('sideBColor', function(sideBColor) {
+     $scope.barSides.forEach(function(item, array, pointer) {
+       item.colorB = sideBColor;
+     });
+     if ($scope.selected.indexOf('B') > -1)
+     $scope.toggle('B', $scope.selected)
+   }, true);
+   $scope.$watch('sideCColor', function(sideCColor) {
+     $scope.barSides.forEach(function(item, array, pointer) {
+       item.colorC = sideCColor;
+     });
+     if ($scope.selected.indexOf('C') > -1)
+     $scope.toggle('C', $scope.selected)
+   }, true);
+   $scope.$watch('sideDColor', function(sideDColor) {
+     $scope.barSides.forEach(function(item, array, pointer) {
+       item.colorD = sideDColor;
+     });
+     if ($scope.selected.indexOf('D') > -1)
+     $scope.toggle('D', $scope.selected)
+   }, true);
+
+
 
 
 // --- SEND MOVE ---------------------------------------------------------------
@@ -553,9 +664,9 @@ $scope.sendMove = function () {
 
 
 
-         var color = rgba2hex($scope.barColor);
+         var color = $scope.barColor.replace('#',''); //rgba2hex($scope.barColor);
          $log.debug(color);
-         var brightness = rgba2brigthness($scope.barColor);
+         var brightness = $scope.animationBrightness; //rgba2brigthness($scope.barColor);
          $log.debug(brightness + "%");
 
          $log.debug(">> ANIMATION: Name: "+$scope.barAnimation.toLowerCase()+", Color: #"+color+", Brightness: "+ brightness+" %");
@@ -650,10 +761,10 @@ $scope.sendMove = function () {
           for (var i = 10; i >= 0; i--) {
 
             switch (s) {
-              case 0: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": rgba2hex($scope.barSides[10-i].colorA), "brightness": $scope.lightingBrightness } ); break;
-              case 1: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": rgba2hex($scope.barSides[10-i].colorB), "brightness": $scope.lightingBrightness } ); break;
-              case 2: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": rgba2hex($scope.barSides[10-i].colorC), "brightness": $scope.lightingBrightness } ); break;
-              case 3: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": rgba2hex($scope.barSides[10-i].colorD), "brightness": $scope.lightingBrightness } ); break;
+              case 0: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": $scope.barSides[10-i].colorA.replace('#', ''), "brightness": $scope.lightingBrightness } ); break; //rgba2hex($scope.barSides[10-i].colorA)
+              case 1: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": $scope.barSides[10-i].colorB.replace('#', ''), "brightness": $scope.lightingBrightness } ); break;
+              case 2: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": $scope.barSides[10-i].colorC.replace('#', ''), "brightness": $scope.lightingBrightness } ); break;
+              case 3: sideJson.sides.push( { "name": sides[s], "led": (i+1), "color": $scope.barSides[10-i].colorD.replace('#', ''), "brightness": $scope.lightingBrightness } ); break;
 
               default: break;
             }
@@ -734,7 +845,7 @@ $scope.sendMove = function () {
               for (var key in data.object) {
                 if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
                     var hex = hex2rgb('#'+data.object[key]);
-                    $scope.barSides[10 - i].colorA = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
+                    $scope.barSides[10 - i].colorA = '#'+data.object[key]; //'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
                     i++;
                 }
               }
@@ -752,7 +863,7 @@ $scope.sendMove = function () {
               for (var key in data.object) {
                 if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
                     var hex = hex2rgb('#'+data.object[key]);
-                    $scope.barSides[10 - i].colorB = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
+                    $scope.barSides[10 - i].colorB = '#'+data.object[key]; //'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
                     i++;
                 }
               }
@@ -770,7 +881,7 @@ $scope.sendMove = function () {
               for (var key in data.object) {
                 if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
                     var hex = hex2rgb('#'+data.object[key]);
-                    $scope.barSides[10 - i].colorC = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
+                    $scope.barSides[10 - i].colorC = '#'+data.object[key]; //'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
                     i++;
                 }
               }
@@ -788,7 +899,7 @@ $scope.sendMove = function () {
               for (var key in data.object) {
                 if (key.indexOf("led_") > -1 && data.object[key] != null && typeof data.object[key] != 'undefined') {
                     var hex = hex2rgb('#'+data.object[key]);
-                    $scope.barSides[10 - i].colorD = 'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
+                    $scope.barSides[10 - i].colorD = '#'+data.object[key]; //'rgba('+hex.r+','+hex.g+','+hex.b+', 0.6)';
                     i++;
                 }
               }

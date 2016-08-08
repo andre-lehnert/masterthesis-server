@@ -14,6 +14,13 @@ var GET_ALL_BY_APP_AND_BY_START_DATE = 'SELECT Id, CreatedDate, LastModifiedDate
 var GET_ALL_BY_APP_AND_BY_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c = \'[:id]\' AND DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
 var GET_ALL_BY_APP_AND_BY_START_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c = \'[:id]\' AND DAY_ONLY(start__c) >= [:start] AND DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
 
+var GET_ALL_BY_SMARTPHONE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c IN (SELECT Id FROM App__c WHERE smartphone__c = \'[:id]\')';
+var GET_ALL_BY_SMARTPHONE_AND_BY_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c IN (SELECT Id FROM App__c WHERE smartphone__c = \'[:id]\') AND DAY_ONLY(start__c) = [:date] ORDER BY start__c';
+var GET_ALL_BY_SMARTPHONE_AND_BY_START_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c IN (SELECT Id FROM App__c WHERE smartphone__c = \'[:id]\') AND DAY_ONLY(start__c) >= [:start] ORDER BY start__c';
+var GET_ALL_BY_SMARTPHONE_AND_BY_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c IN (SELECT Id FROM App__c WHERE smartphone__c = \'[:id]\') AND DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
+var GET_ALL_BY_SMARTPHONE_AND_BY_START_END_DATE = 'SELECT Id, CreatedDate, LastModifiedDate, start__c, app__c, total_time__c, end__c FROM Invocation__c WHERE app__c IN (SELECT Id FROM App__c WHERE smartphone__c = \'[:id]\') AND DAY_ONLY(start__c) >= [:start] AND DAY_ONLY(start__c) <= [:end] ORDER BY start__c';
+
+
 
 module.exports = {
 
@@ -271,6 +278,93 @@ module.exports = {
           }
         });
   },
+
+  getInvocationsBySmartphone : function(req, res, org, oauth, next) {
+
+        var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+        var obj = req.params.id; // Smartphone ID
+
+        console.log(">> GET invocations BY SMARTPHONE ID: "+ obj);
+
+        var query = GET_ALL_BY_SMARTPHONE;
+
+        if (typeof req.query.date != 'undefined') { // &date=2016-06-01
+
+          query = GET_ALL_BY_SMARTPHONE_AND_BY_DATE.replace("[:date]", req.query.date);
+
+        } else if (typeof req.query.start != 'undefined') {
+          if (typeof req.query.end != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_SMARTPHONE_AND_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &start=2016-06-01
+
+            query = GET_ALL_BY_SMARTPHONE_AND_BY_START_DATE.replace("[:start]", req.query.start);
+
+          }
+        } else if (typeof req.query.end != 'undefined') {
+          if (typeof req.query.start != 'undefined') { // &start=2016-06-01&end=2016-06-30
+
+            query = GET_ALL_BY_SMARTPHONE_AND_BY_START_END_DATE.replace("[:start]", req.query.start).replace("[:end]", req.query.end);
+
+          } else { // &end=2016-06-30
+
+            query = GET_ALL_BY_SMARTPHONE_AND_BY_END_DATE.replace("[:end]", req.query.end);
+
+          }
+
+        }
+
+        query = query.replace("[:id]", obj);
+        console.log("QUERY: "+query);
+
+        org.query({ query: query, oauth: oauth }, function(err, results){
+          if (err) {
+
+            console.log(err);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var response =
+            {
+              'href': URL,
+              '_success': false,
+              '_errors': err
+            };
+
+            req.response = response;
+            next();
+
+          } else if(!err) {
+            console.log('>> DB REQUEST');
+            console.log('QUERY: '+ GET_ALL);
+            console.log('RESPONSE: Entries = '+ results.totalSize);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var receivers = [];
+
+            for (var r in results.records) {
+              receivers.push(results.records[r]);
+            }
+
+            var response =
+            {
+              'href': URL,
+              '_success': true,
+              '_count': results.totalSize,
+              'objects': receivers
+            };
+
+            console.log(response);
+
+            req.response = response;
+            next();
+          }
+        });
+  },
+
 
   getInvocation : function(req, res, org, oauth, next) {
 

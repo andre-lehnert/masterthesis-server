@@ -829,6 +829,515 @@ console.log(req.body);
 
   },
 
+  updateSideByLevel : function(req, res, org, oauth, next) {
+
+    var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    var param = req.sideA;
+
+    console.log(">> GET Side BY LEVEL: "+ param);
+
+    var query = GET_BY_ID.replace("[:id]", param);
+
+    org.query({ query: query, oauth: oauth }, function(err, result) {
+
+      if (err) {
+        console.log(err);
+        var response =
+        {
+          'href': URL,
+          '_success': false,
+          '_errors': err
+        };
+        req.response = response;
+        next();
+
+      } else if(!err) {
+
+        console.log('>> DB REQUEST');
+        console.log('QUERY: '+ query);
+        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // UPDATE
+        if (result.totalSize == 1) { // 1 entry
+
+          var side = result.records[0];
+
+          switch (req.lednumber) {
+            case 1: side.set('led_0__c', req.color); break;
+            case 2: side.set('led_1__c', req.color); break;
+            case 3: side.set('led_2__c', req.color); break;
+            case 4: side.set('led_3__c', req.color); break;
+            case 5: side.set('led_4__c', req.color); break;
+            case 6: side.set('led_5__c', req.color); break;
+            case 7: side.set('led_6__c', req.color); break;
+            case 8: side.set('led_7__c', req.color); break;
+            case 9: side.set('led_8__c', req.color); break;
+            case 10: side.set('led_9__c', req.color); break;
+            case 11: side.set('led_10__c', req.color); break;
+            default: break;
+          }
+
+          org.update({ sobject: side, oauth: oauth }, function(err, result) {
+
+            if (err) {
+              console.log(err);
+              var response =
+              {
+                'href': URL,
+                '_success': false,
+                '_errors': err
+              };
+              req.response = response;
+              next();
+
+            } else if(!err) {
+
+              // -----------------------------------------------------------------
+              // REQUEST OBJECT
+              org.query({ query: query, oauth: oauth }, function(err, result) {
+
+                if (err) {
+                  console.log(err);
+                  var response =
+                  {
+                    'href': URL,
+                    '_success': false,
+                    '_errors': err
+                  };
+                  req.response = response;
+                  next();
+
+                } else if(!err) {
+
+                  console.log('>> DB REQUEST');
+                  console.log('QUERY: '+ query);
+                  console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                  // -----------------------------------------------------------------
+                  // Set Response Object
+                  if (result.totalSize == 1) { // 1 entry
+
+                    // <<----
+
+                    param = req.sideB;
+
+                    console.log(">> GET Side BY LEVEL: "+ param);
+
+                    var query = GET_BY_ID.replace("[:id]", param);
+
+                    org.query({ query: query, oauth: oauth }, function(err, result) {
+
+                      if (err) {
+                        console.log(err);
+                        var response =
+                        {
+                          'href': URL,
+                          '_success': false,
+                          '_errors': err
+                        };
+                        req.response = response;
+                        next();
+
+                      } else if(!err) {
+
+                        console.log('>> DB REQUEST');
+                        console.log('QUERY: '+ query);
+                        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                        // -----------------------------------------------------------------
+                        // UPDATE
+                        if (result.totalSize == 1) { // 1 entry
+
+                          var side = result.records[0];
+
+                          switch (req.lednumber) {
+                            case 1: side.set('led_0__c', req.color); break;
+                            case 2: side.set('led_1__c', req.color); break;
+                            case 3: side.set('led_2__c', req.color); break;
+                            case 4: side.set('led_3__c', req.color); break;
+                            case 5: side.set('led_4__c', req.color); break;
+                            case 6: side.set('led_5__c', req.color); break;
+                            case 7: side.set('led_6__c', req.color); break;
+                            case 8: side.set('led_7__c', req.color); break;
+                            case 9: side.set('led_8__c', req.color); break;
+                            case 10: side.set('led_9__c', req.color); break;
+                            case 11: side.set('led_10__c', req.color); break;
+                            default: break;
+                          }
+
+                          org.update({ sobject: side, oauth: oauth }, function(err, result) {
+
+                            if (err) {
+                              console.log(err);
+                              var response =
+                              {
+                                'href': URL,
+                                '_success': false,
+                                '_errors': err
+                              };
+                              req.response = response;
+                              next();
+
+                            } else if(!err) {
+
+                              // -----------------------------------------------------------------
+                              // REQUEST OBJECT
+                              org.query({ query: query, oauth: oauth }, function(err, result) {
+
+                                if (err) {
+                                  console.log(err);
+                                  var response =
+                                  {
+                                    'href': URL,
+                                    '_success': false,
+                                    '_errors': err
+                                  };
+                                  req.response = response;
+                                  next();
+
+                                } else if(!err) {
+
+                                  console.log('>> DB REQUEST');
+                                  console.log('QUERY: '+ query);
+                                  console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                                  // -----------------------------------------------------------------
+                                  // Set Response Object
+                                  if (result.totalSize == 1) { // 1 entry
+
+                                    // <<----
+
+                                    param = req.sideC;
+
+                                    console.log(">> GET Side BY LEVEL: "+ param);
+
+                                    var query = GET_BY_ID.replace("[:id]", param);
+
+                                    org.query({ query: query, oauth: oauth }, function(err, result) {
+
+                                      if (err) {
+                                        console.log(err);
+                                        var response =
+                                        {
+                                          'href': URL,
+                                          '_success': false,
+                                          '_errors': err
+                                        };
+                                        req.response = response;
+                                        next();
+
+                                      } else if(!err) {
+
+                                        console.log('>> DB REQUEST');
+                                        console.log('QUERY: '+ query);
+                                        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                                        // -----------------------------------------------------------------
+                                        // UPDATE
+                                        if (result.totalSize == 1) { // 1 entry
+
+                                          var side = result.records[0];
+
+                                          switch (req.lednumber) {
+                                            case 1: side.set('led_0__c', req.color); break;
+                                            case 2: side.set('led_1__c', req.color); break;
+                                            case 3: side.set('led_2__c', req.color); break;
+                                            case 4: side.set('led_3__c', req.color); break;
+                                            case 5: side.set('led_4__c', req.color); break;
+                                            case 6: side.set('led_5__c', req.color); break;
+                                            case 7: side.set('led_6__c', req.color); break;
+                                            case 8: side.set('led_7__c', req.color); break;
+                                            case 9: side.set('led_8__c', req.color); break;
+                                            case 10: side.set('led_9__c', req.color); break;
+                                            case 11: side.set('led_10__c', req.color); break;
+                                            default: break;
+                                          }
+
+                                          org.update({ sobject: side, oauth: oauth }, function(err, result) {
+
+                                            if (err) {
+                                              console.log(err);
+                                              var response =
+                                              {
+                                                'href': URL,
+                                                '_success': false,
+                                                '_errors': err
+                                              };
+                                              req.response = response;
+                                              next();
+
+                                            } else if(!err) {
+
+                                              // -----------------------------------------------------------------
+                                              // REQUEST OBJECT
+                                              org.query({ query: query, oauth: oauth }, function(err, result) {
+
+                                                if (err) {
+                                                  console.log(err);
+                                                  var response =
+                                                  {
+                                                    'href': URL,
+                                                    '_success': false,
+                                                    '_errors': err
+                                                  };
+                                                  req.response = response;
+                                                  next();
+
+                                                } else if(!err) {
+
+                                                  console.log('>> DB REQUEST');
+                                                  console.log('QUERY: '+ query);
+                                                  console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                                                  // -----------------------------------------------------------------
+                                                  // Set Response Object
+                                                  if (result.totalSize == 1) { // 1 entry
+
+                                                    // <<----
+
+                                                    param = req.sideD;
+
+                                                    console.log(">> GET Side BY LEVEL: "+ param);
+
+                                                    var query = GET_BY_ID.replace("[:id]", param);
+
+                                                    org.query({ query: query, oauth: oauth }, function(err, result) {
+
+                                                      if (err) {
+                                                        console.log(err);
+                                                        var response =
+                                                        {
+                                                          'href': URL,
+                                                          '_success': false,
+                                                          '_errors': err
+                                                        };
+                                                        req.response = response;
+                                                        next();
+
+                                                      } else if(!err) {
+
+                                                        console.log('>> DB REQUEST');
+                                                        console.log('QUERY: '+ query);
+                                                        console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                                                        // -----------------------------------------------------------------
+                                                        // UPDATE
+                                                        if (result.totalSize == 1) { // 1 entry
+
+                                                          var side = result.records[0];
+
+                                                          switch (req.lednumber) {
+                                                            case 1: side.set('led_0__c', req.color); break;
+                                                            case 2: side.set('led_1__c', req.color); break;
+                                                            case 3: side.set('led_2__c', req.color); break;
+                                                            case 4: side.set('led_3__c', req.color); break;
+                                                            case 5: side.set('led_4__c', req.color); break;
+                                                            case 6: side.set('led_5__c', req.color); break;
+                                                            case 7: side.set('led_6__c', req.color); break;
+                                                            case 8: side.set('led_7__c', req.color); break;
+                                                            case 9: side.set('led_8__c', req.color); break;
+                                                            case 10: side.set('led_9__c', req.color); break;
+                                                            case 11: side.set('led_10__c', req.color); break;
+                                                            default: break;
+                                                          }
+
+                                                          org.update({ sobject: side, oauth: oauth }, function(err, result) {
+
+                                                            if (err) {
+                                                              console.log(err);
+                                                              var response =
+                                                              {
+                                                                'href': URL,
+                                                                '_success': false,
+                                                                '_errors': err
+                                                              };
+                                                              req.response = response;
+                                                              next();
+
+                                                            } else if(!err) {
+
+                                                              // -----------------------------------------------------------------
+                                                              // REQUEST OBJECT
+                                                              org.query({ query: query, oauth: oauth }, function(err, result) {
+
+                                                                if (err) {
+                                                                  console.log(err);
+                                                                  var response =
+                                                                  {
+                                                                    'href': URL,
+                                                                    '_success': false,
+                                                                    '_errors': err
+                                                                  };
+                                                                  req.response = response;
+                                                                  next();
+
+                                                                } else if(!err) {
+
+                                                                  console.log('>> DB REQUEST');
+                                                                  console.log('QUERY: '+ query);
+                                                                  console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                                                                  // -----------------------------------------------------------------
+                                                                  // Set Response Object
+                                                                  if (result.totalSize == 1) { // 1 entry
+
+                                                                    var response =
+                                                                    {
+                                                                      'href': URL,
+                                                                      '_success': true,
+                                                                      'object': { 'message': 'Side A, B, C and D updated'}
+                                                                    };
+
+                                                                    console.log(response);
+                                                                    req.response = response;
+                                                                    next();
+
+                                                                  } else { // no entry // salesforce duplicate check
+
+                                                                    var response =
+                                                                    {
+                                                                      'href': URL,
+                                                                      '_success': false,
+                                                                      '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                                                                    };
+
+                                                                    console.log(response);
+
+                                                                    req.response = response;
+                                                                    next();
+                                                                  }
+                                                                }
+
+                                                            });
+                                                          }
+
+                                                          });
+                                                        } else { // no entry // salesforce duplicate check
+                                                          var response =
+                                                          {
+                                                            'href': URL,
+                                                            '_success': false,
+                                                            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                                                          };
+                                                          console.log(response);
+                                                          req.response = response;
+                                                          next();
+                                                        }
+                                                      }
+                                                    });
+
+                                                    // <<----
+
+                                                  } else { // no entry // salesforce duplicate check
+
+                                                    var response =
+                                                    {
+                                                      'href': URL,
+                                                      '_success': false,
+                                                      '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                                                    };
+
+                                                    console.log(response);
+
+                                                    req.response = response;
+                                                    next();
+                                                  }
+                                                }
+
+                                            });
+                                          }
+
+                                          });
+                                        } else { // no entry // salesforce duplicate check
+                                          var response =
+                                          {
+                                            'href': URL,
+                                            '_success': false,
+                                            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                                          };
+                                          console.log(response);
+                                          req.response = response;
+                                          next();
+                                        }
+                                      }
+                                    });
+
+                                    // <<----
+
+                                  } else { // no entry // salesforce duplicate check
+
+                                    var response =
+                                    {
+                                      'href': URL,
+                                      '_success': false,
+                                      '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                                    };
+
+                                    console.log(response);
+
+                                    req.response = response;
+                                    next();
+                                  }
+                                }
+
+                            });
+                          }
+
+                          });
+                        } else { // no entry // salesforce duplicate check
+                          var response =
+                          {
+                            'href': URL,
+                            '_success': false,
+                            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                          };
+                          console.log(response);
+                          req.response = response;
+                          next();
+                        }
+                      }
+                    });
+
+                    // <<----
+
+                  } else { // no entry // salesforce duplicate check
+
+                    var response =
+                    {
+                      'href': URL,
+                      '_success': false,
+                      '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                    };
+
+                    console.log(response);
+
+                    req.response = response;
+                    next();
+                  }
+                }
+
+            });
+          }
+
+          });
+        } else { // no entry // salesforce duplicate check
+          var response =
+          {
+            'href': URL,
+            '_success': false,
+            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+          };
+          console.log(response);
+          req.response = response;
+          next();
+        }
+      }
+    });
+
+  },
+
   deleteSide : function(req, res, org, oauth, next) {
 
     var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;

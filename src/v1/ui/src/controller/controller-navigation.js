@@ -19,10 +19,14 @@ angular
         templateUrl: '../templates/timeline.html',
         controller: 'TimelineController'
       })
-      .when('/dashboard', {
-        templateUrl: '../templates/dashboard.html',
-        controller: 'DashboardController'
+      .when('/editor', {
+        templateUrl: '../templates/editor.html',
+        controller: 'EditorController'
       })
+      // .when('/dashboard', {
+      //   templateUrl: '../templates/dashboard.html',
+      //   controller: 'DashboardController'
+      // })
       .when('/control', {
         templateUrl: '../templates/control.html',
         controller: 'ControlController'
@@ -35,18 +39,18 @@ angular
         templateUrl: '../templates/devices.html',
         controller: 'DevicesController'
       })
-      .when('/settings', {
-        templateUrl: '../templates/settings.html',
-        controller: 'SettingsController'
-      })
-      .when('/help', {
-        templateUrl: '../templates/help.html',
-        controller: 'HelpController'
-      })
-      .when('/share', {
-        templateUrl: '../templates/share.html',
-        controller: 'ShareController'
-      })
+      // .when('/settings', {
+      //   templateUrl: '../templates/settings.html',
+      //   controller: 'SettingsController'
+      // })
+      // .when('/help', {
+      //   templateUrl: '../templates/help.html',
+      //   controller: 'HelpController'
+      // })
+      // .when('/share', {
+      //   templateUrl: '../templates/share.html',
+      //   controller: 'ShareController'
+      // })
       .otherwise({ redirectTo: '/' });
   }])
 
@@ -62,10 +66,15 @@ angular
        text: 'Timeline',
        path: '#/timeline'
      },
+    //  {
+    //    icon : 'dashboard',
+    //    text: 'Dashboard',
+    //    path: '#/dashboard'
+    //  },
      {
-       icon : 'dashboard',
-       text: 'Dashboard',
-       path: '#/dashboard'
+       icon : 'code',
+       text: 'Sequence Editor',
+       path: '#/editor'
      },
      {
        icon : 'pan_tool',
@@ -85,21 +94,21 @@ angular
        text: 'My devices',
        path: '#/devices'
      },
-     {
-       icon : 'help',
-       text: 'Help',
-       path: '#/help'
-     },
-     {
-       icon : 'share',
-       text: 'Share',
-       path: '#/share'
-     },
-     {
-       icon : 'settings',
-       text: 'Settings',
-       path: '#/settings'
-     },
+    //  {
+    //    icon : 'help',
+    //    text: 'Help',
+    //    path: '#/help'
+    //  },
+    //  {
+    //    icon : 'share',
+    //    text: 'Share',
+    //    path: '#/share'
+    //  },
+    //  {
+    //    icon : 'settings',
+    //    text: 'Settings',
+    //    path: '#/settings'
+    //  },
    ];
 
     $rootScope.currentPage = $scope.mainPages[0];

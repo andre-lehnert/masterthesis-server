@@ -25,7 +25,8 @@ var bars          = require('./bar'),
     smartphones   = require('./smartphone'),
     apps          = require('./app'),
     notifications = require('./notification'),
-    invocations   = require('./invocation');
+    invocations   = require('./invocation'),
+    sequences     = require('./sequence'),
     activations   = require('./activation');
 
 
@@ -140,6 +141,14 @@ module.exports = {
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         sides.updateSideByBar(req, res, org, oauth, next);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateSideByLevel : function (req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sides.updateSideByLevel(req, res, org, oauth, next);                             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
@@ -416,6 +425,14 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  getNotificationsBySmartphone : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        notifications.getNotificationsBySmartphone(req, res, org, oauth, next);             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   getNotificationsBySmartphoneApp : function(req, res, next) {
 
     org.authenticate(CREDENTIALS, function(err, resp) {
@@ -486,6 +503,14 @@ module.exports = {
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         invocations.getInvocationsBySmartphoneApp(req, res, org, oauth, next);             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getInvocationsBySmartphone : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        invocations.getInvocationsBySmartphone(req, res, org, oauth, next);             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
@@ -588,5 +613,45 @@ module.exports = {
   },
   // ---------------------------------------------------------------------------
 
+  // --- Sequences -----------------------------------------------------------
+  getSequences : function(req, res, next) {
 
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sequences.getSequences(req, res, org, oauth, next);                 // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getSequence : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sequences.getSequence(req, res, org, oauth, next);             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  insertSequence : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sequences.insertSequence(req, res, org, oauth, next);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateSequence : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sequences.updateSequence(req, res, org, oauth, next);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  deleteSequence : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        sequences.deleteSequence(req, res, org, oauth, next);               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
 };

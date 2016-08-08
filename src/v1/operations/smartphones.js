@@ -57,6 +57,9 @@ var requestInvocations = function (req, res, next) {
   db.getInvocationsBySmartphoneApp(req, res, next);
 };
 
+var requestInvocationsBySmartphone = function (req, res, next) {
+  db.getInvocationsBySmartphone(req, res, next);
+};
 
 var requestNotification = function (req, res, next) {
   db.getNotificationByApp(req, res, next);
@@ -86,6 +89,20 @@ var requestActivation = function (req, res, next) {
 
 var insertActivation = function (req, res, next) {
     db.insertActivation(req, res, next);
+};
+
+
+
+var requestNotifications = function (req, res, next) {
+  db.getNotificationsBySmartphone(req, res, next);
+};
+
+var requestNotification = function (req, res, next) {
+  db.getNotificationByApp(req, res, next); // use :notification id
+};
+
+var insertNotification = function (req, res, next) {
+    db.insertNotification(req, res, next);
 };
 
 // ---------------- Routing ----------------------------------------------------
@@ -186,6 +203,25 @@ app.get('/:id/activations/:activation', [requestActivation], function(req, res) 
  * ## Insert new Activation
  */
 app.post('/:id/activations', [insertActivation], function(req, res) {
+  res.json(req.response);
+});
+
+
+
+
+app.get('/:id/notifications', [requestNotifications], function(req, res) {
+  res.json(req.response);
+});
+
+app.get('/:id/notifications/:notification', [requestNotification], function(req, res) {
+  res.json(req.response);
+});
+
+app.get('/:id/invocations', [requestInvocationsBySmartphone], function(req, res) {
+  res.json(req.response);
+});
+
+app.get('/:id/invocations/:invocation', [requestInvocation], function(req, res) {
   res.json(req.response);
 });
 

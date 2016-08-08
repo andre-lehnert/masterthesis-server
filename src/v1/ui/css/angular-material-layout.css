@@ -1,4 +1,8 @@
 
+body {
+  background-color: rgb(250,250,250);
+}
+
 p.ng-binding {
   text-align: left;
 }
@@ -10,6 +14,25 @@ canvas {
         -ms-user-select: none;
     }
 
+#my-speed-dial {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+md-fab-speed-dial.md-fab-bottom-right {
+
+    right: 20px;
+    bottom: 20px;
+
+    position: fixed;;
+}
+
+.fab-add {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
 
 .card-list-headline {
   margin-left: 2%;
@@ -84,7 +107,7 @@ th, td {
 }
 
 .bar-side {
-  height:70px;
+  height:45px;
   border-left: 1px #dddddd solid;
   border-right: 1px #dddddd solid;
   text-align:center;
@@ -159,4 +182,43 @@ th, td {
   .card-2 {
     margin-top: 25em;
   }
+
+  .md-title {
+    font-size: 1em;
+  }
+
+  .md-subhead {
+    font-size: 12px;
+  }
+
+  .md-headline {
+    font-size: 16px;
+  }
+}
+
+.manual-upward {
+  z-index: 100;
+  position: absolute;
+  left: -3%;
+  top: 10%;
+}
+
+.manual-downward {
+  z-index: 100;
+  position: absolute;
+  left: -3%;
+  top: 30%;
+}
+
+
+
+
+
+.dragable-list-item {
+  display: block;
+}
+
+.dragable-list-card {
+  cursor: pointer;
+  overflow: hidden;
 }

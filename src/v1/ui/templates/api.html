@@ -1,76 +1,94 @@
+<div layout="column">
+
+  <div  layout="row" >
+
+    <div flex-offset="5" flex-offset-sm="10" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+      <h2 class="md-headline">API Version Browser</h2>
+
+      <md-card>
+
+            <md-content layout-gt-sm="row" layout-wrap style="padding: 15px 0 0 15px ">
+
+            <md-input-container >
+                <label>API Version</label>
+                <input name="version" ng-model="apiVersion" placeholder="Enter Version, e.g. 1"
+                       required ng-pattern="/^[0-9]{1}$/">
+                <div ng-messages="versionForm.version.$error" role="alert" multiple>
+                  <div ng-message="required" class="my-message">You must supply a valid version number.</div>
+                  <div ng-message="pattern" class="my-message">That doesn't look like a valid version number.</div>
+                </div>
+              </md-input-container>
+
+              <md-button  ng-click="searchAPI()" class="md-raised" style="height: 36px">Show API-Version</md-button ng-disabled="!findVersion">
+
+            </md-content>
+
+      </md-card>
 
 
-<div  layout="row" >
 
-  <div flex-offset="5" flex-offset-sm="10" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-    <h2 class="md-headline">API Version Browser</h2>
-
-
-
-
-          <md-content layout-gt-sm="row" layout-wrap>
-
-          <md-input-container class="md-block" flex-gt-sm>
-              <label>API Version</label>
-              <input name="version" ng-model="apiVersion" placeholder="Enter Version, e.g. 1"
-                     required ng-pattern="/^[0-9]{1}$/">
-              <div ng-messages="versionForm.version.$error" role="alert" multiple>
-                <div ng-message="required" class="my-message">You must supply a valid version number.</div>
-                <div ng-message="pattern" class="my-message">That doesn't look like a valid version number.</div>
-              </div>
-            </md-input-container>
-
-            <md-button  ng-click="searchAPI()" class="md-raised" style="height: 36px">Show API-Version</md-button ng-disabled="!findVersion">
-
-          </md-content>
-
-
-
-
+    </div>
   </div>
+
+
+  <div  layout="row" >
+    <div flex-offset="5" flex-offset-sm="10" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+
+        <md-card>
+
+
+          <md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex" md-autoselect>
+               <md-tab label="operations">
+                 <md-content class="md-padding">
+                   <h1 class="md-headline">Operations</h1>
+
+                   <md-list>
+                      <md-list-item  class="sidenav-list-item" ng-repeat="op in operations"  ng-click="setDetail(op);">
+                        <p>{{op}}</p>
+                      </md-list-item>
+                   </md-list>
+
+                 </md-content>
+               </md-tab>
+               <md-tab label="details">
+                 <md-content class="md-padding">
+                   <h1 class="md-headline">Details</h1>
+
+                   <md-list>
+                      <md-list-item  class="sidenav-list-item" ng-repeat="de in details" ng-click="invokeExample(de);" >
+                        <div style="width: 35%;">
+                          <p>{{de}}</p>
+                        </div>
+                      </md-list-item>
+                   </md-list>
+
+
+                 </md-content>
+               </md-tab>
+
+               <md-tab label={{tabs[2].name}}>
+                 <md-content class="md-padding">
+                   <h1 class="md-headline">{{tabs[2].title}}</h1>
+
+                   <pre>{{response}}</pre>
+
+                 </md-content>
+               </md-tab>
+             </md-tabs>
+
+          </md-card>
+   </div>
+   </div>
+
+
+   <div  layout="row" layout-align="center" ng-show="isLoading" >
+     <div>
+
+       <div layout="row" layout-sm="column" layout-align="space-around" style="margin-top: 20px">
+             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+       </div>
+
+     </div>
+   </div>
+
 </div>
-
-
-<div  layout="row" >
-  <div flex-offset="5" flex-offset-sm="10" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-
-<md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex" md-autoselect>
-     <md-tab label="operations">
-       <md-content class="md-padding">
-         <h1 class="md-headline">Operations</h1>
-
-         <md-list>
-            <md-list-item  class="sidenav-list-item" ng-repeat="op in operations"  ng-click="setDetail(op);">
-              <p>{{op}}</p>
-            </md-list-item>
-         </md-list>
-
-       </md-content>
-     </md-tab>
-     <md-tab label="details">
-       <md-content class="md-padding">
-         <h1 class="md-headline">Details</h1>
-
-         <md-list>
-            <md-list-item  class="sidenav-list-item" ng-repeat="de in details" ng-click="invokeExample(de);" >
-              <div style="width: 35%;">
-                <p>{{de}}</p>
-              </div>
-            </md-list-item>
-         </md-list>
-
-
-       </md-content>
-     </md-tab>
-
-     <md-tab label={{tabs[2].name}}>
-       <md-content class="md-padding">
-         <h1 class="md-headline">{{tabs[2].title}}</h1>
-
-         <json-formatter json="response" open="3"></json-formatter>
-
-       </md-content>
-     </md-tab>
-   </md-tabs>
- </div>
- </div>

@@ -221,6 +221,59 @@ var updateBarSides = function (req, res, next) {
   db.updateSideByBar(req, res, next);
 };
 
+
+var sendLevelI2CRequest = function (req, res, next) {
+
+  var id, receiver, lednumber, color, brightness;
+
+  if (req.response._success) {
+
+    if (req.ledControl) {
+
+      lednumber = req.params.led;
+
+      if (typeof lednumber != 'number') {
+        lednumber = 0;
+      } else {
+        lednumber = parseInt(req.params.led) + 1;
+      }
+
+      receiver = req.ledControl;
+      id = req.response.object._fields.id;
+
+      if (!req.params.color)
+        color = 'ff0000';
+      else
+        color = req.params.color;
+
+      if (!req.params.brightness)
+        brightness = 100;
+      else
+        brightness = parseInt(req.params.brightness);
+
+      console.log('>> SEND I2C REQUEST: '+receiver+', '+lednumber+', '+color+', '+brightness);
+
+      req.receiver = receiver;
+        req.lednumber = lednumber;
+        req.color =  color;
+        req.brightness = brightness;
+        i2c.level(req, res, next);
+
+    } else {
+      res.send('ERROR: sendI2CRequest(): No LED Controller');
+    }
+  } else {
+    res.send('ERROR: sendI2CRequest(): No Side Found');
+  }
+
+};
+
+
+var updateLevel = function (req, res, next) {
+  db.updateSideByLevel(req, res, next);
+};
+
+
 var insertBar = function (req, res, next) {
     db.insertBar(req, res, next);
 };
@@ -237,7 +290,7 @@ var deleteBar = function (req, res, next) {
 
 var getAvailableBars = function(req, res, next) {
   if (req.query.state == 'active') {
-   console.log('getAvailableBars()'); 
+   console.log('getAvailableBars()');
    i2c.getBars(req, res, next);
   } else
    next();
@@ -332,6 +385,21 @@ app.get('/:label/sides/:side/:operation/:led/:color', [requestBar, requestSide, 
  * ## Get a bar by label (A1, A2, ...), side(a, b, c, d), operation (new, add, remove), led number (0-10), color (ff0000), brightness (0-100)
  */
 app.get('/:label/sides/:side/:operation/:led/:color/:brightness', [requestBar, requestSide, sendSideI2CRequest, updateBarSides], function(req, res) {
+ res.json(req.response);
+});
+
+
+/*
+ * ## Get a bar by label (A1, A2, ...), led number (0-10), color (ff0000)
+ */
+app.get('/:label/level/:led/:color', [requestBar, sendLevelI2CRequest, updateLevel], function(req, res) {
+ res.json(req.response);
+});
+
+/*
+ * ## Get a bar by label (A1, A2, ...), led number (0-10), color (ff0000), brightness (0-100)
+ */
+app.get('/:label/level/:led/:color/:brightness', [requestBar, sendLevelI2CRequest, updateLevel], function(req, res) {
  res.json(req.response);
 });
 

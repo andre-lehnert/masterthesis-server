@@ -56,6 +56,30 @@ console.log('I2C:handleLight: receiver ['+target+'] available');
     }
 };
 
+var handleLevel = function(receivers, target, command, req, res, next) {
+
+console.log('I2C:handleLevel: ['+receivers+'], '+target+', '+command);
+
+    if (receivers.length === 0) {
+
+      console.log('NO I2C RECEIVER FOUND');
+
+    } else {
+
+      receivers.forEach(function(val, index, array) {
+
+        if (parseInt(target) === val) {
+
+console.log('I2C:handleLevel: receiver ['+target+'] available');
+
+            req.update = 'level';
+
+            i2c.send(parseInt(target), command, req, res, next);
+        }
+      });
+    }
+};
+
 var handleLightAll = function(receivers, target, command, req, res, next) {
 
   console.log('I2C:handleLightAll: ['+receivers+'], '+target+', '+command);
@@ -175,7 +199,11 @@ var getAvailableBars = function(receivers, target, command, req, res, next) {
     if (receivers.length === 0) {
 
       console.log('NO I2C RECEIVER FOUND');
+      req.availableBars = [];
+      req.response.objects = [];
+      req.response._count = 0;
 
+      next();
     } else {
       var bars = [];
 
@@ -195,7 +223,7 @@ var getAvailableBars = function(receivers, target, command, req, res, next) {
 
       if (req.response.objects.length > 0)
       for (var i = 0; i < req.response.objects.length; i++) {
-console.log(req.response.objects[i]);
+        console.log(req.response.objects[i]);
         for (var j = 0; j < bars.length; j++) {
 
           if (req.response.objects[i]._fields.motor__c == bars[j].motor &&
@@ -383,6 +411,70 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
 
     // 2) Scan, check available receivers, execute light
     i2c.scan(receiver, api.getLightMessage(side.toLowerCase(), operation, led, color, brightness), handleLight, req, res, next);
+
+  },
+
+  // ----------------------------------------------------------------------
+
+  /*
+   *
+   */
+  level : function(req, res, next) {
+
+    var receiver = req.receiver,
+        led = req.lednumber,
+        color = req.color,
+        brightness = req.brightness;
+
+        console.log('I2C:level: '+receiver+', '+led+', '+color+', '+brightness);
+
+    // --------------------------------------------------------------------
+    // 1) Validate
+    if (
+      typeof receiver === 'undefined' ||
+      receiver < 0 ||
+      receiver < 0x10 ||
+      receiver > 0x6e ||
+      receiver === 0x0f
+    ) {
+      return false;
+    }
+
+    if (
+      typeof led === 'undefined' ||
+      led === '' ||
+      typeof led !== 'number' ||
+      led < 1 ||
+      led > 11
+    ) {
+        return false;
+    }
+
+    if (
+      typeof color === 'undefined' ||
+      color === ''
+    ) {
+      if (operation === '+') {
+        console.log("color");
+        return false;
+      }
+    }
+
+    if (
+      typeof brightness === 'undefined' ||
+      brightness === '' ||
+      typeof brightness !== 'number' ||
+      brightness < 0 ||
+      brightness > 100
+    ) {
+      if (operation === '+') {
+        console.log("brightness");
+        return false;
+      }
+    }
+
+    // 2) Scan, check available receivers, execute level
+    i2c.scan(receiver, api.getLevelMessage(led, color, brightness), handleLevel, req, res, next);
 
   },
 

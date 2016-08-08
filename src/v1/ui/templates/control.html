@@ -1,48 +1,44 @@
-<div  layout="row">
-  <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-    <h2 class="md-display-1"></h2>
+<div layout="column">
+
+  <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+  <!-- Card #1: Choose bar -->
+  <div layout="row" flex-offset="5">
+    <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+        <md-card flex  style="min-width: 450px">
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">Bar Selection</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+            <!-- Bar Selection -->
+            <div style="margin: 2% 0 0 0">
+            <table>
+              <tr class="table-center">
+                <td></td>
+                <td class="md-title" ng-repeat="c in bars.cols">{{c}}</td>
+              </tr>
+              <tr ng-repeat="row in bars.rows">
+                <td class="md-title">{{row.number}}</td>
+                <td ng-repeat="col in row.cols">
+                  <md-button ng-class="col.class" ng-disabled="! col.active" ng-click="selectBar(col)" aria-label="Bar">
+                    <span class="md-title">{{col.name}}</span>
+                  </md-button>
+                </td>
+              </tr>
+            </table>
+          </div>
+          </md-card-content>
+        </md-card>
+
+      </div>
   </div>
-</div>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- Card #1: Choose bar -->
-<div  layout="row">
-  <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-      <md-card>
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Bar Selection</span>
-          </md-card-title-text>
-        </md-card-title>
-        <md-card-content>
-          <!-- Bar Selection -->
-          <div style="margin: 5% 0 5% 0">
-          <table>
-            <tr class="table-center">
-              <td></td>
-              <td class="md-title" ng-repeat="c in bars.cols">{{c}}</td>
-            </tr>
-            <tr ng-repeat="row in bars.rows">
-              <td class="md-title">{{row.number}}</td>
-              <td ng-repeat="col in row.cols">
-                <md-button ng-class="col.class" ng-disabled="! col.active" ng-click="selectBar(col)" aria-label="Bar">
-                  <span class="md-title">{{col.name}}</span>
-                </md-button>
-              </td>
-            </tr>
-          </table>
-        </div>
-        </md-card-content>
-      </md-card>
-
-    </div>
-</div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- Card: Bar Token -->
-<div  layout="row" ng-show="isBarSelected" class="animate-show">
-      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-        <md-card>
+<div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+        <md-card flex style="min-width: 450px">
           <md-card-title>
             <md-card-title-text>
               <span class="md-headline">Token</span>
@@ -53,11 +49,8 @@
             <!-- Wait for response -->
             <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isTokenReceived"></md-progress-linear>
 
-            <!-- JSON Response -->
-            <md-input-container class="md-block" ng-show="isTokenReceived">
-              <p ng-hide="isTokenValid">No Token found!</p>
-              <json-formatter json="token" open="3" ng-show="isTokenValid"></json-formatter>
-            </md-input-container>
+            <pre ng-show="isTokenReceived && !isTokenValid">No Token found!</pre>
+            <pre ng-show="isTokenReceived && isTokenValid">{{token | json}}</pre>
 
           </md-card-content>
         </md-card>
@@ -66,66 +59,59 @@
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- Card: Choose target bar position -->
-<div  layout="row" ng-show="isBarSelected" class="animate-show">
-      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-        <md-card>
-          <md-card-title>
-            <md-card-title-text>
-              <span class="md-headline">Position of Bar</span>
-            </md-card-title-text>
-          </md-card-title>
+<div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+        <md-card flex style="min-width: 450px">
           <md-card-content>
 
-            <!-- Wait for response -->
-            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isBarSelected"></md-progress-linear>
+            <div  layout="row" layout-align="top left">
+              <div flex="25" style="min-width: 150px">
+                <span class="md-headline">Position of Bar</span>
+                  <!-- Target Position -->
+                 <div style="margin: 3% 0 1% 0">
+                    <div class="vertical-slider">
+                     <rzslider rz-slider-model="barPosition" rz-slider-options="movementSpeedSlider.options"  class="md-title"></rzslider>
+                   </div>
+                 </div>
+              </div>
 
-            <!-- Target Position -->
-            <div style="margin: 1% 0 1% 0" ng-show="isBarSelected">
-              <div class="vertical-slider">
-               <rzslider rz-slider-model="barPosition" rz-slider-options="movementSpeedSlider.options"  class="md-title"></rzslider>
-             </div>
-           </div>
+             <div flex>
+               <!-- Stepper Mode -->
+               <span class="md-headline">Movement Speed</span>
 
-           <div ng-show="isBarSelected">
-             <!-- Stepper Mode -->
-             <!-- spacer --> <div style="height: 25px"></div>
-             <span class="md-headline">Movement Speed</span>
+               <div style="margin: 3% 0 0 1%">
+                 <md-radio-group ng-model="barStepperMode">
+                   <md-radio-button value="{{mode.step}}"
+                     ng-repeat="mode in stepperModes" ng-checked="true"
+                     class="md-primary"
+                     aria-label="{{mode.step}}">{{mode.step}}</md-radio-button>
+                 </md-radio-group>
+               </div>
 
-             <div style="margin: 3% 0 0 1%">
-               <md-radio-group ng-model="barStepperMode">
-                 <md-radio-button value="{{mode.step}}"
-                   ng-repeat="mode in stepperModes" ng-checked="true"
-                   class="md-primary"
-                   aria-label="{{mode.step}}">{{mode.speed}}</md-radio-button>
-               </md-radio-group>
-             </div>
-
-             <!-- Send MOVE command -->
-             <md-button class="md-raised md-subhead" aria-label="Move" ng-click="sendMove()">
-                 Move
-             </md-button>
-             <md-button class="md-raised md-subhead" aria-label="Calibrate" ng-click="sendCalibration()" ng-disabled="! isPositionReceived">
-                 Calibrate
-             </md-button>
-
-              <div ng-hide="isPositionReceived">
-               <!-- spacer --> <div style="height: 25px"></div>
-               <!-- Wait for response -->
-               <md-progress-linear md-mode='query' style="width: 100%;" ></md-progress-linear>
               </div>
 
             </div>
 
+             <div style="margin: 5% 0 0 0">
+                <!-- Send MOVE command -->
+               <md-button class="md-raised md-subhead" aria-label="Move" ng-click="sendMove()">
+                   Move
+               </md-button>
+               <md-button class="md-raised md-subhead" aria-label="Calibrate" ng-click="sendCalibration()" ng-disabled="! isPositionReceived">
+                   Calibrate
+               </md-button>
+            </div>
           </md-card-content>
         </md-card>
     </div>
 </div>
 
+
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- Move: Request & Response -->
-<div layout="row" ng-show="isMoveRequestSend" class="animate-show">
-      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-        <md-card>
+<div layout="row" ng-show="isMoveRequestSend" class="animate-show" flex-offset="5">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+        <md-card flex style="min-width: 450px">
           <md-card-title>
             <md-card-title-text>
               <span class="md-headline">REST-Request</span>
@@ -133,11 +119,12 @@
           </md-card-title>
           <md-card-content>
 
-            <!-- REST Request -->
+            <!-- REST Request
             <md-input-container class="md-block">
               <label></label>
               <textarea ng-model="moveRequest.text" rows="2" md-select-on-focus style="height:30px"></textarea>
-            </md-input-container>
+            </md-input-container>-->
+            <pre>{{moveRequest.text}}</pre>
 
             <span class="md-headline">JSON-Response</span>
             <!-- spacer --> <div style="height: 25px"></div>
@@ -145,10 +132,12 @@
             <!-- Response -->
             <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isMoveResponseReceived"></md-progress-linear>
 
-            <!-- JSON Response -->
+            <!-- JSON Response
             <md-input-container class="md-block" ng-show="isMoveResponseReceived">
               <json-formatter json="moveResponse.json" open="3"></json-formatter>
-            </md-input-container>
+            </md-input-container>-->
+
+            <pre ng-show="isMoveResponseReceived">{{moveResponse.json | json}}</pre>
 
           </md-card-content>
         </md-card>
@@ -157,60 +146,81 @@
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- Card #3: Choose Color, Animation & Duration -->
-<div  layout="row" ng-show="isBarSelected" class="animate-show">
-      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-        <md-card>
-          <md-card-title>
-            <md-card-title-text>
-              <span class="md-headline">Color & Animation</span>
-            </md-card-title-text>
-          </md-card-title>
-          <md-card-content>
+<div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
+      <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+        <md-card flex style="min-width: 450px">
+          <md-card-content >
 
-              <!-- Wait for response -->
-              <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isAnimationReceived"></md-progress-linear>
+            <div layout="row" layout-align="top left">
+              <div flex="25" style="min-width: 145px">
+                <span class="md-headline">Color</span>
+                <div style="margin: 3% 0 0 0%">
+                  <!-- Color Picker -->
+                  <md-button  class="md-raised md-subhead" aria-label="Color" colorpicker="hex"
+                      ng-model="barColor"
+                      style="background-color: {{barColor}};color: {{readableColor(barColor)}}">
+                      Choose Color
+                  </md-button>
+                  <md-content layout-padding>
+                    <form name="colorForm">
+                      <md-input-container class="md-block" style="margin: 5px 0 0 -2px; width: 116px">
+                        <label>Color</label>
+                        <input required md-no-asterisk name="color" ng-model="barColor">
+                        <div ng-messages="barColor.$error">
+                          <div ng-message="required">This is required.</div>
+                        </div>
+                      </md-input-container>
+                    </form>
+                  </md-content>
 
-              <div ng-show="isAnimationReceived">
-                <!-- Color Picker -->
-                <md-button  class="md-raised md-subhead" aria-label="Color" colorpicker="rgba"
-                    ng-model="barColor"
-                    style="background-color: {{barColor}};">
-                    Choose Color
-                </md-button>
-
-                <!-- Animation -->
-                <div style="margin: 3% 0 0 1%">
-                  <md-radio-group ng-model="barAnimation">
-                    <md-radio-button value="{{animation}}"
-                      ng-repeat="animation in animations" ng-checked="true"
-                      class="md-primary"
-                      ng-click="selectAnimation(animation)"
-                      aria-label="">{{animation}}</md-radio-button>
-                  </md-radio-group>
                 </div>
-
-                <!-- Speed -->
-                <h3 class="md-subtitle">Animation speed:</h3>
-                <div style="margin: 3% 0 0 1%">
-                  <rzslider rz-slider-model="animationSpeed" rz-slider-options="animationSpeedSlider.options"  class="md-title"></rzslider>
-                </div>
-
-                <!-- Update bar animation -->
-                <md-button class="md-raised md-subhead" aria-label="Animate" ng-click="sendAnimation()">
-                    Animate
-                </md-button>
-
               </div>
+
+              <div  flex="25" style="min-width: 145px">
+                <span class="md-headline">Animation</span>
+                  <!-- Animation -->
+                  <div style="margin: 6% 0 0 1%">
+                    <md-radio-group ng-model="barAnimation">
+                      <md-radio-button value="{{animation}}"
+                        ng-repeat="animation in animations" ng-checked="true"
+                        class="md-primary"
+                        ng-click="selectAnimation(animation)"
+                        aria-label="">{{animation}}</md-radio-button>
+                    </md-radio-group>
+                  </div>
+              </div>
+
+              <div flex>
+                  <!-- Speed -->
+                  <span class="md-headline">Animation speed:</span>
+                  <div style="margin: 3% 0 0 1%">
+                    <rzslider rz-slider-model="animationSpeed" rz-slider-options="animationSpeedSlider.options"  class="md-title"></rzslider>
+                  </div>
+
+                  <!-- Brightness -->
+                  <span class="md-headline">Brightness:</span>
+                  <div style="margin: 3% 0 0 1%">
+                    <rzslider rz-slider-model="animationBrightness" rz-slider-options="animationSpeedSlider.options"  class="md-title"></rzslider>
+                  </div>
+              </div>
+            </div>
+
+              <!-- Update bar animation -->
+              <md-button class="md-raised md-subhead" aria-label="Animate" ng-click="sendAnimation()">
+                  Animate
+              </md-button>
+
           </md-card-content>
         </md-card>
     </div>
 </div>
 
+
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- Animation: Request & Response -->
-<div layout="row" ng-show="isAnimationRequestSend" class="animate-show">
-      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-        <md-card>
+<div layout="row" ng-show="isAnimationRequestSend" class="animate-show" flex-offset="5">
+      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+        <md-card flex style="min-width: 450px">
           <md-card-title>
             <md-card-title-text>
               <span class="md-headline">REST-Request</span>
@@ -218,11 +228,12 @@
           </md-card-title>
           <md-card-content>
 
-            <!-- REST Request -->
+            <!-- REST Request
             <md-input-container class="md-block">
               <label></label>
               <textarea ng-model="animationRequest.text" rows="2" md-select-on-focus style="height:30px"></textarea>
-            </md-input-container>
+            </md-input-container> -->
+            <pre>{{animationRequest.text}}</pre>
 
             <span class="md-headline">JSON-Response</span>
             <!-- spacer --> <div style="height: 25px"></div>
@@ -230,139 +241,161 @@
             <!-- Response -->
             <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isAnimationResponseReceived"></md-progress-linear>
 
-            <!-- JSON Response -->
+            <!-- JSON Response
 
             <md-input-container class="md-block" ng-show="isAnimationResponseReceived">
               <json-formatter json="animationResponse.json" open="3"></json-formatter>
-            </md-input-container>
-
+            </md-input-container>-->
+            <pre ng-show="isAnimationResponseReceived">{{animationResponse.json | json}}</pre>
 
           </md-card-content>
         </md-card>
     </div>
 </div>
 
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- Card: Bar Side LED Control -->
-<div  layout="row" ng-show="isBarSelected" class="animate-show">
-      <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-        <md-card>
-          <md-card-title>
-            <md-card-title-text>
-              <span class="md-headline">Bar sides LED lighting</span>
-            </md-card-title-text>
-          </md-card-title>
-          <md-card-content>
+  <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+  <!-- Card: Bar Side LED Control -->
+  <div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
+        <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+          <md-card flex style="min-width: 450px">
 
-            <md-progress-linear md-mode='query' style="width: 100%;" ng-hide="isSideReceived"></md-progress-linear>
+            <md-card-content  ng-hide="isSideReceived">
+              <span class="md-headline">Bar Side LED Lighting</span>
+              <div style="margin: 5% 0 0% 1%">
+                <md-progress-linear md-mode='query' style="width: 100%;"></md-progress-linear>
+              </div>
+            </md-card-content>
 
+            <md-card-content layout="row" layout-align="top left" ng-show="isSideReceived">
+              <div flex="33" style="min-width: 260px">
+                <span class="md-headline">Bar Side LED Lighting</span>
+                <table>
+                  <tr style="height:33px">
+                    <td style="width: 60px" class="deg-30 text-center">D</td>
+                    <td style="width: 60px" class="deg30 text-center">C</td>
 
-            <div ng-show="isSideReceived">
+                    <td style="width: 5%"></td>
 
-            <table>
-              <tr style="height:70px">
-                <td style="width: 120px" class="deg-30 text-center">D</td>
-                <td style="width: 120px" class="deg30 text-center">C</td>
+                    <td style="width: 60px" class="deg-30 text-center">B</td>
+                    <td style="width: 60px" class="deg30 text-center">A</td>
+                  <tr>
+                  <tr style="height:33px">
+                    <td class="deg30-inverted md-headline text-center bar-side">A</td>
+                    <td class="deg-30-inverted md-headline text-center bar-side">B</td>
 
-                <td style="width: 5%"></td>
+                    <td></td>
 
-                <td style="width: 120px" class="deg-30 text-center">B</td>
-                <td style="width: 120px" class="deg30 text-center">A</td>
-              <tr>
-              <tr style="height:70px">
-                <td class="deg30-inverted md-headline text-center bar-side">A</td>
-                <td class="deg-30-inverted md-headline text-center bar-side">B</td>
+                    <td class="deg30-inverted md-headline text-center bar-side">C</td>
+                    <td class="deg-30-inverted md-headline text-center bar-side">D</td>
+                  <tr>
 
-                <td></td>
+                  <tr ng-repeat="side in barSides">
+                    <td class="bar-side">
+                      <md-button class="md-fab md-mini" style="background-color: {{side.colorA}};color: {{readableColor(side.colorA)}}" colorpicker="hex" ng-model="side.colorA">
+                        <span class="md-title">{{side.led}}</span>
+                      </md-button>
+                    </td>
+                    <td class="bar-side">
+                      <md-button class="md-fab md-mini" style="background-color: {{side.colorB}};color: {{readableColor(side.colorB)}}" colorpicker="hex" ng-model="side.colorB" >
+                        <span class="md-title">{{side.led}}</span>
+                      </md-button>
+                    </td>
 
-                <td class="deg30-inverted md-headline text-center bar-side">C</td>
-                <td class="deg-30-inverted md-headline text-center bar-side">D</td>
-              <tr>
+                    <td></td>
 
-              <tr ng-repeat="side in barSides">
-                <td class="bar-side">
-                  <md-button class="md-fab md-raised" style="background-color: {{side.colorA}};" colorpicker="rgba" ng-model="side.colorA">
-                    <span class="md-title">{{side.led}}</span>
+                    <td class="bar-side">
+                      <md-button class="md-fab  md-mini" style="background-color: {{side.colorC}};color: {{readableColor(side.colorC)}}" colorpicker="hex" ng-model="side.colorC">
+                        <span class="md-title">{{side.led}}</span>
+                      </md-button>
+                    </td>
+                    <td class="bar-side">
+                      <md-button class="md-fab md-mini" style="background-color: {{side.colorD}};color: {{readableColor(side.colorD)}}" colorpicker="hex" ng-model="side.colorD" >
+                        <span class="md-title">{{side.led}}</span>
+                      </md-button>
+                    </td>
+                  <tr>
+
+                  <tr style="height:33px">
+                    <td class="deg30-blank"></td>
+                    <td class="deg-30-blank"></td>
+
+                    <td></td>
+
+                    <td class="deg30-blank"></td>
+                    <td class="deg-30-blank"></td>
+                  <tr>
+
+                </table>
+              </div>
+
+              <div flex="50" flex-offset="5" layout="column">
+
+                <!-- brightness -->
+                <span class="md-headline">Lighting brightness:</span>
+                <div style="margin: 5% 0 5% 1%">
+                  <rzslider rz-slider-model="lightingBrightness" rz-slider-options="lightingBrightnessSlider.options"  class="md-title"></rzslider>
+                </div>
+
+                <!-- reset sides -->
+                <span class="md-headline">Reset Sides:</span>
+                <div style="margin: 5% 0 0 1%">
+
+                  <fieldset>
+                     <div layout="row" layout-wrap flex>
+                     <div flex-xs flex="50">
+                       <md-checkbox aria-label="Select All"
+                                    ng-checked="isChecked()"
+                                    md-indeterminate="isIndeterminate()"
+                                    ng-click="toggleAll()">
+                         <span ng-if="isChecked()">Un-</span>Select All
+                       </md-checkbox>
+                     </div>
+                       <div flex="100" ng-repeat="item in sides">
+                         <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+                          Reset Side {{ item }}
+                         </md-checkbox>
+                       </div>
+                     </div>
+                  </fieldset>
+
+                </div>
+
+                <!-- brightness -->
+                <span class="md-headline">Set Side LED Color</span>
+                <div style="margin: 5% 0 5% 1%">
+
+                  <md-button class="md-raised md-subhead" style="background-color: {{sideAColor}};color: {{readableColor(sideAColor)}}" aria-label="Set A" colorpicker="hex" ng-model="sideAColor">
+                      Side A
                   </md-button>
-                </td>
-                <td class="bar-side">
-                  <md-button class="md-fab" style="background-color: {{side.colorB}};" colorpicker="rgba" ng-model="side.colorB" >
-                    <span class="md-title">{{side.led}}</span>
+                  <md-button class="md-raised md-subhead" style="background-color: {{sideBColor}};color: {{readableColor(sideBColor)}}" aria-label="Set B" colorpicker="hex" ng-model="sideBColor">
+                      Side B
                   </md-button>
-                </td>
-
-                <td></td>
-
-                <td class="bar-side">
-                  <md-button class="md-fab md-raised" style="background-color: {{side.colorC}};" colorpicker="rgba" ng-model="side.colorC">
-                    <span class="md-title">{{side.led}}</span>
+                  <md-button class="md-raised md-subhead" style="background-color: {{sideCColor}};color: {{readableColor(sideCColor)}}" aria-label="Set C" colorpicker="hex" ng-model="sideCColor">
+                      Side C
                   </md-button>
-                </td>
-                <td class="bar-side">
-                  <md-button class="md-fab" style="background-color: {{side.colorD}};" colorpicker="rgba" ng-model="side.colorD" >
-                    <span class="md-title">{{side.led}}</span>
+                  <md-button class="md-raised md-subhead" style="background-color: {{sideDColor}};color: {{readableColor(sideDColor)}}" aria-label="Set D" colorpicker="hex" ng-model="sideDColor">
+                      Side D
                   </md-button>
-                </td>
-              <tr>
 
-              <tr style="height:70px">
-                <td class="deg30-blank"></td>
-                <td class="deg-30-blank"></td>
+                </div>
 
-                <td></td>
+                  <!-- spacer --> <div style="height: 25px"></div>
+                <div layout="row" layout-align="left center">
 
-                <td class="deg30-blank"></td>
-                <td class="deg-30-blank"></td>
-              <tr>
+                     <md-button class="md-raised md-subhead" aria-label="Lighting" ng-click="sendLighting()">
+                         Update Lighting
+                     </md-button>
 
-            </table>
+                     <div ng-hide="isLightingResponseReceived" flex>
+                        <md-progress-circular md-mode="indeterminate" md-diameter="20px" style="top: -8px"></md-progress-circular>
+                     </div>
 
-            <!-- spacer --> <div style="height: 25px"></div>
+                </div>
 
-            <!-- Update bar side lighting -->
-            <md-button class="md-raised md-subhead" aria-label="Reset A" ng-click="sendResetLighting('A')">
-                Reset Side A
-            </md-button>
-            <md-button class="md-raised md-subhead" aria-label="Reset B" ng-click="sendResetLighting('B')">
-                Reset Side B
-            </md-button>
-            <md-button class="md-raised md-subhead" aria-label="Reset C" ng-click="sendResetLighting('C')">
-                Reset Side C
-            </md-button>
-            <md-button class="md-raised md-subhead" aria-label="Reset D" ng-click="sendResetLighting('D')">
-                Reset Side D
-            </md-button>
 
-            <div ng-hide="sendResetLightingDone">
-              <!-- spacer --> <div style="height: 25px"></div>
-              <md-progress-linear md-mode='query' style="width: 100%;"></md-progress-linear>
-            </div>
+            </md-card-content>
+          </md-card>
+      </div>
+  </div>
 
-            <!-- spacer --> <div style="height: 25px"></div>
-
-            <!-- brightness -->
-            <h3 class="md-subtitle">Lighting brightness:</h3>
-            <div style="margin: 3% 0 0 1%">
-              <rzslider rz-slider-model="lightingBrightness" rz-slider-options="lightingBrightnessSlider.options"  class="md-title"></rzslider>
-            </div>
-
-            <!-- spacer --> <div style="height: 25px"></div>
-
-            <!-- Update bar side lighting -->
-            <div>
-              <md-button class="md-raised md-subhead" aria-label="Lighting" ng-click="sendLighting()">
-                  Update Lighting
-              </md-button>
-            </div>
-
-            <div ng-hide="isLightingResponseReceived">
-              <!-- spacer --> <div style="height: 25px"></div>
-              <md-progress-linear md-mode='query' style="width: 100%;"></md-progress-linear>
-            </div>
-
-          </div>
-
-          </md-card-content>
-        </md-card>
-    </div>
 </div>

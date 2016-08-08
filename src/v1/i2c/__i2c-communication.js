@@ -72,6 +72,25 @@ console.log('I2C:send: >> Update Lighting Pattern');
                 "led_10__c": req.leds[10],
                 "label__c": req.side
               };
+          } else if (req.update === 'level') {
+
+            console.log('I2C:send: >> Update Level Lighting Pattern');
+
+            req.body =
+              {
+                "led_0__c": req.leds[0],
+                "led_1__c": req.leds[1],
+                "led_2__c": req.leds[2],
+                "led_3__c": req.leds[3],
+                "led_4__c": req.leds[4],
+                "led_5__c": req.leds[5],
+                "led_6__c": req.leds[6],
+                "led_7__c": req.leds[7],
+                "led_8__c": req.leds[8],
+                "led_9__c": req.leds[9],
+                "led_10__c": req.leds[10],
+                "label__c": req.side
+              };
           } else if (req.update === 'animation') {
 
 console.log('I2C:send: >> Update Animation: '+req.animation);

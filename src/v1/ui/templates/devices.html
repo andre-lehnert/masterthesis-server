@@ -1,11 +1,42 @@
-<div  layout="row">
-  <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
-    <h2 class="md-title">{{currentPage}}</h2>
+<div layout="column">
+
+  <div  layout="row" flex-offset="5" ng-repeat="smartphone in smartphones">
+    <div flex-offset="5" flex-offset-sm="10" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+
+      <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Smartphone: {{smartphone.model}}</span>
+            <span class="md-subhead">ID: {{smartphone.id}}</span>
+            <md-switch aria-label="{{smartphone.id}}" ng-model="smartphone.primary" ng-change="setPrimarySmartphone(smartphone.id)"><span>primary smartphone</span></md-switch>
+
+          </md-card-title-text>
+        </md-card-title>
+        <md-content>
+
+        </md-content>
+        <md-card-actions layout="row" layout-align="end center">
+
+          <md-button ng-click="deleteSmartphone(smartphone)">DELETE</md-button>
+        </md-card-actions>
+      </md-card>
+
+
+    </div>
   </div>
+
+  <md-button class="md-fab fab-add" ng-click="addSmartphone()">
+        <i class="material-icons">add</i>
+  </md-button>
+
 </div>
 
-<div  layout="row" >
-  <div flex-offset="5" flex-offset-sm="10" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50">
+<div  layout="row" layout-align="center" ng-show="isLoading" >
+  <div>
+
+    <div layout="row" layout-sm="column" layout-align="space-around" style="margin-top: 20px">
+          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
 
   </div>
 </div>

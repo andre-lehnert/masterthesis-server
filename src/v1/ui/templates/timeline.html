@@ -1,69 +1,296 @@
 
-  <div  layout="row">
+
+
+<div infinite-scroll='loadMore()'  infinite-scroll-disabled="isLoading" layout="column">
+
+<div layout="row" ng-repeat="day in thisWeek" flex-offset="5">
     <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50" >
       <div class="md-padding" layout="column">
 
         <div  layout="row" >
-          <h2 class="md-headline card-list-headline" >Dienstag, 01.01.1970</h2>
+          <h2 class="md-headline card-list-headline">{{day.praefix}}{{day.date}}</h2>
         </div>
 
 
         <div  layout="row" >
           <md-card flex="" >
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Icon action buttons</span>
-          </md-card-title-text>
-        </md-card-title>
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline" style="color: #F9A825" >Notifications</span>
+              </md-card-title-text>
+            </md-card-title>
+
         <md-card-content>
 
-          <!--<canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-series="series"></canvas>-->
+          <div layout="row" >
+          <canvas flex  chart-colors="['#F9A825']" class="chart chart-bar" chart-data="day.notifications.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
 
+          <div flex="25" class="md-padding" layout="column" layout-align="center" hide-xs>
+            <span class="md-title">Notifications:</span>
+            <span class="md-display-2" style="color: #F9A825">{{day.notifications.sum}}</span>
+          </div>
 
+          </div>
         </md-card-content>
-        <md-card-actions layout="row" layout-align="end center">
-          <md-button class="md-icon-button" aria-label="Favorite">
-            <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
-          </md-button>
-          <md-button class="md-icon-button" aria-label="Settings">
-            <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
-          </md-button>
-          <md-button class="md-icon-button" aria-label="Share">
-            <md-icon md-svg-icon="img/icons/share-arrow.svg"></md-icon>
-          </md-button>
-        </md-card-actions>
+
       </md-card>
     </div>
 
+    <div  layout="row" >
+      <md-card flex="" >
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline" style="color: #0288D1" >App Invocations</span>
+          </md-card-title-text>
+        </md-card-title>
+
+    <md-card-content>
+
+      <div layout="row" >
+        <canvas  flex chart-colors="['#0288D1']" class="chart chart-bar" chart-data="day.invocations.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
+
+        <div flex="25" class="md-padding" layout="column"  layout-align="center" hide-xs>
+          <span class="md-title">Invocations:</span>
+          <span class="md-display-2" style="color: #0288D1">{{day.invocations.sum}}</span>
+          <span class="md-title">App Usage:</span>
+          <span class="md-display-2" style="color: #0288D1">{{day.invocations.usageHours}}h {{day.invocations.usageMinutes}}min</span>
+        </div>
+
+      </div>
+    </md-card-content>
+
+  </md-card>
+  </div>
+
+  <div  layout="row" >
+    <md-card flex="" >
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-headline" style="color: #D81B60" >Smartphone Activations</span>
+        </md-card-title-text>
+      </md-card-title>
+
+  <md-card-content>
+    <div layout="row" >
+      <canvas flex chart-colors="['#D81B60']" class="chart chart-bar" chart-data="day.activations.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
+
+      <div flex="25" class="md-padding" layout="column"  layout-align="center" hide-xs>
+        <span class="md-title">Activations:</span>
+        <span class="md-display-2" style="color: #D81B60">{{day.activations.sum}}</span>
+        <span class="md-title">Usage:</span>
+        <span class="md-display-2" style="color: #D81B60">{{day.activations.usageHours}}h {{day.activations.usageMinutes}}min</span>
+      </div>
+
+    </div>
+  </md-card-content>
+
+  </md-card>
+  </div>
+
+
+
+  </div>
+  </div>
+</div>
+
+<div ng-repeat="week in weeks" flex-offset="5">
+
+  <div  layout="row">
+    <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50" >
+      <div class="md-padding" layout="column">
+
+        <div  layout="row" >
+          <h2 class="md-headline card-list-headline"><strong>Week {{week.week}}:</strong> {{week.start}} - {{week.end}}</h2>
+        </div>
 
 
         <div  layout="row" >
           <md-card flex="" >
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Icon action buttons</span>
-          </md-card-title-text>
-        </md-card-title>
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline" style="color: #F9A825" >Notifications</span>
+              </md-card-title-text>
+            </md-card-title>
+
         <md-card-content>
-          <p>
-            The titles of Washed Out's breakthrough song and the first single from Paracosm share the
-            two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
-          </p>
+
+          <div layout="row" >
+          <canvas flex id="weekNoti{{week.start}}" chart-colors="['#F9A825']" class="chart chart-bar" chart-data="week.notifications.days" chart-labels="weekLabels" chart-series="series" chart-options="chartOptions"></canvas>
+
+          <div flex="25" class="md-padding" layout="column" layout-align="center" hide-xs>
+            <span class="md-title">Notifications:</span>
+            <span class="md-display-2" style="color: #F9A825">{{week.notifications.sum}}</span>
+          </div>
+
+          </div>
         </md-card-content>
-        <md-card-actions layout="row" layout-align="end center">
-          <md-button class="md-icon-button" aria-label="Favorite">
-            <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
-          </md-button>
-          <md-button class="md-icon-button" aria-label="Settings">
-            <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
-          </md-button>
-          <md-button class="md-icon-button" aria-label="Share">
-            <md-icon md-svg-icon="img/icons/share-arrow.svg"></md-icon>
-          </md-button>
-        </md-card-actions>
+
       </md-card>
     </div>
 
+    <div  layout="row" >
+      <md-card flex="" >
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline" style="color: #0288D1" >App Invocations</span>
+          </md-card-title-text>
+        </md-card-title>
+
+    <md-card-content>
+
+      <div layout="row" >
+        <canvas flex id="weekInvo{{week.start}}" chart-colors="['#0288D1']" class="chart chart-bar" chart-data="week.invocations.days" chart-labels="weekLabels" chart-series="series" chart-options="chartOptions"></canvas>
+
+        <div flex="25" class="md-padding" layout="column"  layout-align="center" hide-xs>
+          <span class="md-title">Invocations:</span>
+          <span class="md-display-2" style="color: #0288D1">{{week.invocations.sum}}</span>
+          <span class="md-title">Usage:</span>
+          <span class="md-display-2" style="color: #0288D1">{{week.invocations.usageHours}}h {{week.invocations.usageMinutes}}min</span>
+        </div>
+
+      </div>
+    </md-card-content>
+
+  </md-card>
   </div>
+
+  <div  layout="row" >
+    <md-card flex="" >
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-headline" style="color: #D81B60" >Smartphone Activations</span>
+        </md-card-title-text>
+      </md-card-title>
+
+  <md-card-content>
+    <div layout="row" >
+      <canvas flex  id="weekActy{{week.start}}" chart-colors="['#D81B60']" class="chart chart-bar" chart-data="week.activations.days" chart-labels="weekLabels" chart-series="series" chart-options="chartOptions"></canvas>
+
+      <div flex="25" class="md-padding" layout="column"  layout-align="center" hide-xs>
+        <span class="md-title">Activations:</span>
+        <span class="md-display-2" style="color: #D81B60">{{week.activations.sum}}</span>
+        <span class="md-title">Usage:</span>
+        <span class="md-display-2" style="color: #D81B60">{{week.activations.usageHours}}h {{week.activations.usageMinutes}}min</span>
+      </div>
+
+    </div>
+  </md-card-content>
+
+  </md-card>
+  </div>
+
+
+
+  </div>
+  </div>
+  </div>
+
+
+
+
+
+  <div layout="row" ng-repeat="day in week.days"  flex-offset="5">
+    <div flex-offset="5" flex-offset-sm="5" flex-offset-gt-md="10" flex="90" flex-gt-md="80" flex-lg="70" flex-gt-lg="50" >
+      <div class="md-padding" layout="column">
+
+        <div  layout="row" >
+          <h2 class="md-headline card-list-headline">{{day.date}}</h2>
+        </div>
+
+
+        <div  layout="row" >
+          <md-card flex="" >
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline" style="color: #F9A825" >Notifications</span>
+              </md-card-title-text>
+            </md-card-title>
+
+        <md-card-content>
+
+          <div layout="row" >
+          <canvas flex  chart-colors="['#F9A825']" class="chart chart-bar" chart-data="day.notifications.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
+
+          <div flex="25" class="md-padding" layout="column" layout-align="center" hide-xs>
+            <span class="md-title">Notifications:</span>
+            <span class="md-display-2" style="color: #F9A825">{{day.notifications.sum}}</span>
+          </div>
+
+          </div>
+        </md-card-content>
+
+      </md-card>
+    </div>
+
+    <div  layout="row" >
+      <md-card flex="" >
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline" style="color: #0288D1" >App Invocations</span>
+          </md-card-title-text>
+        </md-card-title>
+
+    <md-card-content>
+
+      <div layout="row" >
+        <canvas  flex chart-colors="['#0288D1']" class="chart chart-bar" chart-data="day.invocations.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
+
+        <div flex="25" class="md-padding" layout="column"  layout-align="center" hide-xs>
+          <span class="md-title">Invocations:</span>
+          <span class="md-display-2" style="color: #0288D1">{{day.invocations.sum}}</span>
+          <span class="md-title">App Usage:</span>
+          <span class="md-display-2" style="color: #0288D1">{{day.invocations.usageHours}}h {{day.invocations.usageMinutes}}min</span>
+        </div>
+
+      </div>
+    </md-card-content>
+
+  </md-card>
+  </div>
+
+  <div  layout="row" >
+    <md-card flex="" >
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-headline" style="color: #D81B60" >Smartphone Activations</span>
+        </md-card-title-text>
+      </md-card-title>
+
+  <md-card-content>
+    <div layout="row" >
+      <canvas flex chart-colors="['#D81B60']" class="chart chart-bar" chart-data="day.activations.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
+
+      <div flex="25" class="md-padding" layout="column"  layout-align="center" hide-xs>
+        <span class="md-title">Activations:</span>
+        <span class="md-display-2" style="color: #D81B60">{{day.activations.sum}}</span>
+        <span class="md-title">Usage:</span>
+        <span class="md-display-2" style="color: #D81B60">{{day.activations.usageHours}}h {{day.activations.usageMinutes}}min</span>
+      </div>
+
+    </div>
+  </md-card-content>
+
+  </md-card>
+  </div>
+
+
+
+  </div>
+  </div>
+  </div>
+
+
+
 </div>
+</div>
+
+
+<div  layout="row" layout-align="center" ng-show="isLoading" >
+  <div>
+
+    <div layout="row" layout-sm="column" layout-align="space-around" style="margin-top: 20px">
+          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+
+  </div>
 </div>
