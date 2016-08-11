@@ -266,7 +266,7 @@ var animateBar = function(req, res, next) {
         req.speed = speed;
 
         console.log('>> SEND I2C REQUEST: '+receiver+', '+animation+', '+color+', '+brightness+', '+speed);
-        //TODO i2c.animation(req, res, next);
+        i2c.animation(req, res, next);
 
       } else {
         res.send('ERROR: sendI2CRequest(): No LED Controller');
@@ -351,7 +351,7 @@ var stopAnimation = function(req, res, next) {
         req.speed = speed;
 
         console.log('>> SEND I2C REQUEST: '+receiver+', '+animation+', '+color+', '+brightness+', '+speed);
-        //TODO i2c.animation(req, res, next);
+        i2c.animation(req, res, next);
 
       } else {
         res.send('ERROR: sendI2CRequest(): No LED Controller');
@@ -417,8 +417,8 @@ var moveBar = function(req, res, next) {
           req.position = targetPosition;
           req.speed = speed;
 
-          //TODO i2c.move(req, res, next);
-          next(); //TODO
+          i2c.move(req, res, next);
+
         } else {
           console.log('=> 100 % already reached -> NO CHANGES');
           next();
@@ -455,8 +455,7 @@ var resetPosition = function(req, res, next) {
     req.position = targetPosition;
     req.speed = speed;
 
-    //TODO i2c.move(req, res, next);
-    next(); //TODO
+    i2c.move(req, res, next);
 
   } else {
 
