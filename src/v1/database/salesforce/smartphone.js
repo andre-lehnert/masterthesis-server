@@ -206,8 +206,8 @@ next();
 
 
                 console.log(response);
-
-                res.json(result);
+                req.response = response;
+                next();
               }
             });
 

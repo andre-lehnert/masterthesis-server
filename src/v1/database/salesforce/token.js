@@ -1,11 +1,13 @@
 var nforce = require('nforce');
 
-var GET_ALL = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c';
-var GET_BY_ID = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id = \'[:id]\'';
-var GET_BY_LABEL = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id  FROM Token__c WHERE label__c = [:label]';
-var GET_BY_APP = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id  FROM Token__c WHERE app__c = [:app]';
-var GET_ALL_INACTIVE = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id NOT IN (SELECT token__c FROM Bar__c)';
-var GET_ALL_ACTIVE = 'SELECT label__c, serial__c, app__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id IN (SELECT token__c FROM Bar__c)';
+var GET_ALL = 'SELECT label__c, serial__c, app__c, app_color__c, CreatedDate, LastModifiedDate, Id FROM Token__c';
+var GET_BY_ID = 'SELECT label__c, serial__c, app__c, app_color__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id = \'[:id]\'';
+var GET_BY_LABEL = 'SELECT label__c, serial__c, app__c, app_color__c, CreatedDate, LastModifiedDate, Id  FROM Token__c WHERE label__c = [:label]';
+var GET_BY_APP = 'SELECT label__c, serial__c, app__c, app_color__c, CreatedDate, LastModifiedDate, Id  FROM Token__c WHERE app__c = \'[:app]\'';
+var GET_ALL_INACTIVE = 'SELECT label__c, serial__c, app__c, app_color__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id NOT IN (SELECT token__c FROM Bar__c)';
+var GET_ALL_ACTIVE = 'SELECT label__c, serial__c, app__c, app_color__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE Id IN (SELECT token__c FROM Bar__c)';
+
+var GET_ALL_ACTIVE_BY_APP = 'SELECT label__c, serial__c, app__c, app_color__c, CreatedDate, LastModifiedDate, Id FROM Token__c WHERE app__c = \'[:app]\' AND Id IN (SELECT token__c FROM Bar__c)'
 
 module.exports = {
 
@@ -68,6 +70,64 @@ module.exports = {
           }
         });
   },
+
+  getTokensByApp : function(req, res, org, oauth, next) {
+
+        var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+        var obj = req.params.app;
+
+        console.log(">> GET ACTIVE TOKEN BY APP: "+ obj);
+
+
+        var query = GET_ALL_ACTIVE_BY_APP.replace("[:app]", obj);
+
+        org.query({ query: query, oauth: oauth }, function(err, results) {
+          if (err) {
+
+            console.log(err);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var response =
+            {
+              'href': URL,
+              '_success': false,
+              '_errors': err
+            };
+
+            req.response = response;
+            next();
+
+          } else if(!err) {
+            //console.log('>> DB REQUEST');
+            console.log('QUERY: '+ query);
+            //console.log('RESPONSE: Entries = '+ results.totalSize);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var receivers = [];
+
+            for (var r in results.records) {
+              receivers.push(results.records[r]);
+            }
+
+            var response =
+            {
+              'href': URL,
+              '_success': true,
+              '_count': results.totalSize,
+              'objects': receivers
+            };
+
+            console.log(response);
+
+            req.response = response;
+            next();
+          }
+        });
+  },
+
 
   getToken : function(req, res, org, oauth, next) {
 
@@ -241,6 +301,7 @@ module.exports = {
         if (result.totalSize == 1) { // 1 entry
 
           req.response = result.records[0];
+          console.log(req.response);
           next(req, res);
 
         } else { // no entry // salesforce duplicate check
@@ -333,8 +394,8 @@ next();
 
 
                 console.log(response);
-
-                res.json(result);
+                req.response = response;
+                next();
               }
             });
 

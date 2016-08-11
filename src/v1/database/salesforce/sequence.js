@@ -205,8 +205,8 @@ module.exports = {
 
 
                 console.log(response);
-
-                res.json(result);
+                req.response = response;
+                next();
               }
             });
 

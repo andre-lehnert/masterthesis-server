@@ -40,6 +40,14 @@ module.exports = {
       } else { console.log('Error: ' + err.message); }
     });
   },
+  getBarsByApp : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        bars.getBarsByApp(req, res, org, oauth, next);                               // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
   getBarsByDevice : function(device, callback) {
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
@@ -76,6 +84,14 @@ module.exports = {
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         bars.updateBarByDevice(req, res, org, oauth, next);                             // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  updateBarAfterNotification : function (req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        bars.updateBarAfterNotification(req, res, org, oauth, next);                             // <--
       } else { console.log('Error: ' + err.message); }
     });
   },
@@ -215,6 +231,14 @@ module.exports = {
     org.authenticate(CREDENTIALS, function(err, resp) {
       if(!err) { oauth = resp;
         tokens.getTokens(req, res, org, oauth, next);                           // <--
+      } else { console.log('Error: ' + err.message); }
+    });
+  },
+  getTokensByApp : function(req, res, next) {
+
+    org.authenticate(CREDENTIALS, function(err, resp) {
+      if(!err) { oauth = resp;
+        tokens.getTokensByApp(req, res, org, oauth, next);                           // <--
       } else { console.log('Error: ' + err.message); }
     });
   },

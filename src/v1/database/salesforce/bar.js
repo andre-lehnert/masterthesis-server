@@ -1,9 +1,11 @@
 var nforce = require('nforce');
 
-var GET_ALL = 'SELECT label__c, calibrated__c, position__c, animation__c, token__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c';
+var GET_ALL = 'SELECT label__c, calibrated__c, position__c, animation__c, token__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, app_name__c, token_label__c, app_id__c, Id FROM Bar__c';
 var GET_BY_ID = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE Id = \'[:id]\'';
 var GET_BY_LABEL = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE label__c = \'[:label]\'';
 var GET_ALL_BY_DEVICE = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE device__c = \'[:id]\'';
+
+var GET_ALL_BY_APP = 'SELECT label__c, token__c, animation__c, position__c, calibrated__c, led__c, motor__c, app__c, app_name__c, token_label__c, app_id__c, current_notifications__c, color__c, brightness__c, animation_speed__c, side_a__c, side_b__c, side_c__c, side_d__c, device__c, CreatedDate, LastModifiedDate, Id FROM Bar__c WHERE app_id__c = \'[:id]\'';
 
 
 module.exports = {
@@ -57,6 +59,63 @@ module.exports = {
           }
         });
   },
+
+  getBarsByApp : function(req, res, org, oauth, next) {
+
+        var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+        var obj = req.params.app;
+
+        var query = GET_ALL_BY_APP.replace("[:id]", obj);
+
+        org.query({ query: query, oauth: oauth }, function(err, results){
+          if (err) {
+
+            console.log(err);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var response =
+            {
+              'href': URL,
+              '_success': false,
+              '_errors': err
+            };
+
+            req.response = response;
+            next();
+
+          } else if(!err) {
+            //console.log('>> DB REQUEST');
+            console.log('QUERY: '+ query);
+            //console.log('RESPONSE: Entries = '+ results.totalSize);
+
+            // -----------------------------------------------------------------
+            // Set Response Object
+            var receivers = [];
+
+            for (var r in results.records) {
+              receivers.push(results.records[r]);
+            }
+
+            var response =
+            {
+              'href': URL,
+              '_success': true,
+              '_count': results.totalSize,
+              'objects': receivers
+            };
+
+            console.log(response);
+
+            req.response = response;
+
+            next();
+          }
+        });
+  },
+
+
 
   /*
    * NO EXPRESS METHOD
@@ -421,6 +480,136 @@ module.exports = {
 
   },
 
+  updateBarAfterNotification : function(req, res, org, oauth, next) {
+
+    var URL =  req.protocol + '://' + req.get('host') + req.originalUrl;
+
+    var barLabel = req.noti.bar.label;
+
+    console.log(">> UPDATE BAR BY LABEL AFTER NOTIFICATION RECEIVED: "+ barLabel);
+
+    var query = GET_BY_LABEL.replace("[:label]", barLabel);
+
+    org.query({ query: query, oauth: oauth }, function(err, result) {
+
+      if (err) {
+        //console.log(err);
+        var response =
+        {
+          'href': URL,
+          '_success': false,
+          '_errors': err
+        };
+        req.response = response;
+        next();
+
+      } else if(!err) {
+
+        //console.log('>> DB REQUEST');
+        console.log('QUERY: '+ query);
+        //console.log('RESPONSE: Entries = '+ result.totalSize);
+
+        // -----------------------------------------------------------------
+        // UPDATE
+        if (result.totalSize == 1) { // 1 entry
+
+          var bar = result.records[0];
+          bar.set('position__c', req.noti.bar.position);
+          bar.set('calibrated__c', req.noti.bar.calibrated);
+          bar.set('animation__c', req.noti.animation.id);
+          bar.set('app__c',  req.noti.app);
+          bar.set('animation_speed__c',  req.noti.animation.speed);
+          bar.set('color__c',  req.noti.animation.color);
+          bar.set('brightness__c',  req.noti.animation.brightness);
+          bar.set('current_notifications__c', req.noti.bar.notifications);
+
+          org.update({ sobject: bar, oauth: oauth }, function(err, result) {
+
+            if (err) {
+              //console.log(err);
+              var response =
+              {
+                'href': URL,
+                '_success': false,
+                '_errors': err
+              };
+              req.response = response;
+              next();
+
+            } else if(!err) {
+
+              // -----------------------------------------------------------------
+              // REQUEST OBJECT
+              org.query({ query: query, oauth: oauth }, function(err, result) {
+
+                if (err) {
+                  //console.log(err);
+                  var response =
+                  {
+                    'href': URL,
+                    '_success': false,
+                    '_errors': err
+                  };
+                  req.response = response;
+                  next();
+
+                } else if(!err) {
+
+                  //console.log('>> DB REQUEST');
+                  console.log('QUERY: '+ query);
+                  //console.log('RESPONSE: Entries = '+ result.totalSize);
+
+                  // -----------------------------------------------------------------
+                  // Set Response Object
+                  if (result.totalSize == 1) { // 1 entry
+
+                    var response =
+                    {
+                      'href': URL,
+                      '_success': true,
+                      'object': result.records[0]
+                    };
+
+                    console.log(response);
+                    req.response = response;
+                    next();
+
+                  } else { // no entry // salesforce duplicate check
+
+                    var response =
+                    {
+                      'href': URL,
+                      '_success': false,
+                      '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+                    };
+
+                    console.log(response);
+
+                    req.response = response;
+                    next();
+                  }
+                }
+
+            });
+          }
+
+          });
+        } else { // no entry // salesforce duplicate check
+          var response =
+          {
+            'href': URL,
+            '_success': false,
+            '_errors': { message: 'No entry found', errorCode: 'NO_ENTRY', statusCode: 204 }
+          };
+          console.log(response);
+          req.response = response;
+          next();
+        }
+      }
+    });
+
+  },
+
   updateBarByDevice : function(req, res, org, oauth, next) {
 
     var barLabel = req.params.label;
@@ -433,7 +622,7 @@ module.exports = {
 
       if (err) {
         console.log(err);
-      
+
       } else if(!err) {
 
         //console.log('>> DB REQUEST');
@@ -446,14 +635,14 @@ module.exports = {
 
           var bar = result.records[0];
           bar.set('token__c', req.body.token__c);
-          
+
           org.update({ sobject: bar, oauth: oauth }, function(err, result) {
 
             if (err)
               console.log(err);
-                        
+
           });
-     
+
        }
       }
 

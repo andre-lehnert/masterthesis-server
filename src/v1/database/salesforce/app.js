@@ -1,7 +1,7 @@
 var nforce = require('nforce');
 
 var GET_ALL = 'SELECT Id, CreatedDate, LastModifiedDate, name__c, author__c, package__c, version__c, color__c, animation__c, animation_speed__c, icon__c, smartphone__c, brightness__c FROM App__c';
-var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, name__c, author__c, package__c, version__c, color__c, animation__c, animation_speed__c, icon__c, smartphone__c, brightness__c FROM App__c WHERE Id = \'[:id]\'';
+var GET_BY_ID = 'SELECT Id, CreatedDate, LastModifiedDate, name__c, author__c, package__c, version__c, color__c, animation__c, animation_speed__c, icon__c, smartphone__c, brightness__c, animation_name__c, animation_short_name__c FROM App__c WHERE Id = \'[:id]\'';
 var GET_ALL_BY_SMARTPHONE = 'SELECT Id, CreatedDate, LastModifiedDate, name__c, author__c, package__c, version__c, color__c, animation__c, animation_speed__c, icon__c, smartphone__c, brightness__c FROM App__c WHERE smartphone__c = \'[:id]\'';
 
 module.exports = {
@@ -240,6 +240,7 @@ module.exports = {
           console.log(response);
 
           req.response = response;
+
           next();
         }
       }
@@ -335,8 +336,8 @@ next();
 
 
                 console.log(response);
-
-                res.json(result);
+                req.response = response;
+                next();
               }
             });
 

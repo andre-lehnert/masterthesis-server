@@ -531,7 +531,7 @@ module.exports = {
             };
 
             req.response = response;
-next();
+            next();
 
           // -----------------------------------------------------------------
           // on SUCCESS
@@ -561,7 +561,7 @@ next();
                   '_errors': err
                 };
                 req.response = response;
-next();
+                next();
 
               // -----------------------------------------------------------------
               // on SUCCESS
@@ -584,7 +584,14 @@ next();
 
                 console.log(response);
 
-                res.json(result);
+                req.response = response;
+
+                // POST /smartphones/ /apps/ /notifications
+                req.notification = {};
+                req.notification.id = result.records[0]._fields.id;
+                req.notification.appId = result.records[0]._fields.app__c;
+
+                next();
               }
             });
 

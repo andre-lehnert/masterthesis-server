@@ -581,10 +581,14 @@ module.exports = {
                   'object': result.records[0]._fields
                 };
 
-
                 console.log(response);
+                req.invocation = {};
+                req.invocation.id = result.records[0]._fields.id;
+                req.invocation.appId = result.records[0]._fields.app__c;
 
-                res.json(result);
+                req.response = response;
+
+                next();
               }
             });
 

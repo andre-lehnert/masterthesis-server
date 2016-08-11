@@ -45,7 +45,7 @@ module.exports = {
 
           if (req.update === 'position') {
 
-console.log('I2C:send: >> Update Position: '+req.position);
+            console.log('I2C:send: >> Update Position: '+req.position);
 
             // New Position
             req.body =
@@ -55,7 +55,7 @@ console.log('I2C:send: >> Update Position: '+req.position);
 
           } else if (req.update === 'light') {
 
-console.log('I2C:send: >> Update Lighting Pattern');
+            console.log('I2C:send: >> Update Lighting Pattern');
 
             req.body =
               {
@@ -93,7 +93,7 @@ console.log('I2C:send: >> Update Lighting Pattern');
               };
           } else if (req.update === 'animation') {
 
-console.log('I2C:send: >> Update Animation: '+req.animation);
+            console.log('I2C:send: >> Update Animation: '+req.animation);
 
             req.body =
               {
@@ -140,7 +140,7 @@ console.log('I2C:send: >> Update Animation: '+req.animation);
 };
 
 var writeLightingSide = function(address, sides, index, callback, req, res, next) {
-console.log(index);
+  console.log(index);
   wire.setAddress(address);
   var bytes = [];
   var message = api.getLightMessage(sides[index].name, '+', sides[index].led, sides[index].color, sides[index].brightness)

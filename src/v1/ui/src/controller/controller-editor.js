@@ -210,7 +210,7 @@ angular
        $scope.bars = data; // Get JSON
        //console.log(data);
 
-       var url = $scope.uriPraefix + '/bars' //?state=active'; //TODO
+       var url = $scope.uriPraefix + '/bars?state=active'; // <---
        console.log('GET '+ url);
        $http({method: 'GET', url: url}) // Get available bars (Salesforce.com)
          .success(function(data, status) {
@@ -571,7 +571,6 @@ angular
       'addLevelLighting' : true,
       'addDelay' : false,
     };
-    //TODO
   };
   $scope.addDelay = function() {
 
@@ -585,7 +584,6 @@ angular
       'addLevelLighting' : false,
       'addDelay' : true,
     };
-    //TODO
   };
 
   $scope.goBack = function() {
@@ -1432,7 +1430,7 @@ angular
 
     console.log('GET '+ uri);
 
-    $http({ method: 'GET', url: 'http://localhost/api/v1/bars' }). //TODO
+    $http({ method: 'GET', url: uri }).
         success(function(data, status) {
           //console.log(data);
           console.log("--> Request done");
@@ -1453,7 +1451,7 @@ angular
 
     console.log('GET '+ uri);
 
-    $http({ method: 'GET', url: 'http://localhost/api/v1/bars' }). //TODO
+    $http({ method: 'GET', url: uri }).
         success(function(data, status) {
           //console.log(data);
           console.log("--> Request done");
@@ -1495,7 +1493,7 @@ angular
 
     console.log('GET '+ uri);
 
-    $http({ method: 'GET', url: 'http://localhost/api/v1/bars' }). //TODO
+    $http({ method: 'GET', url: uri }).
         success(function(data, status) {
           //console.log(data);
           console.log("--> Request done");
@@ -1525,7 +1523,7 @@ angular
 
     console.log('GET '+ uri);
 
-    $http({ method: 'GET', url: 'http://localhost/api/v1/bars' }). //TODO
+    $http({ method: 'GET', url: uri }).
         success(function(data, status) {
           //console.log(data);
           console.log("--> Request done");

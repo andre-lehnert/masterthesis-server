@@ -4,13 +4,8 @@ var i2c = require('./i2c-communication'),
 // --- Functions ---------------------------------------------------------------
 
 var handleMove = function(receivers, target, command, req, res, next) {
-    // var res = {};
-    // res.done = false;
-    // res.success = false;
-    // res.value = -1;
-    //
 
-console.log('I2C:handleMove: ['+receivers+'], '+target+', '+command);
+  console.log('I2C:handleMove: ['+receivers+'], '+target+', '+command);
 
     if (receivers.length === 0) {
 
@@ -22,7 +17,7 @@ console.log('I2C:handleMove: ['+receivers+'], '+target+', '+command);
 
         if (parseInt(target) === val) {
 
-console.log('I2C:handleMove: receiver ['+target+'] available');
+          console.log('I2C:handleMove: receiver ['+target+'] available');
 
             req.update = 'position';
 
@@ -34,7 +29,7 @@ console.log('I2C:handleMove: receiver ['+target+'] available');
 
 var handleLight = function(receivers, target, command, req, res, next) {
 
-console.log('I2C:handleLight: ['+receivers+'], '+target+', '+command);
+  console.log('I2C:handleLight: ['+receivers+'], '+target+', '+command);
 
     if (receivers.length === 0) {
 
@@ -46,7 +41,7 @@ console.log('I2C:handleLight: ['+receivers+'], '+target+', '+command);
 
         if (parseInt(target) === val) {
 
-console.log('I2C:handleLight: receiver ['+target+'] available');
+          console.log('I2C:handleLight: receiver ['+target+'] available');
 
             req.update = 'light';
 
@@ -58,7 +53,7 @@ console.log('I2C:handleLight: receiver ['+target+'] available');
 
 var handleLevel = function(receivers, target, command, req, res, next) {
 
-console.log('I2C:handleLevel: ['+receivers+'], '+target+', '+command);
+  console.log('I2C:handleLevel: ['+receivers+'], '+target+', '+command);
 
     if (receivers.length === 0) {
 
@@ -70,7 +65,7 @@ console.log('I2C:handleLevel: ['+receivers+'], '+target+', '+command);
 
         if (parseInt(target) === val) {
 
-console.log('I2C:handleLevel: receiver ['+target+'] available');
+          console.log('I2C:handleLevel: receiver ['+target+'] available');
 
             req.update = 'level';
 
@@ -104,7 +99,7 @@ var handleLightAll = function(receivers, target, command, req, res, next) {
 
 var handleAnimation = function(receivers, target, command, req, res, next) {
 
-console.log('I2C:handleAnimation: ['+receivers+'], '+target+', '+command);
+  console.log('I2C:handleAnimation: ['+receivers+'], '+target+', '+command);
 
     if (receivers.length === 0) {
 
@@ -116,7 +111,7 @@ console.log('I2C:handleAnimation: ['+receivers+'], '+target+', '+command);
 
         if (parseInt(target) === val) {
 
-console.log('I2C:handleAnimation: receiver ['+target+'] available');
+          console.log('I2C:handleAnimation: receiver ['+target+'] available');
 
             req.update = 'animation';
 
@@ -146,6 +141,8 @@ var handleStatus = function(receivers, target, command, req, res, next) {
 
             req.update = 'status';
 
+            req.ledReceiver = val + 1; // define led controller via addressing schema
+
             i2c.request(parseInt(target), req, res, getTokenId);
         }
       });
@@ -165,6 +162,7 @@ var getTokenId = function(req, res, next) {
     req.response = {};
     req.response._fields = {};
     req.response._fields.id = null //'';
+    req.response._fields.app__c = null;
     updateTokenId(req, res, next);
   }
 };
@@ -180,17 +178,28 @@ var updateTokenId = function(req, res, next) {
 
     req.tokenid = req.response._fields.id;
 
-    req.body = { 'token__c' : req.response._fields.id };
+    req.body = { 'token__c' : req.response._fields.id, 'app__c' : req.response._fields.app__c };
 
   //console.log('>> Update Bar ['+req.params.label+']');
 
+
+    // Level Lighting Parameter
+    //
+    //
+    req.receiver = req.ledReceiver;
+    req.lednumber = 1;
+    req.color = req.response._fields.app_color__c;
+    req.brightness = 100;
+
+
     // 2) Update Bar Token Id
-    db.updateBarByDevice(req, res, next);
+    db.updateBarByDevice(req, res, level);
 
   } else {
 //    console.log('>> TOKEN NOT CHANGED');
   }
 };
+
 
 var getAvailableBars = function(receivers, target, command, req, res, next) {
 

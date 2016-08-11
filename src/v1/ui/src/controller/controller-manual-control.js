@@ -80,7 +80,7 @@ $scope.getBars = function() {
      $scope.bars = data; // Get JSON
      //console.log(data);
 
-     var url = $scope.uriPraefix + '/bars';//?state=active';
+     var url = $scope.uriPraefix + '/bars?state=active'; // <--
      console.log('GET '+ url);
      $http({method: 'GET', url: url}) // Get available bars (Salesforce.com)
        .success(function(data, status) {
