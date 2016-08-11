@@ -475,6 +475,8 @@ var updateBarAfterEvent = function(req, res, next) {
 
 };
 
+var empty = function(req,res,next) {}
+
 // ---------------- Routing ----------------------------------------------------
 
 /*
@@ -529,7 +531,7 @@ app.get('/:id/apps/:app/notifications/:notification', [requestNotification], fun
 /*
  * ## Insert new Notification & animate bar if monitored
  */
-app.post('/:id/apps/:app/notifications', [insertNotification, requestTokensByApp, requestActiveApp, requestBar, animateBar, moveBar, updateBarAfterEvent], function(req, res) {
+app.post('/:id/apps/:app/notifications', [insertNotification, requestTokensByApp, requestActiveApp, requestBar, animateBar, moveBar, updateBarAfterEvent, empty], function(req, res) {
   res.json(req.response);
 });
 
@@ -550,7 +552,7 @@ app.get('/:id/apps/:app/invocations/:invocation', [requestInvocation], function(
 /*
  * ## Insert new Invocation
  */
-app.post('/:id/apps/:app/invocations', [insertInvocation, requestTokensByApp, requestActiveApp, requestBar, stopAnimation, resetPosition, updateBarAfterEvent], function(req, res) {
+app.post('/:id/apps/:app/invocations', [insertInvocation, requestTokensByApp, requestActiveApp, requestBar, stopAnimation, resetPosition, updateBarAfterEvent,empty], function(req, res) {
   res.json(req.response);
 });
 

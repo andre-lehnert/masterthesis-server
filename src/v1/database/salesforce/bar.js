@@ -635,12 +635,19 @@ module.exports = {
 
           var bar = result.records[0];
           bar.set('token__c', req.body.token__c);
+	  bar.set('app__c', req.body.app__c);
 
           org.update({ sobject: bar, oauth: oauth }, function(err, result) {
 
             if (err)
               console.log(err);
-
+            else {
+              
+		console.log(result);
+		req.response = result;
+                
+		next(req, res, next);
+	    }
           });
 
        }
