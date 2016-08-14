@@ -229,7 +229,7 @@ angular
                    var hex = hex2rgb('#'+bar.color__c);
                    var brightness = (parseInt(bar.brightness__c) / 100);
 
-                   $scope.bars.rows[j].cols[k].animation.color = 'rgba('+hex.r+','+hex.g+','+hex.b+','+brightness+')';
+                   $scope.bars.rows[j].cols[k].animation.color = bar.color__c; //'rgba('+hex.r+','+hex.g+','+hex.b+','+brightness+')';
 
                    $scope.bars.rows[j].cols[k].animation.speed = bar.animation_speed__c;
 
@@ -1442,10 +1442,12 @@ angular
 
     console.log("EXECUTE ANIMATION: id = "+($scope.sequence.operations__c[$scope.currentFunction].id));
 
+console.log("---> "+$scope.sequence.operations__c[$scope.currentFunction].color.replace("#",""));
+
     var uri = $scope.uriPraefix + '/animation/'
        + $scope.sequence.operations__c[$scope.currentFunction].bar.toLowerCase() + '/' // :barReceiver
        + $scope.sequence.operations__c[$scope.currentFunction].animation + '/'
-       + $scope.sequence.operations__c[$scope.currentFunction].color + '/'
+       + $scope.sequence.operations__c[$scope.currentFunction].color.replace("#","") + '/'
        + $scope.sequence.operations__c[$scope.currentFunction].brightness + '/'
        + $scope.sequence.operations__c[$scope.currentFunction].speed; // :speed
 

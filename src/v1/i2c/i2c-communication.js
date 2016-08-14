@@ -81,7 +81,6 @@ module.exports = {
                 "led_10__c": req.leds[10],
                 "label__c": req.side
               };
-
           } else if (req.update === 'animation') {
 
             console.log('I2C:send: >> Update Animation: '+req.animation);

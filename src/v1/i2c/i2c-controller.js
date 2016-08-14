@@ -191,14 +191,80 @@ var updateTokenId = function(req, res, next) {
     req.color = req.response._fields.app_color__c;
     req.brightness = 100;
 
+    console.log(">>>> UPDATE BAR");
 
     // 2) Update Bar Token Id
     db.updateBarByDevice(req, res, level);
+    
 
   } else {
 //    console.log('>> TOKEN NOT CHANGED');
   }
 };
+
+var level =  function(req, res, next) {
+
+if (typeof req != 'undefined') {
+
+console.log(">>> LEVEL "+req.ledReceiver+" -> "+req.color);
+
+    var receiver = req.ledReceiver,
+        led = 11,
+        color = req.color,
+        brightness = req.brightness;
+
+        console.log('I2C:level: '+receiver+', '+led+', '+color+', '+brightness);
+
+    // --------------------------------------------------------------------
+    // 1) Validate
+    if (
+      typeof receiver === 'undefined' ||
+      receiver < 0 ||
+      receiver < 0x10 ||
+      receiver > 0x6e ||
+      receiver === 0x0f
+    ) {
+      return false;
+    }
+
+    if (
+      typeof led === 'undefined' ||
+      led === '' ||
+      typeof led !== 'number' ||
+      led < 1 ||
+      led > 11
+    ) {
+        return false;
+    }
+
+    if (
+      typeof color === 'undefined' ||
+      color === ''
+    ) {
+      
+        return false;
+      
+    }
+
+    if (
+      typeof brightness === 'undefined' ||
+      brightness === '' ||
+      typeof brightness !== 'number' ||
+      brightness < 0 ||
+      brightness > 100
+    ) {
+      if (operation === '+') {
+        console.log("brightness");
+        return false;
+      }
+    }
+
+    // 2) Scan, check available receivers, execute level
+    i2c.scan(receiver, api.getLevelMessage(led, color, brightness), handleLevel, req, res, next);
+}
+
+};
+
 
 
 var getAvailableBars = function(receivers, target, command, req, res, next) {
