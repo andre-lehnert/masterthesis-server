@@ -1314,10 +1314,17 @@ angular
     }
 
     var url = $scope.uriPraefix + '/sequences';
-    var method = 'POST';
-    if (typeof $scope.sequence.id != 'undefined' && $scope.sequence.id != '') {
+
+    var method = 'PUT';
+
+    if (typeof $scope.sequence.id != 'undefined' & $scope.sequence.id != '') {
+      console.log(">>> UPDATE SEQUENCE ["+$scope.sequence.id+"]");
       method = 'PUT';
       url = url+ '/' + $scope.sequence.id;
+    } else {
+      console.log(">>> NEW SEQUENCE");
+      console.log($scope.sequence);
+      method = 'POST';
     }
 
     var data = {

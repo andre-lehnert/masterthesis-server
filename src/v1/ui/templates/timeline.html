@@ -3,41 +3,41 @@
 
 <div infinite-scroll='loadMore()'  infinite-scroll-disabled="isLoading" layout="column">
 
-<div layout="row" ng-repeat="day in thisWeek" flex-offset="5">
+<div layout="row" ng-repeat="day in thisWeek">
     <div flex-offset="5" flex="90">
       <div class="md-padding" layout="column">
 
-        <div  layout="row" >
+        <div flex-offset="5" >
           <h2 class="md-headline card-list-headline">{{day.praefix}}{{day.date}}</h2>
         </div>
 
 
-        <div  layout="row" >
-          <md-card flex="" >
+        <div layout="row" >
+          <md-card flex >
             <md-card-title>
               <md-card-title-text>
                 <span class="md-headline" style="color: #F9A825" >Notifications</span>
               </md-card-title-text>
             </md-card-title>
 
-        <md-card-content>
+            <md-card-content>
 
-          <div layout="row" >
-          <canvas flex  chart-colors="['#F9A825']" class="chart chart-bar" chart-data="day.notifications.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
+              <div layout="row" >
+              <canvas flex  chart-colors="['#F9A825']" class="chart chart-bar" chart-data="day.notifications.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
 
-          <div flex="25" class="md-padding" layout="column" layout-align="center" hide-xs>
-            <span class="md-title">Notifications:</span>
-            <span class="md-display-2" style="color: #F9A825">{{day.notifications.sum}}</span>
-          </div>
+              <div flex="25" class="md-padding" layout="column" layout-align="center" hide-xs>
+                <span class="md-title">Notifications:</span>
+                <span class="md-display-2" style="color: #F9A825">{{day.notifications.sum}}</span>
+              </div>
 
-          </div>
-        </md-card-content>
+              </div>
+            </md-card-content>
 
       </md-card>
     </div>
 
     <div  layout="row" >
-      <md-card flex="" >
+      <md-card flex >
         <md-card-title>
           <md-card-title-text>
             <span class="md-headline" style="color: #0288D1" >App Invocations</span>
@@ -47,7 +47,7 @@
     <md-card-content>
 
       <div layout="row" >
-        <canvas  flex chart-colors="['#0288D1']" class="chart chart-bar" chart-data="day.invocations.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
+        <canvas flex chart-colors="['#0288D1']" class="chart chart-bar" chart-data="day.invocations.hours" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
 
         <div flex="25" class="md-padding" layout="column"  layout-align="center" hide-xs>
           <span class="md-title">Invocations:</span>
@@ -63,7 +63,7 @@
   </div>
 
   <div  layout="row" >
-    <md-card flex="" >
+    <md-card flex >
       <md-card-title>
         <md-card-title-text>
           <span class="md-headline" style="color: #D81B60" >Smartphone Activations</span>
@@ -93,19 +93,22 @@
   </div>
 </div>
 
-<div ng-repeat="week in weeks" flex-offset="5">
+
+
+
+<div ng-repeat="week in weeks">
 
   <div  layout="row">
     <div flex-offset="5" flex="90" >
       <div class="md-padding" layout="column">
 
-        <div  layout="row" >
+        <div>
           <h2 class="md-headline card-list-headline"><strong>Week {{week.week}}:</strong> {{week.start}} - {{week.end}}</h2>
         </div>
 
 
         <div  layout="row" >
-          <md-card flex="" >
+          <md-card flex >
             <md-card-title>
               <md-card-title-text>
                 <span class="md-headline" style="color: #F9A825" >Notifications</span>
@@ -129,7 +132,7 @@
     </div>
 
     <div  layout="row" >
-      <md-card flex="" >
+      <md-card flex >
         <md-card-title>
           <md-card-title-text>
             <span class="md-headline" style="color: #0288D1" >App Invocations</span>
@@ -155,7 +158,7 @@
   </div>
 
   <div  layout="row" >
-    <md-card flex="" >
+    <md-card flex >
       <md-card-title>
         <md-card-title-text>
           <span class="md-headline" style="color: #D81B60" >Smartphone Activations</span>
@@ -199,7 +202,7 @@
 
 
         <div  layout="row" >
-          <md-card flex="" >
+          <md-card flex >
             <md-card-title>
               <md-card-title-text>
                 <span class="md-headline" style="color: #F9A825" >Notifications</span>
