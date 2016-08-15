@@ -232,8 +232,8 @@ var sendLevelI2CRequest = function (req, res, next) {
 
       lednumber = req.params.led;
 
-      if (typeof lednumber != 'number') {
-        lednumber = 0;
+      if (typeof req.params.led == 'undefined') {
+        lednumber = 1;
       } else {
         lednumber = parseInt(req.params.led) + 1;
       }
@@ -270,7 +270,8 @@ var sendLevelI2CRequest = function (req, res, next) {
 
 
 var updateLevel = function (req, res, next) {
-  db.updateSideByLevel(req, res, next);
+ // db.updateSideByLevel(req, res, next);
+next();
 };
 
 

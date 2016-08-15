@@ -67,7 +67,7 @@ var handleLevel = function(receivers, target, command, req, res, next) {
 
           console.log('I2C:handleLevel: receiver ['+target+'] available');
 
-            req.update = 'level';
+            //req.update = 'level';
 
             i2c.send(parseInt(target), command, req, res, next);
         }
@@ -512,6 +512,7 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
       receiver > 0x6e ||
       receiver === 0x0f
     ) {
+console.log("XXX receiver");
       return false;
     }
 
@@ -522,6 +523,8 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
       led < 1 ||
       led > 11
     ) {
+console.log("XXX led");
+
         return false;
     }
 
@@ -531,6 +534,7 @@ console.log('I2C:light: '+receiver+', '+side+', '+operation+', '+led+', '+color+
     ) {
       if (operation === '+') {
         console.log("color");
+console.log("XXX color");
         return false;
       }
     }

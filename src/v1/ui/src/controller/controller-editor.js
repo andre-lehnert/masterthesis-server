@@ -1480,8 +1480,8 @@ console.log("---> "+$scope.sequence.operations__c[$scope.currentFunction].color.
          + 'sides/'
          + $scope.sequence.operations__c[$scope.currentFunction].side.toLowerCase() + '/'
          + $scope.sequence.operations__c[$scope.currentFunction].op.toLowerCase() + '/'
-         + $scope.sequence.operations__c[$scope.currentFunction].led + '/'
-         + $scope.sequence.operations__c[$scope.currentFunction].color;
+         + ($scope.sequence.operations__c[$scope.currentFunction].led-1) + '/'
+         + $scope.sequence.operations__c[$scope.currentFunction].color.replace('#','');
 
     } else if ($scope.sequence.operations__c[$scope.currentFunction].op == 'Remove') {
 
@@ -1490,7 +1490,7 @@ console.log("---> "+$scope.sequence.operations__c[$scope.currentFunction].color.
          + 'sides/'
          + $scope.sequence.operations__c[$scope.currentFunction].side.toLowerCase() + '/'
          + $scope.sequence.operations__c[$scope.currentFunction].op.toLowerCase() + '/'
-         + $scope.sequence.operations__c[$scope.currentFunction].led;
+         + ($scope.sequence.operations__c[$scope.currentFunction].led-1);
     }
 
     console.log('GET '+ uri);
@@ -1512,14 +1512,14 @@ console.log("---> "+$scope.sequence.operations__c[$scope.currentFunction].color.
       var uri = $scope.uriPraefix + '/bars/'
          + $scope.sequence.operations__c[$scope.currentFunction].bar.toLowerCase() + '/'
          + 'level/'
-         + $scope.sequence.operations__c[$scope.currentFunction].led + '/'
-         + $scope.sequence.operations__c[$scope.currentFunction].color;
+         + ($scope.sequence.operations__c[$scope.currentFunction].led-1) + '/'
+         + $scope.sequence.operations__c[$scope.currentFunction].color.replace('#','');
 
     } else if ($scope.sequence.operations__c[$scope.currentFunction].op == 'Remove') {
       var uri = $scope.uriPraefix + '/bars/'
          + $scope.sequence.operations__c[$scope.currentFunction].bar.toLowerCase() + '/'
          + 'level/'
-         + $scope.sequence.operations__c[$scope.currentFunction].led + '/'
+         + ($scope.sequence.operations__c[$scope.currentFunction].led-1) + '/'
          + '000000';
     }
 
@@ -1582,9 +1582,9 @@ console.log("---> "+$scope.sequence.operations__c[$scope.currentFunction].color.
         } else if (item.function == 'animate') {
           $scope.functions.push(function() { executeAnimation($scope.next) } ); // Add execution
         } else if (item.function == 'lighting') {
-
+          $scope.functions.push(function() { executeLighting($scope.next) } ); // Add execution
         } else if (item.function == 'level lighting') {
-
+          $scope.functions.push(function() { executeLevelLighting($scope.next) } ); // Add execution
         }
       }
     });
