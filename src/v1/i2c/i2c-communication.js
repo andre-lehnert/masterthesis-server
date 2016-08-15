@@ -16,9 +16,18 @@ module.exports = {
           if (command != 'SCAN') {
             callback(data, target, command, req, res, next);
           }
-        } else { console.log('ERROR: command or taget missing'); }
+        } else {
+          console.log('ERROR: command or taget missing');
+          command = 'undefined';
+          target = 'undefined';
+          callback(data, target, command, req, res, next);
+        }
+
       } else {
         console.log('ERROR: '+err);
+        command = 'undefined';
+        target = 'undefined';
+        callback(data, target, command, req, res, next);
       }
     });
 
@@ -101,6 +110,9 @@ module.exports = {
       wire.readByte(function(err, result) {
         if (err != null) {
           console.log("ERROR: "+err);
+          req.success = false;
+          req.token = 'undefined';
+          next(req, res, next);
         } else {
           console.log("RECEIVE ["+address+"]: "+result);
           req.success = true;

@@ -6,7 +6,7 @@
 
 
     <div  layout="row" flex-offset="5" ng-repeat="sequence in sequences">
-      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85"  >
+      <div  flex-offset="5" flex="90"  >
 
         <md-card>
           <md-card-title>
@@ -79,7 +79,7 @@
 
       <li flex-offset="5" class="dragable-list-item">
         <div layout="row" flex-offset="1">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+          <div flex-offset="5" flex="90" >
             <!-- Item Type -->
             <md-card >
               <md-content layout-padding>
@@ -110,7 +110,7 @@
                 ng-model="sequence.operations__c"
                 jqyoui-draggable="{index: {{$index}},animate:false}">
 
-            <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+            <div flex-offset="5" flex="90" >
               <!-- manual positioning
               <md-button class="md-fab md-mini manual-upward">
                 <i class="material-icons">arrow_upward</i>
@@ -316,7 +316,7 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
     <!-- Card #1: Choose bar -->
     <div layout="row" flex-offset="5">
-      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+      <div  flex-offset="5" flex="90" >
           <md-card flex  style="min-width: 320px">
             <md-card-title>
               <md-card-title-text>
@@ -350,7 +350,7 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
     <!-- Card: Choose target bar position -->
     <div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
-          <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+          <div  flex-offset="5" flex="90" >
             <md-card style="min-width: 320px">
               <md-card-content layout="row" layout-align="top left">
 
@@ -421,7 +421,7 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
     <!-- Card #1: Choose bar -->
     <div layout="row" flex-offset="5">
-      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+      <div  flex-offset="5" flex="90" >
           <md-card flex  style="min-width: 440px">
             <md-card-title>
               <md-card-title-text>
@@ -455,7 +455,7 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
     <!-- Card #3: Choose Color, Animation & Duration -->
     <div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+          <div flex-offset="5" flex="90" >
             <md-card flex style="min-width: 440px">
               <md-card-content layout="row" layout-align="top left">
 
@@ -553,7 +553,7 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
     <!-- Card #1: Choose bar -->
     <div layout="row" flex-offset="5">
-      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+      <div  flex-offset="5" flex="90" >
           <md-card flex  style="min-width: 440px">
             <md-card-title>
               <md-card-title-text>
@@ -587,7 +587,7 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
     <!-- Card: Bar Side LED Control -->
     <div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+          <div flex-offset="5" flex="90">
             <md-card flex style="min-width: 440px">
               <md-card-content layout="column" layout-align="top left">
 
@@ -620,7 +620,7 @@
     </div>
 
     <div layout="row" ng-show="isBarSelected && isSideSelected" class="animate-show" flex-offset="5">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+          <div flex-offset="5" flex="90">
             <md-card flex style="min-width: 440px">
               <md-card-content layout="column" layout-align="top left">
 
@@ -648,7 +648,7 @@
     </div>
 
     <div layout="row" ng-show="isBarSelected && isSideSelected && isOperationSelected && !patternOperation.New.selected" class="animate-show" flex-offset="5">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+          <div flex-offset="5" flex="90">
             <md-card flex style="min-width: 440px">
               <md-card-content layout="column" layout-align="top left">
 
@@ -671,7 +671,7 @@
 
 
     <div layout="row" ng-show="isBarSelected && isSideSelected && isOperationSelected && !(patternOperation.New.selected || patternOperation.Remove.selected) && isLedSelected" class="animate-show" flex-offset="5">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+          <div flex-offset="5" flex="90">
             <md-card flex style="min-width: 440px">
               <md-card-content layout="column" layout-align="top left">
 
@@ -706,7 +706,7 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
     <!-- Card: Bar Side LED Control -->
     <!--<div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+          <div flex-offset="5" flex="90">
             <md-card flex style="min-width: 440px">
               <md-card-content layout="row" layout-align="top left">
                 <div flex="33" style="min-width: 260px">
@@ -863,7 +863,7 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
     <!-- Card #1: Choose bar -->
     <div layout="row" flex-offset="5">
-      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+      <div  flex-offset="5" flex="90" >
           <md-card flex  style="min-width: 440px">
             <md-card-title>
               <md-card-title-text>
@@ -895,7 +895,7 @@
     </div>
 
     <div layout="row" ng-show="isBarSelected" class="animate-show" flex-offset="5">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+          <div flex-offset="5" flex="90">
             <md-card flex style="min-width: 440px">
               <md-card-content layout="column" layout-align="top left">
 
@@ -920,7 +920,7 @@
     </div>
 
     <div layout="row" ng-show="isBarSelected && isOperationSelected && !patternOperation.New.selected" class="animate-show" flex-offset="5">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+          <div flex-offset="5" flex="90">
             <md-card flex style="min-width: 440px">
               <md-card-content layout="column" layout-align="top left">
 
@@ -943,7 +943,7 @@
 
 
     <div layout="row" ng-show="isBarSelected && isOperationSelected && !(patternOperation.Remove.selected) && isLedSelected" class="animate-show" flex-offset="5">
-          <div flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85">
+          <div flex-offset="5" flex="90">
             <md-card flex style="min-width: 440px">
               <md-card-content layout="column" layout-align="top left">
 
@@ -1006,7 +1006,7 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
     <!-- Card #1: Choose bar -->
     <div layout="row" flex-offset="5">
-      <div  flex-offset="1" flex-offset-gt-sm="5" flex-xs="95" flex-sm="90" flex-gt-sm="85" >
+      <div  flex-offset="5" flex="90" >
           <md-card flex  style="min-width: 320px">
             <md-card-title>
               <md-card-title-text>

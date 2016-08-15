@@ -222,3 +222,8 @@ th, td {
   cursor: pointer;
   overflow: hidden;
 }
+
+
+.flex-90, .layout-row>.flex-90 {
+max-height: none;
+}
